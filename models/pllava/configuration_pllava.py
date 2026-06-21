@@ -102,6 +102,10 @@ class PllavaConfig(PretrainedConfig):
         tau=1.0, 
         cluster_ratio=1.0, 
         temporal_segment_ratio=1.0,
+        use_entropy_adaptive=False,
+        tau_entropy=0.8,
+        entropy_fallback_layer=20,
+        entropy_computation_layers=None,
         **kwargs,
     ):
         self.ignore_index = ignore_index
@@ -119,6 +123,10 @@ class PllavaConfig(PretrainedConfig):
         self.tau = tau
         self.cluster_ratio = cluster_ratio
         self.temporal_segment_ratio = temporal_segment_ratio
+        self.use_entropy_adaptive = use_entropy_adaptive
+        self.tau_entropy = tau_entropy
+        self.entropy_fallback_layer = entropy_fallback_layer
+        self.entropy_computation_layers = entropy_computation_layers
         
         self.vision_config = vision_config
         

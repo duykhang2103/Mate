@@ -592,6 +592,10 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         config.text_config.alpha = config.alpha
         config.text_config.softmax = config.softmax
         config.text_config.pooling_shape = config.pooling_shape
+        config.text_config.use_entropy_adaptive = getattr(config, 'use_entropy_adaptive', False)
+        config.text_config.tau_entropy = getattr(config, 'tau_entropy', 0.8)
+        config.text_config.entropy_fallback_layer = getattr(config, 'entropy_fallback_layer', 20)
+        config.text_config.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
         self.pad_token_id = self.config.pad_token_id if self.config.pad_token_id is not None else self.config.text_config.pad_token_id
         assert self.pad_token_id is not None, 'provide the model with pad_token_id, this would be used to arranging new embedings'
         config.text_config.pad_token_id = self.pad_token_id
@@ -1044,8 +1048,13 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
             # Shift so that tokens < n predict n
             if attention_mask is not None:
                 shift_attention_mask = attention_mask[..., 1:]
+                logits_seq_len = logits.shape[1] - 1
+                if shift_attention_mask.shape[1] > logits_seq_len:
+                    shift_attention_mask = shift_attention_mask[..., :logits_seq_len]
                 shift_logits = logits[..., :-1, :][shift_attention_mask.to(logits.device) != 0].contiguous()
-                shift_labels = labels[..., 1:][shift_attention_mask.to(labels.device) != 0].contiguous()
+                if labels is not None:
+                    # shift_labels = labels[..., 1:][shift_attention_mask.to(labels.device) != 0].contiguous()
+                    shift_labels = labels[..., 1:1+logits_seq_len][shift_attention_mask.to(labels.device) != 0].contiguous()
             else:
                 shift_logits = logits[..., :-1, :].contiguous()
                 shift_labels = labels[..., 1:].contiguous()

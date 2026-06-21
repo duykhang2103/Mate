@@ -300,9 +300,9 @@ class LlamaMLP(nn.Module):
         self.config = config
         self.hidden_size = config.hidden_size
         self.intermediate_size = config.intermediate_size
-        self.gate_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=config.mlp_bias)
-        self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=config.mlp_bias)
-        self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=config.mlp_bias)
+        self.gate_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=getattr(config, "mlp_bias", False))
+        self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=getattr(config, "mlp_bias", False))
+        self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=getattr(config, "mlp_bias", False))
         self.act_fn = ACT2FN[config.hidden_act]
 
     def forward(self, x):
@@ -1302,6 +1302,12 @@ class LlamaModelVTP(LlamaModel):
         self.softmax = config.softmax
         self.pad_token_id = config.pad_token_id
 
+        # Entropy-adaptive pruning config
+        self.use_entropy_adaptive = getattr(config, 'use_entropy_adaptive', False)
+        self.tau_entropy = getattr(config, 'tau_entropy', 0.8)
+        self.entropy_fallback_layer = getattr(config, 'entropy_fallback_layer', 20)
+        self.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
+
         self.cache = VTPWindowCache(
             alpha=self.alpha,
             total_num_layers=len(self.layers),
@@ -1327,6 +1333,49 @@ class LlamaModelVTP(LlamaModel):
             stored_key = apply_rotary_pos_emb_single(stored_key, cos, sin)
             past_key_values.key_cache[layer_idx] = stored_key
         return past_key_values
+
+    def _compute_attention_entropy(self, attentions, input_ids_new):
+        """
+        Compute Shannon entropy of text-to-image attention distribution.
+        
+        Args:
+            attentions: Tensor of shape [batch, heads, seq_len, seq_len] from the decoder layer
+            input_ids_new: Original input_ids to locate image tokens (pad_token_id positions)
+        
+        Returns:
+            Scalar entropy value (lower = more focused = better to prune)
+        """
+        pad_token = self.pad_token_id
+        batch_img_indices, seq_img_indices = torch.where(input_ids_new == pad_token)
+        
+        if len(seq_img_indices) == 0:
+            return float('inf')  # No image tokens found, don't trigger
+        
+        img_start, img_end = seq_img_indices[0].item(), seq_img_indices[-1].item()
+        
+        # Extract text-to-image attention: [batch, heads, num_text_tokens, num_img_tokens]
+        text_to_image_attn = attentions[:, :, img_end+1:, img_start: img_end+1]
+        
+        if text_to_image_attn.shape[2] == 0 or text_to_image_attn.shape[3] == 0:
+            return float('inf')
+        
+        # Average across batch, heads, and text tokens -> [num_img_tokens]
+        # Use max across text tokens to get the most relevant attention per image token
+        attn_scores = text_to_image_attn[0].max(dim=0)[0].max(dim=0)[0]  # [num_img_tokens]
+        
+        # Apply softmax to normalize to probability distribution
+        attn_probs = F.softmax(attn_scores, dim=-1)
+        
+        # Compute Shannon entropy: H = -sum(p * log(p))
+        # Clamp to avoid log(0)
+        attn_probs_clamped = torch.clamp(attn_probs, min=1e-10)
+        entropy = -torch.sum(attn_probs_clamped * torch.log(attn_probs_clamped))
+        
+        # Normalize by log(num_img_tokens) to get entropy in [0, 1]
+        num_img_tokens = text_to_image_attn.shape[3]
+        normalized_entropy = entropy / torch.log(torch.tensor(num_img_tokens, dtype=torch.float, device=entropy.device))
+        
+        return normalized_entropy.item()
     
     @add_start_docstrings_to_model_forward(LLAMA_INPUTS_DOCSTRING)
     def forward(
@@ -1397,6 +1446,18 @@ class LlamaModelVTP(LlamaModel):
         all_self_attns = () if output_attentions else None
         next_decoder_cache = None
 
+        # Entropy-adaptive pruning: compute entropy at each layer to find dynamic pruning point
+        is_prefill = hidden_states.shape[1] > 1
+        dynamic_selected_layer = None
+        layer_entropies = [] if (self.use_entropy_adaptive and is_prefill) else None
+
+        # Determine which layers to compute entropy at
+        if self.use_entropy_adaptive and is_prefill:
+            if self.entropy_computation_layers is not None:
+                entropy_layers_to_compute = set(self.entropy_computation_layers)
+            else:
+                entropy_layers_to_compute = set(range(len(self.layers)))
+
         layer_idx = 0
         pos_cache = True
         for decoder_layer in self.layers:
@@ -1414,8 +1475,14 @@ class LlamaModelVTP(LlamaModel):
                     self.original_number = hidden_states.shape[1]
                     self.count_flag = False
 
-            if hidden_states.shape[1] > 1 and layer_idx == self.selected_layer:
-                output_attentions = True
+            # Determine whether to collect attention at this layer
+            if is_prefill:
+                if self.use_entropy_adaptive:
+                    # Collect attention at all layers in the entropy computation set
+                    output_attentions = layer_idx in entropy_layers_to_compute
+                else:
+                    # Original behavior: only collect at selected_layer
+                    output_attentions = layer_idx == self.selected_layer
             else:
                 output_attentions = False
 
@@ -1453,13 +1520,47 @@ class LlamaModelVTP(LlamaModel):
             if output_attentions:
                 all_self_attns += (layer_outputs[1],)
 
+            # Entropy computation: calculate text-to-image attention entropy for this layer
+            if self.use_entropy_adaptive and is_prefill and output_attentions and layer_outputs[1] is not None:
+                entropy = self._compute_attention_entropy(layer_outputs[1], input_ids_new)
+                layer_entropies.append((layer_idx, entropy))
+                # Check if entropy has dropped below threshold -> trigger pruning
+                if dynamic_selected_layer is None and entropy < self.tau_entropy:
+                    dynamic_selected_layer = layer_idx
+
             # used for LLM-VTP
-            if layer_idx==self.selected_layer and (hidden_states.shape[1] > 1):
-                past_key_values, hidden_states, all_hidden_states, causal_mask, attention_mask, position_ids, cache_position = \
-                    self.cache(past_key_values, input_ids_new, layer_outputs[1], hidden_states, all_hidden_states, causal_mask, \
-                        attention_mask, self.pad_token_id, position_ids, text_indices, \
-                            static_sizes=static_sizes, dynamic_sizes=dynamic_sizes, window_sizes=window_sizes)
+            if is_prefill:
+                # For entropy-adaptive: prune at the dynamically selected layer
+                # For fixed: prune at self.selected_layer (original behavior)
+                should_prune = False
+                if self.use_entropy_adaptive:
+                    should_prune = (dynamic_selected_layer is not None and layer_idx == dynamic_selected_layer)
+                else:
+                    should_prune = (layer_idx == self.selected_layer)
+
+                if should_prune:
+                    # Re-enable output_attentions for the pruning layer if needed (fixed mode)
+                    if not self.use_entropy_adaptive:
+                        pass  # attention already collected above
+                    past_key_values, hidden_states, all_hidden_states, causal_mask, attention_mask, position_ids, cache_position = \
+                        self.cache(past_key_values, input_ids_new, layer_outputs[1], hidden_states, all_hidden_states, causal_mask, \
+                            attention_mask, self.pad_token_id, position_ids, text_indices, \
+                                static_sizes=static_sizes, dynamic_sizes=dynamic_sizes, window_sizes=window_sizes,
+                                dynamic_selected_layer=dynamic_selected_layer)
             layer_idx += 1
+
+        # Fallback: if entropy-adaptive was enabled but no layer triggered, use fallback layer
+        if self.use_entropy_adaptive and is_prefill and dynamic_selected_layer is None:
+            dynamic_selected_layer = min(self.entropy_fallback_layer, len(self.layers) - 1)
+            logger.info(f"[VTP-Entropy] No layer triggered (min entropy: {min(e for _, e in layer_entropies):.4f}), using fallback layer {dynamic_selected_layer}")
+
+        # Store entropy profile for external access (e.g., inference visualization)
+        if self.use_entropy_adaptive and is_prefill:
+            self.last_layer_entropies = layer_entropies
+            self.last_dynamic_selected_layer = dynamic_selected_layer
+        else:
+            self.last_layer_entropies = None
+            self.last_dynamic_selected_layer = None
 
         self.count_flag = True
         if hidden_states.shape[1] == 1:
@@ -1481,8 +1582,8 @@ class LlamaModelVTP(LlamaModel):
             last_hidden_state=hidden_states,
             past_key_values=next_cache,
             hidden_states=all_hidden_states,
-            attentions=all_self_attns,
-            attention_mask=attention_mask
+            attentions=all_self_attns
+            # attention_mask=attention_mask
         )
 
 class TextPivotMerge_LayerWise:
@@ -2286,8 +2387,8 @@ class LlamaForCausalLMVTP(LlamaForCausalLM):
             logits=logits,
             past_key_values=outputs.past_key_values,
             hidden_states=outputs.hidden_states,
-            attentions=outputs.attentions,
-            attention_mask=outputs.attention_mask
+            attentions=outputs.attentions
+            # attention_mask=outputs.attention_mask
         )
 
 class LlamaForCausalLMElastic(LlamaForCausalLM):

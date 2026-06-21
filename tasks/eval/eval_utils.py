@@ -8,30 +8,19 @@ import dataclasses
 from typing import Any, List
 
 from PIL import Image
-import cv2
-import imageio
 import numpy as np
 import torch
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 from torchvision.transforms.functional import InterpolationMode
-from moviepy.editor import VideoFileClip
 
-from PIL import Image
-from decord import VideoReader, cpu # This is Terrible, if you have this line of import in front of torch, will cause model.to(device) to hang
+from decord import VideoReader, cpu  # keep after torch (see PLLaVA note on import order)
 from transformers import StoppingCriteria, StoppingCriteriaList
-from transformers import AutoProcessor, AutoModelForZeroShotObjectDetection
 
 from utils.easydict import EasyDict
 
 IMAGE_TOKEN = "<image>"
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-# from visualizer import Visualizer
-import numpy as np
-import matplotlib
-import cv2
-from matplotlib.colors import XKCD_COLORS
 
 class SeparatorStyle(Enum):
     """Different separator style."""
@@ -68,7 +57,7 @@ class Conversation(EasyDict):
     messages: List[List[str]]
     sep: List[str]
     mm_token: str
-    
+
     mm_style: MultiModalConvStyle = MultiModalConvStyle.MM_INTERLEAF
     pre_query_prompt: str=None
     post_query_prompt: str=None
@@ -111,7 +100,7 @@ class Conversation(EasyDict):
                 if self.mm_token not in query:
                     query = f'{mm_str} {query}'
         self._append_message(role, query)
-    
+
     def assistant_response(self, response, pre_query_prompt=None, post_query_prompt=None):
         if post_query_prompt is not None:
             response = f"{response} {post_query_prompt}"
@@ -121,7 +110,7 @@ class Conversation(EasyDict):
 
         role = self.roles[1]
         self._append_message(role, response)
-    
+
     def _append_message(self, role, message):
         message = '' if message is None else message
         self.messages.append([role, message])
@@ -235,7 +224,7 @@ conv_eval_videoqa_llavanext = Conversation(
 )
 
 
-SYSTEM_RECAPTION="""You are a powerful Video Magic ChatBot, a large vision-language assistant. 
+SYSTEM_RECAPTION="""You are a powerful Video Magic ChatBot, a large vision-language assistant.
 You are able to understand the video content that the user provides and assist the user in a video recaptioning task.
 The user will provide you with the video and maybe some extra noisy information to help you out. Make use of the information in a proper way to be competent for the recaption job
 ### INSTRUCTIONS:
@@ -288,10 +277,10 @@ class EvalDataset(Dataset):
             'gif': self.read_clip_gif,
             'frame': self.read_frame,
         }
-        
+
     def __getitem__(self, index) -> Any:
         raise NotImplementedError('')
-        
+
     def __str__(self):
         len_list = {}
         option_list = {}
@@ -302,7 +291,7 @@ class EvalDataset(Dataset):
             if data['task_type'] not in option_list:
                 option_list[data['task_type']] = 0
             option_list[data['task_type']] += len(data['data']['candidates'])
-        
+
         correct = 0
         total = 0
         res = f"There are {len(self.data_list)} videos as follow:\n"
@@ -313,10 +302,10 @@ class EvalDataset(Dataset):
             correct = correct + 1 / option_list[k]
         res += f"Total random accuracy: {correct/total*100:.2f}%"
         return res.rstrip()
-        
+
     def __len__(self):
         return len(self.data_list)
-    
+
     def get_index(self, bound, fps, max_frame, first_idx=0):
         if bound:
             start, end = bound[0], bound[1]
@@ -330,26 +319,29 @@ class EvalDataset(Dataset):
             for idx in range(self.num_segments)
         ])
         return frame_indices
-    
+
     def read_video(self, video_path, bound=None):
         # BGR
         vr = VideoReader(video_path, ctx=cpu(0), num_threads=4)
         max_frame = len(vr) - 1
         fps = float(vr.get_avg_fps())
-        
+
         images_group = list()
-        frame_indices = self.get_index(bound, fps, max_frame, first_idx=0) 
+        frame_indices = self.get_index(bound, fps, max_frame, first_idx=0)
         for frame_index in frame_indices:
             img = Image.fromarray(vr[frame_index].asnumpy())
             images_group.append(img)
         return images_group
-    
+
     def read_gif(self, video_path, bound=None, fps=25):
+        import cv2
+        import imageio
+
         gif = imageio.get_reader(video_path)
         max_frame = len(gif) - 1
-        
+
         images_group = list()
-        frame_indices = self.get_index(bound, fps, max_frame, first_idx=0) 
+        frame_indices = self.get_index(bound, fps, max_frame, first_idx=0)
         for index, frame in enumerate(gif):
             if index in frame_indices:
                 img = cv2.cvtColor(frame, cv2.COLOR_RGBA2RGB)
@@ -365,13 +357,16 @@ class EvalDataset(Dataset):
             assert len(images_group) == self.num_segments
 
         return images_group
-    
+
     def read_clip_gif(self, video_path, bound=None, fps=25):
+        import cv2
+        from moviepy.editor import VideoFileClip
+
         gif = VideoFileClip(video_path)
         frames = gif.iter_frames()
         max_frame = gif.reader.nframes - 1
         images_group = list()
-        frame_indices = self.get_index(bound, fps, max_frame, first_idx=0) 
+        frame_indices = self.get_index(bound, fps, max_frame, first_idx=0)
         for index, frame in enumerate(frames):
             if index in frame_indices:
                 img = cv2.cvtColor(frame, cv2.COLOR_RGBA2RGB)
@@ -385,7 +380,7 @@ class EvalDataset(Dataset):
             assert len(images_group) == self.num_segments
 
         return images_group
-    
+
     def read_frame(self, video_path, bound=None, fps=3):
         max_frame = len(os.listdir(video_path))
         images_group = list()
@@ -395,7 +390,7 @@ class EvalDataset(Dataset):
             img = Image.open(os.path.join(video_path, f"{frame_index:05d}.jpg"))
             images_group.append(img)
         return images_group
-    
+
     def read_npy(self, video_path, bound=None, fps=3):
         if os.path.isfile(video_path):
             video_path = os.path.splitext(video_path)[0] + '.npy'
@@ -403,9 +398,9 @@ class EvalDataset(Dataset):
             video_path = video_path + '.npy'
         else:
             raise ValueError(f"No such file or directory: {video_path}")
-        
+
         video_path_npy = video_path.replace('DATAS/MVBench/video', 'DATAS/MVBench/sampled_frames')
-        
+
         video = np.load(video_path_npy, allow_pickle=True)
         images_group = [image.astype(np.uint8) for image in video]
 
@@ -416,12 +411,16 @@ class EvalDataset(Dataset):
         #     images_group.extend(segs_group)
         # else:
         #     raise ValueError(f"No such file or directory: {seg_path_npy}")
-        
+
         images_group = [Image.fromarray(image) for image in images_group]
 
         return images_group
-    
+
     def draw_number_text(self, img_seq, seg_seq):
+        import cv2
+        from matplotlib.colors import XKCD_COLORS
+        from tasks.eval.visualizer import Visualizer
+
         # img_seq: t h w c
         # seg_seq: [h w c]*(t*k) (value: 0-255)
         seg_seq = np.stack(seg_seq, axis=0) # t*k h w c
@@ -451,13 +450,13 @@ class EvalDataset(Dataset):
             cv2.imwrite('masks/test_mask_{}.jpg'.format(str(t_idx)), img)
         img_list = np.stack(img_list, axis=0) # t h w c
         return img_list
-    
+
     def read_seg(self, seg_path):
         segs = np.load(seg_path, allow_pickle=True).item()
         frame_indices = list(segs.keys())
         if len(frame_indices) == 0:
             return []
-        
+
         frame_indices = sorted(frame_indices)
 
         # delete over-large segments
@@ -477,17 +476,17 @@ class EvalDataset(Dataset):
         #     seg = segs[frame_index]
         #     for key in to_delete:
         #         del seg[key]
-        
+
         # Add in the group
-        
+
         segs_group = list()
         for frame_index in frame_indices:
             seg = segs[frame_index]
             segs_group.append(seg)
-            # segs_group.extend([v.transpose((1, 2, 0)).astype(np.uint8).repeat(3, axis=2)*255.0 for v in seg]) 
+            # segs_group.extend([v.transpose((1, 2, 0)).astype(np.uint8).repeat(3, axis=2)*255.0 for v in seg])
             # for k, v in seg.items():
             #     segs_group.append(v.transpose((1, 2, 0)).astype(np.uint8).repeat(3, axis=2)*255.0) # h w c
-        
+
         segs_group = np.concatenate(segs_group, axis=0)*255.0
         segs_group = segs_group.transpose((0, 2, 3, 1)).repeat(3, axis=3).astype(np.uint8) # t h w 3
 
@@ -529,7 +528,7 @@ class ChatPllava:
             for i in range(diff_mm_num):
                 conv.user_query("", is_mm=True)
             prompt = conv.get_prompt()
-            
+
         inputs = self.processor(text=prompt, images=img_list, return_tensors="pt")
         if inputs['pixel_values'] is None:
             inputs.pop('pixel_values')
@@ -537,7 +536,7 @@ class ChatPllava:
 
         with torch.no_grad():
             output_token = self.model.generate(**inputs, media_type='video',
-                                        do_sample=self.do_sample,max_new_tokens=max_new_tokens, num_beams=num_beams, min_length=min_length, 
+                                        do_sample=self.do_sample,max_new_tokens=max_new_tokens, num_beams=num_beams, min_length=min_length,
                                         top_p=top_p, repetition_penalty=repetition_penalty, length_penalty=length_penalty, temperature=temperature,
                                         ) # dont need to long for the choice.
             output_text = self.processor.batch_decode(output_token, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
@@ -553,8 +552,8 @@ class ChatPllava:
         output_text = output_text.split(split_tag)[-1].rstrip(conv.sep[1])
         conv.assistant_response(output_text)
         return output_text, output_token.cpu().numpy(), conv
-    
-        
+
+
     def get_index(self, num_frames, num_segments):
         seg_size = float(num_frames - 1) / num_segments
         start = int(seg_size / 2)
@@ -567,12 +566,12 @@ class ChatPllava:
         vr = VideoReader(video_path, ctx=cpu(0))
         num_frames = len(vr)
         frame_indices = self.get_index(num_frames, num_segments)
-        
+
         duration = len(vr) // vr.get_avg_fps()
         index = np.linspace(0, len(vr)-1, num=int(duration))
         buffer = vr.get_batch(index).asnumpy()
         # transform
-        
+
         images_group = list()
         for frame in buffer:
             img = Image.fromarray(frame)
@@ -591,7 +590,7 @@ class ChatPllava:
             return images_group
 
     def upload_video(self, image, conv: Conversation, img_list: list[list], num_segments=None):
-        num_segments = self.model.config.num_frames if num_segments is None else num_segments 
+        num_segments = self.model.config.num_frames if num_segments is None else num_segments
         if isinstance(image, str):  # is a image path
             vid, msg = self.load_video(image, num_segments=num_segments, return_msg=True)
         else:
@@ -602,7 +601,7 @@ class ChatPllava:
         msg = "Received."
         # self.conv.append_message(self.conv.roles[1], msg)
         return msg, img_list, conv
-    
+
     def upload_img(self, image, conv, img_list):
         assert False
         img = image#Image.open(image)#.convert('RGB')

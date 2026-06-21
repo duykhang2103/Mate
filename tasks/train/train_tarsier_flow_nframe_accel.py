@@ -30,7 +30,7 @@ from transformers.utils import TensorType
 from tasks.shared_utils import create_optimizer, create_scheduler
 import copy
 
-from mmcv.runner import load_checkpoint
+from mmengine.runner import load_checkpoint
 
 from transformers import  (
     DataCollatorWithPadding,

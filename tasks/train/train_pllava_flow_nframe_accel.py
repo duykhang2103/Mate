@@ -41,7 +41,7 @@ from transformers import  (
 
 from models.pllava import PllavaConfig, PllavaForConditionalGeneration, PllavaProcessor
 from models.pllava import PllavaFlowForConditionalGeneration
-from mmcv.runner import load_checkpoint
+from mmengine.runner import load_checkpoint
 
 # logger = logging.getLogger(__name__)
 IMAGE_TOKEN='<image>'

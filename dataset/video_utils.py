@@ -95,7 +95,7 @@ def read_frames_av(
         max_num_frames=-1, client=None, clip=None,
     ):
     reader = av.open(video_path)
-    frames = [torch.from_numpy(f.to_rgb().to_ndarray()) for f in reader.decode(video=0)]
+    frames = [torch.from_numpy(f.to_rgb().to_ndarray(format='rgb24')) for f in reader.decode(video=0)]
     vlen = len(frames)
     duration = get_pyav_video_duration(reader)
     fps = vlen / float(duration)

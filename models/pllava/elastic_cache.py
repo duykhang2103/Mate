@@ -152,6 +152,9 @@ class VTPWindowCache:
         
         topk_indices = torch.cat(topk_indices_list, dim=0)
 
+        # Save pruning decision for visualization
+        self.last_topk_indices = topk_indices.detach().cpu()
+
         return topk_indices
     
     def obtain_language_attention(self, input_ids, attentions, pad_token, text_indices=None):
@@ -167,7 +170,7 @@ class VTPWindowCache:
 
         return text_to_image_attentions, text_to_text_attentions, image_to_image_attentions, img_start, img_end, seq_len
     
-    def prompt_prefill(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False):
+    def prompt_prefill(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None):
         text_to_image_attentions, text_to_text_attentions, image_to_image_attentions, img_start, img_end, seq_len = self.obtain_language_attention(input_ids, attentions, pad_token_id) # batch_size, head_num, num_query, num_img
         
         topk_indices = self.process_attention(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes) # num
@@ -180,7 +183,10 @@ class VTPWindowCache:
         index_list_pre_image = torch.arange(0, img_start, device=input_ids.device) # maintain the tokens before the image
         index_list_post_image = torch.arange(img_end+1, seq_len, device=input_ids.device) # maintain the tokens after the image
         index_list = torch.cat([index_list_pre_image, image_index_list, index_list_post_image], dim=0) # concat the tokens before and after the image
-        for layer_idx in range(self.selected_layer+1):                                                                                                                               
+        
+        # Use dynamic layer if provided, otherwise fall back to self.selected_layer
+        prune_layer = dynamic_selected_layer if dynamic_selected_layer is not None else self.selected_layer
+        for layer_idx in range(prune_layer+1):                                                                                                                               
             past_key_values.key_cache[layer_idx] = past_key_values.key_cache[layer_idx][:,:,index_list,:].contiguous()
             past_key_values.value_cache[layer_idx] = past_key_values.value_cache[layer_idx][:,:,index_list,:].contiguous()
 
@@ -202,9 +208,9 @@ class VTPWindowCache:
         return past_key_values, hidden_states, updated_hidden_states, causal_mask, attention_mask, position_ids, cache_postition
 
 
-    def __call__(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False):
+    def __call__(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None):
                 
-        return self.prompt_prefill(past_key_values, input_ids, attentions, hidden_states, past_hidden_states, causal_mask, attention_mask, pad_token_id, position_ids, text_indices, attn_shallower, static_sizes, dynamic_sizes, window_sizes, decoding_flag)
+        return self.prompt_prefill(past_key_values, input_ids, attentions, hidden_states, past_hidden_states, causal_mask, attention_mask, pad_token_id, position_ids, text_indices, attn_shallower, static_sizes, dynamic_sizes, window_sizes, decoding_flag, dynamic_selected_layer)
 
 class ElasticCache:
     def __init__(
