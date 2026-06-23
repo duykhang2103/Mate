@@ -45,9 +45,7 @@ def save_results(result_list, save_path):
 
     for k, v in acc_dict.items():
         final_res[k] = v[0] / v[1] * 100
-        correct += v[0]
-        total += v[1]    
-    final_res['Avg'] = correct / total * 100
+    final_res['Avg'] = sum(v[0] for v in acc_dict.values()) / sum(v[1] for v in acc_dict.values()) * 100
 
     all_results = {
         "acc_dict": acc_dict,
@@ -131,27 +129,29 @@ class MVBenchDataset(EvalDataset):
         # ])
     
     def __getitem__(self, idx):
-        question, answer = self.qa_template(self.data_list[idx]['data'])
-        task_type = self.data_list[idx]['task_type']
-        decord_method = self.decord_method[self.data_list[idx]['data_type']]
-        bound = None
-        if self.data_list[idx]['bound']:
-            bound = (
-                self.data_list[idx]['data']['start'],
-                self.data_list[idx]['data']['end'],
-            )
-        video_path = os.path.join(self.data_list[idx]['prefix'], self.data_list[idx]['data']['video'])
+        try:
+            question, answer = self.qa_template(self.data_list[idx]['data'])
+            task_type = self.data_list[idx]['task_type']
+            decord_method = self.decord_method[self.data_list[idx]['data_type']]
+            bound = None
+            if self.data_list[idx]['bound']:
+                bound = (
+                    self.data_list[idx]['data']['start'],
+                    self.data_list[idx]['data']['end'],
+                )
+            video_path = os.path.join(self.data_list[idx]['prefix'], self.data_list[idx]['data']['video'])
 
+            images_group = decord_method(video_path, bound)
 
-        images_group = decord_method(video_path, bound)
-
-        return {
-            'video_path': video_path, 
-            'video_pils': images_group, # some might use the original pils and do their own transforms
-            'question': question, 
-            'answer': answer,
-            'task_type': task_type,
-        }
+            return {
+                'video_path': video_path, 
+                'video_pils': images_group,
+                'question': question, 
+                'answer': answer,
+                'task_type': task_type,
+            }
+        except Exception:
+            return None
         
 
     def qa_template(self, data):

@@ -1,0 +1,123 @@
+{
+  "raw_visual_tokens_after_projector": 2304,
+  "baseline": {
+    "vision_tokens_after_merge": 2304,
+    "vision_retention_vs_raw": 1.0,
+    "llm_visual_tokens_after_layer_prune": 2304,
+    "llm_visual_retention_vs_raw": 1.0,
+    "wall_time_sec": 10.31459375,
+    "answer": "In the video, a woman is seen cooking on a television show set. She is wearing an apron and a plaid shirt, and she appears to be preparing a dish that involves measuring ingredients and mixing them in a bowl. There are various kitchen utensils and ingredients visible on the counter, including a measuring cup, a spoon, and a bowl. The background shows a scenic view of a body of water, suggesting that the location might be near a lake or a coastal area. The woman seems to be following a recipe and demonstrating cooking techniques for the audience.",
+    "raw_visual_tokens": 2304,
+    "after_vision_merge_tokens": 2304,
+    "vision_retention_ratio": 1.0,
+    "static_tokens": 0,
+    "dynamic_tokens": 2304,
+    "temporal_windows": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "static_per_window": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "dynamic_per_window": [
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144,
+      144
+    ],
+    "frame_prune_masks": null
+  },
+  "pruned": {
+    "vision_tokens_after_merge": 634,
+    "vision_retention_vs_raw": 0.2751736111111111,
+    "llm_visual_tokens_after_layer_prune": 249,
+    "llm_visual_retention_vs_raw": 0.10807291666666667,
+    "wall_time_sec": 5.70909228515625,
+    "answer": "In the video, a woman is cooking a meal on a television show set. She is wearing an apron and appears to be in the process of preparing a dish. There are various kitchen utensils and ingredients visible on the counter, including a bowl, a spoon, and a measuring cup. The woman is looking at the camera and seems to be engaged in the cooking process. The background suggests that this is a professional cooking show, possibly aimed at demonstrating recipes or cooking techniques.",
+    "raw_visual_tokens": 2304,
+    "after_vision_merge_tokens": 634,
+    "vision_retention_ratio": 0.2751736111111111,
+    "static_tokens": 134,
+    "dynamic_tokens": 500,
+    "temporal_windows": [
+      2,
+      7,
+      7
+    ],
+    "static_per_window": [
+      59,
+      24,
+      51
+    ],
+    "dynamic_per_window": [
+      24,
+      336,
+      140
+    ],
+    "frame_prune_masks": null
+  },
+  "delta_pruned_vs_baseline": {
+    "vision_tokens_removed": 1670,
+    "vision_token_reduction_pct": 72.48263888888889,
+    "llm_visual_tokens_removed": 2055,
+    "llm_visual_token_reduction_pct": 89.19270833333334,
+    "overall_visual_retention_vs_raw_pct": 10.807291666666668,
+    "speedup_baseline_over_pruned": 1.8066959220151588,
+    "answers_match": false
+  },
+  "pruning_hyperparameters": {
+    "selected_layer": 10,
+    "alpha": 0.4,
+    "tau": 0.8,
+    "cluster_ratio": 0.5,
+    "temporal_segment_ratio": 0.25,
+    "baseline_alpha": 1.0,
+    "use_entropy_adaptive": false,
+    "tau_entropy": 0.8,
+    "entropy_fallback_layer": 20
+  },
+  "video": "example/cooking.mp4",
+  "question": "What is happening in this video?",
+  "frame_sampling": "16 frames sampled at 0.2, 0.6, 1.0, 1.4, 1.8, 2.2, 2.6, 3.0, 3.4, 3.7, 4.1, 4.5, 4.9, 5.3, 5.7, 6.1 seconds."
+}

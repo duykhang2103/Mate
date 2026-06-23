@@ -261,6 +261,8 @@ def run(rank, args, world_size,start_rank=0):
     done_count = 0
 
     for example in tqdm(dataset):
+        if example is None:
+            continue
         task_type = example['task_type']
         gt = example['answer']
         if task_type == 'consistency_qa':

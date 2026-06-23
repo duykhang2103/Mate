@@ -8,7 +8,8 @@ from tasks.eval.eval_utils import Conversation
 from models.pllava import PllavaProcessor, PllavaForConditionalGeneration, PllavaConfig
 from accelerate import init_empty_weights, dispatch_model, infer_auto_device_map,load_checkpoint_in_model
 from accelerate.utils import get_balanced_memory
-from mmcv.runner import load_checkpoint
+# from mmcv.runner import load_checkpoint
+load_checkpoint = None
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
