@@ -51,13 +51,15 @@ The codebase already contains significant experimental groundwork:
 
 | Component                     | File                                             | Status                    | Notes                                                           |
 | ----------------------------- | ------------------------------------------------ | ------------------------- | --------------------------------------------------------------- |
-| Entropy-adaptive config       | `configuration_pllava.py`                        | Implemented               | `use_entropy_adaptive`, `tau_entropy`, `entropy_fallback_layer` |
-| Entropy computation           | `llama.py:_compute_attention_entropy`            | Implemented but flawed    | Single-head collapse issue                                      |
-| Dynamic layer selection       | `llama.py:LlamaModelVTP.forward`                 | Implemented               | Works, but only tested with broken entropy                      |
+| Entropy-adaptive config       | `configuration_pllava.py`                        | **Done**                  | `use_entropy_adaptive`, `tau_entropy`, `entropy_fallback_layer` |
+| Entropy computation           | `llama.py:_compute_attention_entropy`            | **Done but needs fix**    | Single-head collapse issue — Phase 2 task                       |
+| Dynamic layer selection       | `llama.py:LlamaModelVTP.forward`                 | **Done**                  | Works, awaiting multi-head entropy fix                          |
+| VTPWindowCache dynamic layer  | `elastic_cache.py`                               | **Done**                  | Accepts `dynamic_selected_layer` parameter                      |
+| Config propagation            | `modeling_pllava.py`, `model_utils.py`           | **Done**                  | Entropy params propagated through config chain                  |
+| Single-video inference        | `scripts/infer_single_video.py`                  | **Done**                  | With entropy profile visualization                              |
 | Multi-head pruning strategies | `modify_llama.py`                                | 12 variants implemented   | H2O, PivotKV, WeightedMerge, TextPrior, etc. — mostly unused    |
 | Weighted merge                | `modify_llama.py:WeightedMergeKVCache_LayerWise` | Implemented but not wired | Uses similarity-weighted merge instead of 50/50 average         |
 | Progressive pruning concept   | `doc/PRUNEVID_LIMITATION.md`                     | Proposed, not implemented | "Approach A: Progressive Multi-Stage Pruning"                   |
-| Single-video inference        | `scripts/infer_single_video.py`                  | Working                   | With entropy profile visualization                              |
 
 ### 1.4 Compute Resources
 
@@ -86,13 +88,21 @@ Alternative titles:
 
 1. **Multi-head entropy-guided layer selection**: Replace PruneVid's fixed `selected_layer=10` with a dynamic trigger based on per-head attention entropy. Simple queries trigger early; complex queries trigger late.
 
-2. **Motion-aware adaptive retention**: Replace the fixed `alpha` with per-region adaptive retention ratios. Regions with high temporal variance (motion) receive higher retention; static backgrounds receive lower retention.
+2. **Motion-aware adaptive retention**: Replace the fixed `alpha` with per-region adaptive retention ratios. Regions with high temporal variance (motion) receive higher retention; static backgrounds receive lower retention. If the attention-variance proxy fails during Phase 3 trials, use a true visual motion proxy instead. Since already have decord in your tech stack, we can compute a rapid, training-free frame-difference metric (e.g., mean pixel difference between adjacent frames in a window) to scale your adaptive $\alpha$. Reviewers will love a comparison between "Text-Attn Variance" vs. "Pixel Variance" in ablation studies!
 
 3. **Progressive multi-stage pruning**: Distribute the pruning budget across 2-3 LLM layers instead of a single massive drop. This allows the model to gradually refine its visual representation as layers become more semantic.
 
 4. **Empirical validation**: Show improvements over PruneVid on MVBench, VideoMME, Egoschema, and VCG-Bench, with particular gains on motion-heavy and temporally complex subsets.
 
 ---
+
+Note: for "Motion-aware adaptive retention":
+
+- In Phase 3, add quick test of both proxies on 5 videos
+
+- If attention-variance works, skip pixel difference
+
+- If it fails, implement pixel difference (Section 3.3.1)
 
 ## 3. Implementation Plan
 
@@ -119,6 +129,8 @@ Alternative titles:
 ### 3.2 Phase 2: Multi-Head Entropy Fix (Weeks 3–4)
 
 **Objective**: Fix the broken entropy computation and validate the entropy-adaptive approach.
+
+**Status**: Entropy-adaptive infrastructure is **already implemented** (config, dynamic layer selection, VTPWindowCache, inference script). The remaining work is fixing the multi-head entropy collapse and running validation.
 
 #### 3.2.1 Changes to `models/pllava/llama.py`
 
@@ -289,6 +301,30 @@ progressive_alphas=[0.7, 0.5, 0.3],
 
 **Checkpoint**: Progressive pruning runs. Token count decreases gradually across layers.
 
+#### 3.4.3 Cascading Error Mitigation
+
+Progressive pruning carries a fundamental risk: **irreversible token loss**. When tokens are pruned at layer 6, they cannot be recovered at layer 12. This creates cascading errors if early layers prune tokens that deeper layers would need.
+
+**Mitigation strategy**:
+
+1. **Conservative early stages**: Use higher retention at early layers (e.g., 0.7) and more aggressive pruning at later layers (e.g., 0.3). This preserves more tokens when representations are shallow.
+
+2. **Fallback to single-stage**: If progressive pruning degrades accuracy vs. single-stage entropy-adaptive, fall back to entropy-adaptive only. The single-stage approach is already novel and publishable.
+
+3. **Validation gate**: Before committing to progressive pruning, run a quick A/B test on 2 MVBench motion tasks:
+   - If progressive > single-stage by ≥0.5%: proceed with progressive
+   - If progressive ≤ single-stage: drop progressive, focus on entropy + motion-adaptive only
+
+4. **Token importance preservation**: At each pruning stage, always preserve tokens that were "borderline" (attention score within 10% of the cutoff). These tokens are most likely to change importance in deeper layers.
+
+```python
+# In VTPWindowCache.process_attention(), add borderline preservation:
+margin = 0.1  # preserve tokens within 10% of cutoff
+cutoff_score = static_attentions[num_retain_static_tokens - 1]
+borderline_mask = static_attentions >= cutoff_score * (1 - margin)
+# Keep both top-k AND borderline tokens
+```
+
 ### 3.5 Phase 5: Weighted Token Merge (Week 9)
 
 **Objective**: Replace 50/50 average merge with similarity-weighted merge.
@@ -338,6 +374,27 @@ This preserves more information when the pivot is a good match (high similarity 
 **Total evaluation runs**: ~12 configs × 4 benchmarks = ~48 runs
 **Estimated time per run**: 3-6 hours (depending on benchmark size)
 **Total compute**: ~12-24 GPU-days (with 2 GPUs: ~6-12 days)
+
+Note: if have enough time, benchmark on
+
+- Ablation: motion-adaptive on high-motion videos (σ > threshold)
+- Ablation: motion-adaptive on low-motion videos (σ < threshold)
+
+Should breakdown for easier understanding
+
+```
+MVBench_subsets = {
+"action_heavy": ["action_order", "action_count", "sports_complex"],
+"temporal_complex": ["activity_order", "timestamp"],
+"static": ["dialogue", "knowledge_qa"]
+}
+```
+
+# Report accuracy per subset
+
+for subset_name, subsets in MVBench_subsets.items():
+accuracy = evaluate_on_subsets(subsets)
+print(f"{subset_name}: PruneVid={baseline_acc} vs Our={our_acc}")
 
 #### 3.6.2 Hyperparameter Search
 
