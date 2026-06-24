@@ -1,0 +1,66 @@
+2026-06-23 14:42:21 | INFO | Logging to test_results/single_video_infer/infer_single_video.log
+2026-06-23 14:42:21 | INFO | Loading model from MODELS/pllava-7b (weight_dir=MODELS/pllava-7b)
+2026-06-23 14:42:21 | INFO | LoRA: True | lora_alpha=14
+2026-06-23 14:42:21 | INFO | Entropy-adaptive: False | tau_entropy=0.8 | fallback_layer=20
+2026-06-23 14:42:27 | INFO | Loading optical flow model
+2026-06-23 14:42:27 | INFO | Loading optical flow model failed, use default model
+2026-06-23 14:42:47 | INFO | Loaded video: 16 frames sampled at 0.2, 0.6, 1.0, 1.4, 1.8, 2.2, 2.6, 3.0, 3.4, 3.7, 4.1, 4.5, 4.9, 5.3, 5.7, 6.1 seconds.
+2026-06-23 14:42:47 | INFO | Running BASELINE inference...
+2026-06-23 14:42:49 | WARNING | We detected that you are passing `past_key_values` as a tuple and this is deprecated and will be removed in v4.43. Please use an appropriate `Cache` class (https://huggingface.co/docs/transformers/v4.41.3/en/internal/generation_utils#transformers.Cache)
+2026-06-23 14:42:49 | WARNING | LlamaModel is using LlamaSdpaAttention, but `torch.nn.functional.scaled_dot_product_attention` does not support `output_attentions=True`. Falling back to the manual attention implementation, but specifying the manual implementation will be required from Transformers version v5.0.0 onwards. This warning can be removed using the argument `attn_implementation="eager"` when loading the model.
+2026-06-23 14:42:59 | INFO | DEBUG: input_ids shape=(1, 71)  output_ids shape=(1, 205)
+2026-06-23 14:42:59 | INFO | DEBUG: num new tokens=134
+2026-06-23 14:42:59 | INFO | DEBUG: raw decoded text (no skip_special) = <s> Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER: <image> 
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is seen cooking on a television show set. She is wearing an apron and a plaid shirt, and she appears to be preparing a dish that involves measuring ingredients and
+2026-06-23 14:42:59 | INFO | DEBUG: decoded text (skip_special) = Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER:  
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is seen cooking on a television show set. She is wearing an apron and a plaid shirt, and she appears to be preparing a dish that involves measuring ingredients and mixing the
+2026-06-23 14:42:59 | INFO | Output <unk> count: 0
+2026-06-23 14:42:59 | INFO | Running PRUNED inference (entropy_adaptive=False)...
+2026-06-23 14:43:05 | INFO | DEBUG: input_ids shape=(1, 71)  output_ids shape=(1, 185)
+2026-06-23 14:43:05 | INFO | DEBUG: num new tokens=114
+2026-06-23 14:43:05 | INFO | DEBUG: raw decoded text (no skip_special) = <s> Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER: <image> 
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is cooking a meal on a television show set. She is wearing an apron and appears to be in the process of preparing a dish. There are various kitchen utensils and in
+2026-06-23 14:43:05 | INFO | DEBUG: decoded text (skip_special) = Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER:  
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is cooking a meal on a television show set. She is wearing an apron and appears to be in the process of preparing a dish. There are various kitchen utensils and ingredients v
+2026-06-23 14:43:05 | INFO | Output <unk> count: 0
+2026-06-23 14:43:05 | INFO | Wrote JSON report to test_results/single_video_infer/comparison.json
+2026-06-23 14:43:05 | INFO | ========================================================================
+2026-06-23 14:43:05 | INFO | Video: example/cooking.mp4
+2026-06-23 14:43:05 | INFO | Question: What is happening in this video?
+2026-06-23 14:43:05 | INFO | ------------------------------------------------------------------------
+2026-06-23 14:43:05 | INFO | Visual tokens (projector output): 2304  (16 sampled frames)
+2026-06-23 14:43:05 | INFO | 
+2026-06-23 14:43:05 | INFO | BASELINE (no vision merge, alpha=1.00)
+2026-06-23 14:43:05 | INFO |   Vision tokens after merge : 2304 (100.0% of raw)
+2026-06-23 14:43:05 | INFO |   LLM visual tokens (est.)  : 2304 (100.0% of raw)
+2026-06-23 14:43:05 | INFO |   Static / dynamic (vision) : 0 / 2304
+2026-06-23 14:43:05 | INFO |   Generate time             : 10.315 s
+2026-06-23 14:43:05 | INFO |   Answer:
+In the video, a woman is seen cooking on a television show set. She is wearing an apron and a plaid shirt, and she appears to be preparing a dish that involves measuring ingredients and mixing them in a bowl. There are various kitchen utensils and ingredients visible on the counter, including a measuring cup, a spoon, and a bowl. The background shows a scenic view of a body of water, suggesting that the location might be near a lake or a coastal area. The woman seems to be following a recipe and demonstrating cooking techniques for the audience.
+2026-06-23 14:43:05 | INFO | 
+2026-06-23 14:43:05 | INFO | PRUNED (PruneVid)
+2026-06-23 14:43:05 | INFO |   tau=0.80  cluster_ratio=0.50  temporal_segment_ratio=0.25  alpha=0.40
+2026-06-23 14:43:05 | INFO |   Fixed pruning layer       : -1
+2026-06-23 14:43:05 | INFO |   Vision tokens after merge : 634 (27.5% of raw)
+2026-06-23 14:43:05 | INFO |   LLM visual tokens (est.)  : 249 (10.8% of raw)
+2026-06-23 14:43:05 | INFO |   Static / dynamic (vision) : 134 / 500
+2026-06-23 14:43:05 | INFO |   Temporal windows (frames) : [2, 7, 7]
+2026-06-23 14:43:05 | INFO |   Static per window         : [59, 24, 51]
+2026-06-23 14:43:05 | INFO |   Dynamic per window        : [24, 336, 140]
+2026-06-23 14:43:05 | INFO |   Generate time             : 5.709 s
+2026-06-23 14:43:05 | INFO |   Answer:
+In the video, a woman is cooking a meal on a television show set. She is wearing an apron and appears to be in the process of preparing a dish. There are various kitchen utensils and ingredients visible on the counter, including a bowl, a spoon, and a measuring cup. The woman is looking at the camera and seems to be engaged in the cooking process. The background suggests that this is a professional cooking show, possibly aimed at demonstrating recipes or cooking techniques.
+2026-06-23 14:43:05 | INFO | 
+2026-06-23 14:43:05 | INFO | DIFFERENCE (pruned vs baseline)
+2026-06-23 14:43:05 | INFO |   Vision tokens removed     : 1670 (72.5% reduction)
+2026-06-23 14:43:05 | INFO |   LLM visual tokens removed : 2055 (89.2% reduction)
+2026-06-23 14:43:05 | INFO |   Overall retention vs raw  : 10.8%
+2026-06-23 14:43:05 | INFO |   Time ratio (baseline/pruned): 1.81x
+2026-06-23 14:43:05 | INFO |   Answers identical         : False
+2026-06-23 14:43:05 | INFO | ========================================================================
+2026-06-23 14:43:05 | INFO | Built prune masks for 16 frames (12x12)
+2026-06-23 14:43:06 | INFO | Visualization video saved  ->  output/cooking_20260623_144305.mp4

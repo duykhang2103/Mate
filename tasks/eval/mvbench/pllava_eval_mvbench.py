@@ -130,6 +130,18 @@ def parse_args():
         type=float,
         default=1.0,
     )
+    parser.add_argument(
+        "--tasks", 
+        type=str,
+        default=None,
+        help="Comma-separated list of task types to evaluate on (e.g. 'Action Sequence,State Change'). Default: all tasks.",
+    )
+    parser.add_argument(
+        "--max_samples", 
+        type=int,
+        default=None,
+        help="Max number of samples to evaluate per task. Default: all samples.",
+    )
     args = parser.parse_args()
     return args
 
@@ -252,6 +264,26 @@ def run(rank, args, world_size):
                                                        cluster_ratio=args.cluster_ratio)
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
+
+    # Filter by tasks if specified
+    if args.tasks:
+        allowed_tasks = set(t.strip() for t in args.tasks.split(','))
+        dataset.data_list = [d for d in dataset.data_list if d['task_type'] in allowed_tasks]
+        logger.info(f'Filtered to tasks: {allowed_tasks} ({len(dataset.data_list)} samples)')
+
+    # Limit samples per task if specified
+    if args.max_samples is not None:
+        from collections import defaultdict
+        task_counts = defaultdict(int)
+        filtered = []
+        for d in dataset.data_list:
+            task = d['task_type']
+            if task_counts[task] < args.max_samples:
+                filtered.append(d)
+                task_counts[task] += 1
+        dataset.data_list = filtered
+        logger.info(f'Limited to {args.max_samples} samples per task ({len(dataset.data_list)} total)')
+
     logger.info('single test...')
 
     vid_path = "./example/yoga.mp4"
@@ -272,6 +304,8 @@ def run(rank, args, world_size):
     done_count = 0
 
     for example in dataset:
+        if example is None:
+            continue
         task_type = example['task_type']
         if task_type not in acc_dict:
             acc_dict[task_type] = [0, 0] # correct, total

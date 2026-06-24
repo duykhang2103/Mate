@@ -272,6 +272,8 @@ def run(rank, args, world_size):
     done_count = 0
 
     for example in dataset:
+        if example is None:
+            continue
         task_type = example['task_type']
         if task_type not in acc_dict:
             acc_dict[task_type] = [0, 0] # correct, total
