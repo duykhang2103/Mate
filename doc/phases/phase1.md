@@ -168,7 +168,7 @@ python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --alpha 0.4 --tau 0.8 \
     --temporal_segment_ratio 0.25 \
     --cluster_ratio 0.5 \
-    --tasks "Action Sequence,Action Prediction,State Change" \
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
     --max_samples 100
 ```
 
