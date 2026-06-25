@@ -97,7 +97,10 @@ class MVBenchDataset(EvalDataset):
 
         self.data_list = []
         for k, v in data_list_info.items():
-            with open(os.path.join(data_dir, v[0]), 'r') as f:
+            json_path = os.path.join(data_dir, v[0])
+            if not os.path.exists(json_path):
+                continue
+            with open(json_path, 'r') as f:
                 json_data = json.load(f)
             for data in json_data:
                 self.data_list.append({
@@ -150,6 +153,8 @@ class MVBenchDataset(EvalDataset):
                 'answer': answer,
                 'task_type': task_type,
             }
+        except IndexError:
+            raise
         except Exception:
             return None
         

@@ -1,0 +1,2651 @@
+{
+    "acc_dict": {
+        "Action Sequence": [
+            42,
+            75
+        ],
+        "Action Prediction": [
+            32,
+            75
+        ],
+        "Unexpected Action": [
+            54,
+            75
+        ],
+        "Object Interaction": [
+            49,
+            75
+        ],
+        "Moving Direction": [
+            14,
+            75
+        ]
+    },
+    "result_list": [
+        {
+            "pred": "(C) Put down the cup/glass/bottle.",
+            "gt": "(A) Ate the medicine.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ZS9XR.mp4",
+            "question": "Question: What happened after the person took the food?\nOptions:\n(A) Ate the medicine.\n(B) Tidied up the blanket.\n(C) Put down the cup/glass/bottle.\n(D) Took the box."
+        },
+        {
+            "pred": "(B) Took the phone/camera.",
+            "gt": "(C) Opened the closet/cabinet.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/EY6P4.mp4",
+            "question": "Question: What happened before the person watched at the book?\nOptions:\n(A) Tidied up the table.\n(B) Took the phone/camera.\n(C) Opened the closet/cabinet.\n(D) Washed the table."
+        },
+        {
+            "pred": "(C) Opened the closet/cabinet.",
+            "gt": "(C) Opened the closet/cabinet.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/WBS4I.mp4",
+            "question": "Question: What happened before the person watched at the book?\nOptions:\n(A) Put down the sandwich.\n(B) Washed the table.\n(C) Opened the closet/cabinet.\n(D) Put down the pillow."
+        },
+        {
+            "pred": "(C) Opened the door.",
+            "gt": "(D) Threw the towel.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/43FG9.mp4",
+            "question": "Question: What happened after the person put down the clothes?\nOptions:\n(A) Took the broom.\n(B) Took the blanket.\n(C) Opened the door.\n(D) Threw the towel."
+        },
+        {
+            "pred": "(C) Sat on the sofa/couch.",
+            "gt": "(C) Sat on the sofa/couch.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9LHP3.mp4",
+            "question": "Question: What happened after the person held the shoe?\nOptions:\n(A) Opened the closet/cabinet.\n(B) Threw the broom.\n(C) Sat on the sofa/couch.\n(D) Washed the clothes."
+        },
+        {
+            "pred": "(B) Put down the towel.",
+            "gt": "(B) Put down the towel.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/PQYWB.mp4",
+            "question": "Question: What happened after the person held the phone/camera?\nOptions:\n(A) Closed the refrigerator.\n(B) Put down the towel.\n(C) Put down the laptop.\n(D) Opened the window."
+        },
+        {
+            "pred": "(C) Closed the window.",
+            "gt": "(C) Closed the window.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/GLGQJ.mp4",
+            "question": "Question: What happened after the person took the phone/camera?\nOptions:\n(A) Took the book.\n(B) Put down the pillow.\n(C) Closed the window.\n(D) Took the food."
+        },
+        {
+            "pred": "(D) Put down the paper/notebook.",
+            "gt": "(D) Put down the paper/notebook.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/VKXLL.mp4",
+            "question": "Question: What happened after the person opened the box?\nOptions:\n(A) Threw the clothes.\n(B) Put down the food.\n(C) Sat at the table.\n(D) Put down the paper/notebook."
+        },
+        {
+            "pred": "(D) Put down the broom.",
+            "gt": "(D) Put down the broom.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/0OSJY.mp4",
+            "question": "Question: What happened after the person sat on the bed?\nOptions:\n(A) Took the phone/camera.\n(B) Opened the window.\n(C) Took the pillow.\n(D) Put down the broom."
+        },
+        {
+            "pred": "(D) Put down the cup/glass/bottle.",
+            "gt": "(B) Put down the bag.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HPAYB.mp4",
+            "question": "Question: What happened before the person took the clothes?\nOptions:\n(A) Threw the book.\n(B) Put down the bag.\n(C) Opened the window.\n(D) Put down the cup/glass/bottle."
+        },
+        {
+            "pred": "(A) Put down the laptop.",
+            "gt": "(A) Put down the laptop.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/M2XIS.mp4",
+            "question": "Question: What happened before the person sat on the sofa/couch?\nOptions:\n(A) Put down the laptop.\n(B) Took the paper/notebook.\n(C) Put down the pillow.\n(D) Ate the medicine."
+        },
+        {
+            "pred": "(B) Took the dish.",
+            "gt": "(A) Tidied up the table.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/YOCI8.mp4",
+            "question": "Question: What happened after the person held the blanket?\nOptions:\n(A) Tidied up the table.\n(B) Took the dish.\n(C) Opened the window.\n(D) Took the pillow."
+        },
+        {
+            "pred": "(B) Opened the laptop.",
+            "gt": "(B) Opened the laptop.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3Q6N1.mp4",
+            "question": "Question: What happened before the person held the food?\nOptions:\n(A) Put down the clothes.\n(B) Opened the laptop.\n(C) Put down the food.\n(D) Took the dish."
+        },
+        {
+            "pred": "(C) Put down the food.",
+            "gt": "(C) Put down the food.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/KFGXC.mp4",
+            "question": "Question: What happened after the person held the dish?\nOptions:\n(A) Sat on the bed.\n(B) Ate the sandwich.\n(C) Put down the food.\n(D) Took the food."
+        },
+        {
+            "pred": "(D) Took the bag.",
+            "gt": "(D) Took the bag.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/GKH0F.mp4",
+            "question": "Question: What happened after the person sat on the sofa/couch?\nOptions:\n(A) Ate the sandwich.\n(B) Put down the pillow.\n(C) Washed the clothes.\n(D) Took the bag."
+        },
+        {
+            "pred": "(D) Tidied up the blanket.",
+            "gt": "(D) Tidied up the blanket.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/84893.mp4",
+            "question": "Question: What happened before the person threw the clothes?\nOptions:\n(A) Opened the bag.\n(B) Took the shoe.\n(C) Threw the food.\n(D) Tidied up the blanket."
+        },
+        {
+            "pred": "(B) Put down the food.",
+            "gt": "(D) Tidied up the table.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HL5OP.mp4",
+            "question": "Question: What happened after the person took the dish?\nOptions:\n(A) Threw the shoe.\n(B) Put down the food.\n(C) Threw the pillow.\n(D) Tidied up the table."
+        },
+        {
+            "pred": "(D) Closed the book.",
+            "gt": "(D) Closed the book.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/FQS7O.mp4",
+            "question": "Question: What happened after the person sat at the table?\nOptions:\n(A) Put down the cup/glass/bottle.\n(B) Opened the box.\n(C) Opened the window.\n(D) Closed the book."
+        },
+        {
+            "pred": "(A) Closed the closet/cabinet.",
+            "gt": "(A) Closed the closet/cabinet.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HOYUT.mp4",
+            "question": "Question: What happened before the person took the towel?\nOptions:\n(A) Closed the closet/cabinet.\n(B) Threw the clothes.\n(C) Lied on the bed.\n(D) Lied on the sofa/couch."
+        },
+        {
+            "pred": "(D) Ate the sandwich.",
+            "gt": "(B) Took the paper/notebook.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/L9J5I.mp4",
+            "question": "Question: What happened after the person put down the food?\nOptions:\n(A) Opened the bag.\n(B) Took the paper/notebook.\n(C) Threw the clothes.\n(D) Ate the sandwich."
+        },
+        {
+            "pred": "(B) Took the paper/notebook.",
+            "gt": "(B) Took the paper/notebook.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/EFR6I.mp4",
+            "question": "Question: What happened before the person watched at the book?\nOptions:\n(A) Closed the window.\n(B) Took the paper/notebook.\n(C) Took the book.\n(D) Threw the shoe."
+        },
+        {
+            "pred": "(A) Opened the bag.",
+            "gt": "(C) Threw the clothes.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/0OE6M.mp4",
+            "question": "Question: What happened before the person took the towel?\nOptions:\n(A) Opened the bag.\n(B) Put down the phone/camera.\n(C) Threw the clothes.\n(D) Opened the closet/cabinet."
+        },
+        {
+            "pred": "(B) Opened the box.",
+            "gt": "(B) Opened the box.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MD6P2.mp4",
+            "question": "Question: What happened before the person held the medicine?\nOptions:\n(A) Took the dish.\n(B) Opened the box.\n(C) Threw the box.\n(D) Washed the window."
+        },
+        {
+            "pred": "(B) Tidied up the closet/cabinet.",
+            "gt": "(D) Tidied up the blanket.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3064K.mp4",
+            "question": "Question: What happened before the person put down the clothes?\nOptions:\n(A) Opened the window.\n(B) Tidied up the closet/cabinet.\n(C) Took the food.\n(D) Tidied up the blanket."
+        },
+        {
+            "pred": "(D) Opened the book.",
+            "gt": "(D) Opened the book.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/8IPWO.mp4",
+            "question": "Question: What happened after the person drank from the cup/glass/bottle?\nOptions:\n(A) Put down the laptop.\n(B) Put down the cup/glass/bottle.\n(C) Put down the phone/camera.\n(D) Opened the book."
+        },
+        {
+            "pred": "(A) Sat on the floor.",
+            "gt": "(A) Sat on the floor.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/DPLMM.mp4",
+            "question": "Question: What happened before the person took the pillow?\nOptions:\n(A) Sat on the floor.\n(B) Threw the blanket.\n(C) Threw the shoe.\n(D) Closed the door."
+        },
+        {
+            "pred": "(D) Put down the cup/glass/bottle.",
+            "gt": "(A) Took the laptop.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/8G9A9.mp4",
+            "question": "Question: What happened before the person held the phone/camera?\nOptions:\n(A) Took the laptop.\n(B) Sat on the sofa/couch.\n(C) Put down the shoe.\n(D) Put down the cup/glass/bottle."
+        },
+        {
+            "pred": "(A) Put down the dish.",
+            "gt": "(A) Put down the dish.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2PREF.mp4",
+            "question": "Question: What happened before the person opened the closet/cabinet?\nOptions:\n(A) Put down the dish.\n(B) Closed the box.\n(C) Closed the book.\n(D) Threw the shoe."
+        },
+        {
+            "pred": "(A) Put down the box.",
+            "gt": "(C) Took the towel.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/JLGLU.mp4",
+            "question": "Question: What happened before the person closed the door?\nOptions:\n(A) Put down the box.\n(B) Took the paper/notebook.\n(C) Took the towel.\n(D) Sat at the table."
+        },
+        {
+            "pred": "(A) Put down the cup/glass/bottle.",
+            "gt": "(A) Put down the cup/glass/bottle.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/DSZYT.mp4",
+            "question": "Question: What happened after the person held the dish?\nOptions:\n(A) Put down the cup/glass/bottle.\n(B) Sat on the floor.\n(C) Took the cup/glass/bottle.\n(D) Threw the towel."
+        },
+        {
+            "pred": "(A) Sat on the sofa/couch.",
+            "gt": "(A) Sat on the sofa/couch.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/YMGGV.mp4",
+            "question": "Question: What happened before the person took the blanket?\nOptions:\n(A) Sat on the sofa/couch.\n(B) Threw the box.\n(C) Put down the broom.\n(D) Opened the closet/cabinet."
+        },
+        {
+            "pred": "(D) Sat on the sofa/couch.",
+            "gt": "(D) Sat on the sofa/couch.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HOI88.mp4",
+            "question": "Question: What happened after the person sat at the table?\nOptions:\n(A) Opened the book.\n(B) Opened the refrigerator.\n(C) Took the clothes.\n(D) Sat on the sofa/couch."
+        },
+        {
+            "pred": "(D) Closed the door.",
+            "gt": "(B) Took the dish.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/LH6LE.mp4",
+            "question": "Question: What happened after the person opened the closet/cabinet?\nOptions:\n(A) Took the sandwich.\n(B) Took the dish.\n(C) Took the phone/camera.\n(D) Closed the door."
+        },
+        {
+            "pred": "(C) Took the book.",
+            "gt": "(A) Put down the book.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/4P13T.mp4",
+            "question": "Question: What happened after the person opened the bag?\nOptions:\n(A) Put down the book.\n(B) Opened the book.\n(C) Took the book.\n(D) Put down the blanket."
+        },
+        {
+            "pred": "(C) Took the sandwich.",
+            "gt": "(B) Opened the bag.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/CJ58B.mp4",
+            "question": "Question: What happened before the person held the food?\nOptions:\n(A) Took the food.\n(B) Opened the bag.\n(C) Took the sandwich.\n(D) Tidied up the table."
+        },
+        {
+            "pred": "(A) Washed the clothes.",
+            "gt": "(B) Threw the blanket.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/V3RAX.mp4",
+            "question": "Question: What happened before the person took the clothes?\nOptions:\n(A) Washed the clothes.\n(B) Threw the blanket.\n(C) Took the towel.\n(D) Opened the bag."
+        },
+        {
+            "pred": "(C) Washed the clothes.",
+            "gt": "(C) Washed the clothes.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2RRSO.mp4",
+            "question": "Question: What happened after the person held the sandwich?\nOptions:\n(A) Took the cup/glass/bottle.\n(B) Put down the clothes.\n(C) Washed the clothes.\n(D) Opened the bag."
+        },
+        {
+            "pred": "(C) Put down the shoe.",
+            "gt": "(B) Threw the box.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MLS4T.mp4",
+            "question": "Question: What happened before the person took the cup/glass/bottle?\nOptions:\n(A) Threw the blanket.\n(B) Threw the box.\n(C) Put down the shoe.\n(D) Took the clothes."
+        },
+        {
+            "pred": "(A) Opened the bag.",
+            "gt": "(B) Closed the closet/cabinet.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XFRYR.mp4",
+            "question": "Question: What happened before the person held the food?\nOptions:\n(A) Opened the bag.\n(B) Closed the closet/cabinet.\n(C) Opened the laptop.\n(D) Ate the sandwich."
+        },
+        {
+            "pred": "(C) Put down the food.",
+            "gt": "(B) Put down the bag.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/56XKK.mp4",
+            "question": "Question: What happened before the person opened the door?\nOptions:\n(A) Tidied up the clothes.\n(B) Put down the bag.\n(C) Put down the food.\n(D) Opened the book."
+        },
+        {
+            "pred": "(D) Took the shoe.",
+            "gt": "(C) Sat on the floor.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HCM5Y.mp4",
+            "question": "Question: What happened before the person opened the door?\nOptions:\n(A) Put down the paper/notebook.\n(B) Tidied up the blanket.\n(C) Sat on the floor.\n(D) Took the shoe."
+        },
+        {
+            "pred": "(C) Took the paper/notebook.",
+            "gt": "(C) Took the paper/notebook.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/0F453.mp4",
+            "question": "Question: What happened after the person opened the refrigerator?\nOptions:\n(A) Closed the window.\n(B) Put down the cup/glass/bottle.\n(C) Took the paper/notebook.\n(D) Sat at the table."
+        },
+        {
+            "pred": "(A) Tidied up the table.",
+            "gt": "(A) Tidied up the table.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/V9W9C.mp4",
+            "question": "Question: What happened after the person drank from the cup/glass/bottle?\nOptions:\n(A) Tidied up the table.\n(B) Took the bag.\n(C) Took the dish.\n(D) Threw the book."
+        },
+        {
+            "pred": "(C) Threw the shoe.",
+            "gt": "(C) Threw the shoe.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/136V6.mp4",
+            "question": "Question: What happened after the person closed the door?\nOptions:\n(A) Put down the broom.\n(B) Put down the laptop.\n(C) Threw the shoe.\n(D) Took the picture."
+        },
+        {
+            "pred": "(C) Put down the phone/camera.",
+            "gt": "(C) Put down the phone/camera.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/J7BOV.mp4",
+            "question": "Question: What happened before the person took the cup/glass/bottle?\nOptions:\n(A) Put down the dish.\n(B) Opened the book.\n(C) Put down the phone/camera.\n(D) Took the food."
+        },
+        {
+            "pred": "(A) Took the blanket.",
+            "gt": "(A) Took the blanket.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/983K8.mp4",
+            "question": "Question: What happened after the person held the food?\nOptions:\n(A) Took the blanket.\n(B) Tidied up the table.\n(C) Took the book.\n(D) Threw the broom."
+        },
+        {
+            "pred": "(B) Took the cup/glass/bottle.",
+            "gt": "(D) Put down the box.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/VO45S.mp4",
+            "question": "Question: What happened before the person washed the dish?\nOptions:\n(A) Washed the table.\n(B) Took the cup/glass/bottle.\n(C) Tidied up the towel.\n(D) Put down the box."
+        },
+        {
+            "pred": "(C) Closed the closet/cabinet.",
+            "gt": "(C) Closed the closet/cabinet.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/1UI6I.mp4",
+            "question": "Question: What happened before the person held the mirror?\nOptions:\n(A) Took the cup/glass/bottle.\n(B) Sat on the table.\n(C) Closed the closet/cabinet.\n(D) Opened the window."
+        },
+        {
+            "pred": "(A) Tidied up the closet/cabinet.",
+            "gt": "(B) Tidied up the blanket.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/84893.mp4",
+            "question": "Question: What happened after the person put down the clothes?\nOptions:\n(A) Tidied up the closet/cabinet.\n(B) Tidied up the blanket.\n(C) Took the phone/camera.\n(D) Sat on the table."
+        },
+        {
+            "pred": "(C) Took the laptop.",
+            "gt": "(C) Took the laptop.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/T1CQE.mp4",
+            "question": "Question: What happened after the person opened the bag?\nOptions:\n(A) Sat at the table.\n(B) Tidied up the closet/cabinet.\n(C) Took the laptop.\n(D) Put down the cup/glass/bottle."
+        },
+        {
+            "pred": "(A) Put down the cup/glass/bottle.",
+            "gt": "(B) Put down the towel.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/OEE36.mp4",
+            "question": "Question: What happened before the person closed the box?\nOptions:\n(A) Put down the cup/glass/bottle.\n(B) Put down the towel.\n(C) Threw the box.\n(D) Sat on the sofa/couch."
+        },
+        {
+            "pred": "(C) Put down the phone/camera.",
+            "gt": "(B) Took the book.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/OK2AF.mp4",
+            "question": "Question: What happened after the person closed the door?\nOptions:\n(A) Threw the broom.\n(B) Took the book.\n(C) Put down the phone/camera.\n(D) Put down the picture."
+        },
+        {
+            "pred": "(D) Sat at the table.",
+            "gt": "(A) Took the picture.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ZAJAJ.mp4",
+            "question": "Question: What happened after the person put down the pillow?\nOptions:\n(A) Took the picture.\n(B) Tidied up the table.\n(C) Sat on the floor.\n(D) Sat at the table."
+        },
+        {
+            "pred": "(D) Put down the laptop.",
+            "gt": "(D) Put down the laptop.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/CCCUJ.mp4",
+            "question": "Question: What happened before the person took the blanket?\nOptions:\n(A) Took the book.\n(B) Put down the dish.\n(C) Opened the closet/cabinet.\n(D) Put down the laptop."
+        },
+        {
+            "pred": "(B) Took the towel.",
+            "gt": "(C) Tidied up the clothes.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/6H78U.mp4",
+            "question": "Question: What happened before the person put down the blanket?\nOptions:\n(A) Took the bag.\n(B) Took the towel.\n(C) Tidied up the clothes.\n(D) Opened the box."
+        },
+        {
+            "pred": "(B) Threw the shoe.",
+            "gt": "(B) Threw the shoe.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NV4FC.mp4",
+            "question": "Question: What happened after the person put down the clothes?\nOptions:\n(A) Tidied up the blanket.\n(B) Threw the shoe.\n(C) Opened the door.\n(D) Put down the paper/notebook."
+        },
+        {
+            "pred": "(A) Took the paper/notebook.",
+            "gt": "(A) Took the paper/notebook.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NW0KT.mp4",
+            "question": "Question: What happened after the person opened the book?\nOptions:\n(A) Took the paper/notebook.\n(B) Put down the food.\n(C) Threw the clothes.\n(D) Took the dish."
+        },
+        {
+            "pred": "(B) Opened the bag.",
+            "gt": "(B) Opened the bag.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/SUI1X.mp4",
+            "question": "Question: What happened after the person sat on the floor?\nOptions:\n(A) Put down the book.\n(B) Opened the bag.\n(C) Washed the clothes.\n(D) Took the picture."
+        },
+        {
+            "pred": "(A) Put down the phone/camera.",
+            "gt": "(A) Put down the phone/camera.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/UDGRS.mp4",
+            "question": "Question: What happened before the person closed the book?\nOptions:\n(A) Put down the phone/camera.\n(B) Sat at the table.\n(C) Put down the cup/glass/bottle.\n(D) Put down the broom."
+        },
+        {
+            "pred": "(B) Took the cup/glass/bottle.",
+            "gt": "(A) Lied on the bed.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/E002I.mp4",
+            "question": "Question: What happened before the person closed the door?\nOptions:\n(A) Lied on the bed.\n(B) Took the cup/glass/bottle.\n(C) Put down the blanket.\n(D) Closed the closet/cabinet."
+        },
+        {
+            "pred": "(D) Put down the book.",
+            "gt": "(D) Put down the book.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/IZ2XX.mp4",
+            "question": "Question: What happened after the person closed the door?\nOptions:\n(A) Took the food.\n(B) Put down the phone/camera.\n(C) Threw the book.\n(D) Put down the book."
+        },
+        {
+            "pred": "(C) Opened the book.",
+            "gt": "(C) Opened the book.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/FX1T5.mp4",
+            "question": "Question: What happened after the person watched at the picture?\nOptions:\n(A) Opened the laptop.\n(B) Took the broom.\n(C) Opened the book.\n(D) Opened the closet/cabinet."
+        },
+        {
+            "pred": "(C) Opened the door.",
+            "gt": "(B) Put down the box.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/0HGNK.mp4",
+            "question": "Question: What happened after the person sat at the table?\nOptions:\n(A) Put down the broom.\n(B) Put down the box.\n(C) Opened the door.\n(D) Closed the closet/cabinet."
+        },
+        {
+            "pred": "(B) Took the towel.",
+            "gt": "(D) Took the paper/notebook.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3IRHH.mp4",
+            "question": "Question: What happened after the person held the dish?\nOptions:\n(A) Ate the medicine.\n(B) Took the towel.\n(C) Took the phone/camera.\n(D) Took the paper/notebook."
+        },
+        {
+            "pred": "(D) Washed the clothes.",
+            "gt": "(D) Washed the clothes.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9BCZU.mp4",
+            "question": "Question: What happened after the person put down the blanket?\nOptions:\n(A) Took the pillow.\n(B) Washed the cup/glass/bottle.\n(C) Took the bag.\n(D) Washed the clothes."
+        },
+        {
+            "pred": "(A) Opened the laptop.",
+            "gt": "(A) Opened the laptop.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3XKBC.mp4",
+            "question": "Question: What happened after the person put down the clothes?\nOptions:\n(A) Opened the laptop.\n(B) Threw the broom.\n(C) Opened the door.\n(D) Closed the closet/cabinet."
+        },
+        {
+            "pred": "(C) Put down the food.",
+            "gt": "(D) Put down the shoe.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/7TA23.mp4",
+            "question": "Question: What happened after the person took the phone/camera?\nOptions:\n(A) Threw the bag.\n(B) Opened the bag.\n(C) Put down the food.\n(D) Put down the shoe."
+        },
+        {
+            "pred": "(A) Sat at the table.",
+            "gt": "(A) Sat at the table.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/1ZBUS.mp4",
+            "question": "Question: What happened before the person held the sandwich?\nOptions:\n(A) Sat at the table.\n(B) Put down the shoe.\n(C) Opened the laptop.\n(D) Ate the medicine."
+        },
+        {
+            "pred": "(A) Put down the broom.",
+            "gt": "(D) Threw the pillow.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/TBRZ5.mp4",
+            "question": "Question: What happened before the person held the phone/camera?\nOptions:\n(A) Put down the broom.\n(B) Threw the towel.\n(C) Opened the bag.\n(D) Threw the pillow."
+        },
+        {
+            "pred": "(B) Threw the shoe.",
+            "gt": "(B) Threw the shoe.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/4GLAP.mp4",
+            "question": "Question: What happened before the person opened the door?\nOptions:\n(A) Put down the book.\n(B) Threw the shoe.\n(C) Took the book.\n(D) Took the clothes."
+        },
+        {
+            "pred": "(B) Opened the laptop.",
+            "gt": "(D) Took the towel.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/KU656.mp4",
+            "question": "Question: What happened after the person lied on the bed?\nOptions:\n(A) Washed the dish.\n(B) Opened the laptop.\n(C) Put down the pillow.\n(D) Took the towel."
+        },
+        {
+            "pred": "(D) Took the clothes.",
+            "gt": "(B) Tidied up the table.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/YB67Z.mp4",
+            "question": "Question: What happened after the person opened the box?\nOptions:\n(A) Put down the picture.\n(B) Tidied up the table.\n(C) Lied on the floor.\n(D) Took the clothes."
+        },
+        {
+            "pred": "(D) Put down the laptop.",
+            "gt": "(B) Took the food.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/8W31Y.mp4",
+            "question": "Question: What happened after the person lied on the bed?\nOptions:\n(A) Tidied up the clothes.\n(B) Took the food.\n(C) Opened the book.\n(D) Put down the laptop."
+        },
+        {
+            "pred": "(B) Tidied up the closet/cabinet.",
+            "gt": "(B) Tidied up the closet/cabinet.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/T2J3M.mp4",
+            "question": "Question: What happened after the person opened the door?\nOptions:\n(A) Put down the pillow.\n(B) Tidied up the closet/cabinet.\n(C) Sat on the bed.\n(D) Closed the box."
+        },
+        {
+            "pred": "(C) Sat on the bed.",
+            "gt": "(C) Sat on the bed.",
+            "task_type": "Action Sequence",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/BE51K.mp4",
+            "question": "Question: What happened after the person put down the bag?\nOptions:\n(A) Closed the window.\n(B) Closed the closet/cabinet.\n(C) Sat on the bed.\n(D) Closed the book."
+        },
+        {
+            "pred": "(A) Put down the pillow.",
+            "gt": "(A) Put down the pillow.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/AJTDO.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the pillow.\n(B) Open the door.\n(C) Take the book.\n(D) Open the closet/cabinet."
+        },
+        {
+            "pred": "(D) Open the book.",
+            "gt": "(D) Open the book.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/RJCNV.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Sit on the floor.\n(B) Put down the cup/glass/bottle.\n(C) Take the book.\n(D) Open the book."
+        },
+        {
+            "pred": "(A) Put down the cup/glass/bottle.",
+            "gt": "(B) Take the book.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/X8JVY.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the cup/glass/bottle.\n(B) Take the book.\n(C) Eat the sandwich.\n(D) Put down the dish."
+        },
+        {
+            "pred": "(B) Put down the clothes.",
+            "gt": "(D) Throw the blanket.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3CAPI.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Tidy up the broom.\n(B) Put down the clothes.\n(C) Put down the food.\n(D) Throw the blanket."
+        },
+        {
+            "pred": "(B) Open the box.",
+            "gt": "(C) Tidy up the closet/cabinet.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/T2J3M.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Tidy up the table.\n(B) Open the box.\n(C) Tidy up the closet/cabinet.\n(D) Hold the dish."
+        },
+        {
+            "pred": "(C) Take the paper/notebook.",
+            "gt": "(C) Take the paper/notebook.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/727IZ.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the shoe.\n(B) Sit on the table.\n(C) Take the paper/notebook.\n(D) Throw the clothes."
+        },
+        {
+            "pred": "(C) Tidy up.",
+            "gt": "(D) Lie on.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/N2GFQ.mp4",
+            "question": "Question: What will the person do next with the sofa/couch?\nOptions:\n(A) Take.\n(B) Sit on.\n(C) Tidy up.\n(D) Lie on."
+        },
+        {
+            "pred": "(C) Sit on the table.",
+            "gt": "(A) Take the clothes.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/5INX3.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the clothes.\n(B) Put down the bag.\n(C) Sit on the table.\n(D) Take the book."
+        },
+        {
+            "pred": "(B) Put down the laptop.",
+            "gt": "(B) Put down the laptop.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/FL6DF.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Throw the shoe.\n(B) Put down the laptop.\n(C) Put down the dish.\n(D) Open the bag."
+        },
+        {
+            "pred": "(D) Take the bag.",
+            "gt": "(D) Take the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/M52K2.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the closet/cabinet.\n(B) Tidy up the broom.\n(C) Throw the pillow.\n(D) Take the bag."
+        },
+        {
+            "pred": "(B) Take the food.",
+            "gt": "(A) Put down the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/78R4Y.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the bag.\n(B) Take the food.\n(C) Take the phone/camera.\n(D) Put down the shoe."
+        },
+        {
+            "pred": "(C) Tidy up the table.",
+            "gt": "(A) Take the picture.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ZAJAJ.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the picture.\n(B) Eat the medicine.\n(C) Tidy up the table.\n(D) Close the closet/cabinet."
+        },
+        {
+            "pred": "(D) Put down the paper/notebook.",
+            "gt": "(D) Put down the paper/notebook.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/I4N6K.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the broom.\n(B) Open the bag.\n(C) Take the cup/glass/bottle.\n(D) Put down the paper/notebook."
+        },
+        {
+            "pred": "(A) Take the bag.",
+            "gt": "(B) Wash the window.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/B8PQL.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the bag.\n(B) Wash the window.\n(C) Tidy up the blanket.\n(D) Sit on the sofa/couch."
+        },
+        {
+            "pred": "(B) Take the phone/camera.",
+            "gt": "(C) Take the blanket.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/7SXQS.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Eat the sandwich.\n(B) Take the phone/camera.\n(C) Take the blanket.\n(D) Eat the medicine."
+        },
+        {
+            "pred": "(D) Open the box.",
+            "gt": "(D) Open the box.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/QRWQ3.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the shoe.\n(B) Open the book.\n(C) Take the shoe.\n(D) Open the box."
+        },
+        {
+            "pred": "(B) Close the laptop.",
+            "gt": "(B) Close the laptop.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/M7BD4.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the towel.\n(B) Close the laptop.\n(C) Close the door.\n(D) Hold the book."
+        },
+        {
+            "pred": "(C) Put down.",
+            "gt": "(C) Put down.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ATV2F.mp4",
+            "question": "Question: What will the person do next with the blanket?\nOptions:\n(A) Tidy up.\n(B) Sit on.\n(C) Put down.\n(D) Take."
+        },
+        {
+            "pred": "(C) Take the food.",
+            "gt": "(B) Sit at the table.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/M6ERH.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the door.\n(B) Sit at the table.\n(C) Take the food.\n(D) Take the dish."
+        },
+        {
+            "pred": "(D) Put down the book.",
+            "gt": "(C) Open the box.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/TVCQF.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Wash the window.\n(B) Throw the clothes.\n(C) Open the box.\n(D) Put down the book."
+        },
+        {
+            "pred": "(D) Take the box.",
+            "gt": "(A) Wash the table.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NJANX.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Wash the table.\n(B) Lie on the floor.\n(C) Put down the towel.\n(D) Take the box."
+        },
+        {
+            "pred": "(C) Take the shoe.",
+            "gt": "(C) Take the shoe.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ZNQVC.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Hold the laptop.\n(B) Sit on the sofa/couch.\n(C) Take the shoe.\n(D) Take the phone/camera."
+        },
+        {
+            "pred": "(B) Put down the towel.",
+            "gt": "(B) Put down the towel.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/1O1JS.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the box.\n(B) Put down the towel.\n(C) Take the laptop.\n(D) Close the closet/cabinet."
+        },
+        {
+            "pred": "(A) Open the laptop.",
+            "gt": "(A) Open the laptop.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3XKBC.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the laptop.\n(B) Lie on the sofa/couch.\n(C) Close the box.\n(D) Take the phone/camera."
+        },
+        {
+            "pred": "(B) Put down the phone/camera.",
+            "gt": "(B) Put down the phone/camera.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9ZQ0R.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the closet/cabinet.\n(B) Put down the phone/camera.\n(C) Open the book.\n(D) Open the bag."
+        },
+        {
+            "pred": "(B) Put down the food.",
+            "gt": "(D) Open the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/DQEC3.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the box.\n(B) Put down the food.\n(C) Take the paper/notebook.\n(D) Open the bag."
+        },
+        {
+            "pred": "(B) Open the door.",
+            "gt": "(C) Close the closet/cabinet.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2U0QT.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the closet/cabinet.\n(B) Open the door.\n(C) Close the closet/cabinet.\n(D) Tidy up the clothes."
+        },
+        {
+            "pred": "(B) Open the refrigerator.",
+            "gt": "(A) Close the refrigerator.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/Z6LYG.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the refrigerator.\n(B) Open the refrigerator.\n(C) Throw the clothes.\n(D) Close the closet/cabinet."
+        },
+        {
+            "pred": "(B) Put down.",
+            "gt": "(B) Put down.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/J6TVB.mp4",
+            "question": "Question: What will the person do next with the dish?\nOptions:\n(A) Wash.\n(B) Put down.\n(C) Hold.\n(D) Take."
+        },
+        {
+            "pred": "(D) Open the door.",
+            "gt": "(C) Lie on the sofa/couch.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/N2GFQ.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the door.\n(B) Take the picture.\n(C) Lie on the sofa/couch.\n(D) Open the door."
+        },
+        {
+            "pred": "(C) Wash the dish.",
+            "gt": "(B) Put down the shoe.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/7TA23.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the bag.\n(B) Put down the shoe.\n(C) Wash the dish.\n(D) Sit on the sofa/couch."
+        },
+        {
+            "pred": "(C) Sit on the sofa/couch.",
+            "gt": "(C) Sit on the sofa/couch.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9OMY1.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the window.\n(B) Close the refrigerator.\n(C) Sit on the sofa/couch.\n(D) Open the closet/cabinet."
+        },
+        {
+            "pred": "(B) Put down the paper/notebook.",
+            "gt": "(B) Put down the paper/notebook.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/GPR89.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the closet/cabinet.\n(B) Put down the paper/notebook.\n(C) Take the dish.\n(D) Take the food."
+        },
+        {
+            "pred": "(B) Take the laptop.",
+            "gt": "(B) Take the laptop.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NNG97.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the door.\n(B) Take the laptop.\n(C) Take the cup/glass/bottle.\n(D) Throw the food."
+        },
+        {
+            "pred": "(C) Open the bag.",
+            "gt": "(C) Open the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/I1OLQ.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the cup/glass/bottle.\n(B) Put down the broom.\n(C) Open the bag.\n(D) Lie on the sofa/couch."
+        },
+        {
+            "pred": "(B) Open the bag.",
+            "gt": "(A) Sit on the floor.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/Z6HEA.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Sit on the floor.\n(B) Open the bag.\n(C) Lie on the bed.\n(D) Tidy up the table."
+        },
+        {
+            "pred": "(D) Put down the paper/notebook.",
+            "gt": "(A) Close the laptop.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9A58F.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the laptop.\n(B) Open the book.\n(C) Sit on the bed.\n(D) Put down the paper/notebook."
+        },
+        {
+            "pred": "(A) Take the food.",
+            "gt": "(C) Close the window.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3B81O.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the food.\n(B) Close the door.\n(C) Close the window.\n(D) Open the window."
+        },
+        {
+            "pred": "(B) Put down the towel.",
+            "gt": "(A) Throw the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2LCLG.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Throw the bag.\n(B) Put down the towel.\n(C) Eat the sandwich.\n(D) Sit at the table."
+        },
+        {
+            "pred": "(A) Put down the cup/glass/bottle.",
+            "gt": "(C) Take the pillow.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/75RPN.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the cup/glass/bottle.\n(B) Tidy up the blanket.\n(C) Take the pillow.\n(D) Put down the dish."
+        },
+        {
+            "pred": "(C) Take the clothes.",
+            "gt": "(B) Take the shoe.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/8LAK1.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Eat the medicine.\n(B) Take the shoe.\n(C) Take the clothes.\n(D) Throw the food."
+        },
+        {
+            "pred": "(D) Put down the box.",
+            "gt": "(A) Throw the blanket.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NM65M.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Throw the blanket.\n(B) Eat the medicine.\n(C) Lie on the sofa/couch.\n(D) Put down the box."
+        },
+        {
+            "pred": "(B) Take the food.",
+            "gt": "(C) Throw the pillow.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/M1GW9.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the dish.\n(B) Take the food.\n(C) Throw the pillow.\n(D) Eat the medicine."
+        },
+        {
+            "pred": "(D) Put down the cup/glass/bottle.",
+            "gt": "(D) Put down the cup/glass/bottle.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/106AY.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the picture.\n(B) Sit on the sofa/couch.\n(C) Throw the clothes.\n(D) Put down the cup/glass/bottle."
+        },
+        {
+            "pred": "(A) Put down.",
+            "gt": "(A) Put down.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ACJBD.mp4",
+            "question": "Question: What will the person do next with the blanket?\nOptions:\n(A) Put down.\n(B) Take.\n(C) Hold.\n(D) Throw."
+        },
+        {
+            "pred": "(A) Put down.",
+            "gt": "(B) Tidy up.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/TCN06.mp4",
+            "question": "Question: What will the person do next with the blanket?\nOptions:\n(A) Put down.\n(B) Tidy up.\n(C) Hold.\n(D) Take."
+        },
+        {
+            "pred": "(D) Lie on the sofa/couch.",
+            "gt": "(D) Lie on the sofa/couch.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/55AH5.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the clothes.\n(B) Tidy up the clothes.\n(C) Take the bag.\n(D) Lie on the sofa/couch."
+        },
+        {
+            "pred": "(C) Put down the blanket.",
+            "gt": "(C) Put down the blanket.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/FL6DF.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the picture.\n(B) Take the book.\n(C) Put down the blanket.\n(D) Sit on the floor."
+        },
+        {
+            "pred": "(C) Take the shoe.",
+            "gt": "(A) Close the window.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/B69CF.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Close the window.\n(B) Take the towel.\n(C) Take the shoe.\n(D) Take the food."
+        },
+        {
+            "pred": "(C) Lie on the floor.",
+            "gt": "(A) Lie on the sofa/couch.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/RKGG5.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Lie on the sofa/couch.\n(B) Close the box.\n(C) Lie on the floor.\n(D) Hold the book."
+        },
+        {
+            "pred": "(B) Put down the phone/camera.",
+            "gt": "(A) Take the picture.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/IHSRC.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the picture.\n(B) Put down the phone/camera.\n(C) Hold the box.\n(D) Take the blanket."
+        },
+        {
+            "pred": "(D) Throw the pillow.",
+            "gt": "(C) Throw the book.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/YHXU9.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Wash the window.\n(B) Sit at the table.\n(C) Throw the book.\n(D) Throw the pillow."
+        },
+        {
+            "pred": "(D) Wash the cup/glass/bottle.",
+            "gt": "(C) Close the window.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/GLGQJ.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the pillow.\n(B) Lie on the bed.\n(C) Close the window.\n(D) Wash the cup/glass/bottle."
+        },
+        {
+            "pred": "(C) Put down the broom.",
+            "gt": "(A) Throw the towel.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/43FG9.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Throw the towel.\n(B) Eat the sandwich.\n(C) Put down the broom.\n(D) Open the book."
+        },
+        {
+            "pred": "(A) Put down the laptop.",
+            "gt": "(A) Put down the laptop.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/P4HXN.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the laptop.\n(B) Put down the dish.\n(C) Sit on the floor.\n(D) Take the box."
+        },
+        {
+            "pred": "(C) Tidy up the towel.",
+            "gt": "(A) Take the box.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/D1NT7.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the box.\n(B) Throw the food.\n(C) Tidy up the towel.\n(D) Sit on the sofa/couch."
+        },
+        {
+            "pred": "(A) Tidy up the clothes.",
+            "gt": "(D) Throw the pillow.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/AJTDO.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Tidy up the clothes.\n(B) Eat the sandwich.\n(C) Put down the phone/camera.\n(D) Throw the pillow."
+        },
+        {
+            "pred": "(D) Open the refrigerator.",
+            "gt": "(A) Eat the medicine.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/432NL.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Eat the medicine.\n(B) Put down the towel.\n(C) Put down the paper/notebook.\n(D) Open the refrigerator."
+        },
+        {
+            "pred": "(B) Take the phone/camera.",
+            "gt": "(B) Take the phone/camera.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/LLOGB.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Throw the blanket.\n(B) Take the phone/camera.\n(C) Close the door.\n(D) Open the closet/cabinet."
+        },
+        {
+            "pred": "(D) Take the food.",
+            "gt": "(B) Take the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NLWBW.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Wash the cup/glass/bottle.\n(B) Take the bag.\n(C) Throw the pillow.\n(D) Take the food."
+        },
+        {
+            "pred": "(D) Take the clothes.",
+            "gt": "(C) Put down the towel.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/6H78U.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the box.\n(B) Put down the broom.\n(C) Put down the towel.\n(D) Take the clothes."
+        },
+        {
+            "pred": "(D) Take the blanket.",
+            "gt": "(D) Take the blanket.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/OEE36.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Wash the table.\n(B) Eat the medicine.\n(C) Throw the shoe.\n(D) Take the blanket."
+        },
+        {
+            "pred": "(B) Take the box.",
+            "gt": "(B) Take the box.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/VWAEL.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Eat the medicine.\n(B) Take the box.\n(C) Take the book.\n(D) Take the dish."
+        },
+        {
+            "pred": "(D) Hold the food.",
+            "gt": "(A) Put down the book.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/KV99H.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the book.\n(B) Take the sandwich.\n(C) Open the closet/cabinet.\n(D) Hold the food."
+        },
+        {
+            "pred": "(C) Take the towel.",
+            "gt": "(C) Take the towel.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2WGSN.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the phone/camera.\n(B) Close the book.\n(C) Take the towel.\n(D) Throw the food."
+        },
+        {
+            "pred": "(D) Eat the sandwich.",
+            "gt": "(D) Eat the sandwich.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/27JQL.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the door.\n(B) Take the shoe.\n(C) Take the book.\n(D) Eat the sandwich."
+        },
+        {
+            "pred": "(B) Eat the sandwich.",
+            "gt": "(D) Open the closet/cabinet.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2PREF.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the cup/glass/bottle.\n(B) Eat the sandwich.\n(C) Lie on the floor.\n(D) Open the closet/cabinet."
+        },
+        {
+            "pred": "(C) Put down the towel.",
+            "gt": "(C) Put down the towel.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MDG2T.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Wash the mirror.\n(B) Close the box.\n(C) Put down the towel.\n(D) Open the door."
+        },
+        {
+            "pred": "(C) Tidy up the table.",
+            "gt": "(D) Put down the shoe.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/D1WYU.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Open the closet/cabinet.\n(B) Eat the medicine.\n(C) Tidy up the table.\n(D) Put down the shoe."
+        },
+        {
+            "pred": "(D) Take the bag.",
+            "gt": "(D) Take the bag.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/5X5DT.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the clothes.\n(B) Take the dish.\n(C) Hold the picture.\n(D) Take the bag."
+        },
+        {
+            "pred": "(A) Put down.",
+            "gt": "(A) Put down.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/E7Q3R.mp4",
+            "question": "Question: What will the person do next with the cup/glass/bottle?\nOptions:\n(A) Put down.\n(B) Wash.\n(C) Close.\n(D) Take."
+        },
+        {
+            "pred": "(D) Put down the towel.",
+            "gt": "(D) Put down the towel.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/TK76G.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Take the clothes.\n(B) Lie on the floor.\n(C) Sit on the table.\n(D) Put down the towel."
+        },
+        {
+            "pred": "(D) Take.",
+            "gt": "(B) Put down.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/BGQIF.mp4",
+            "question": "Question: What will the person do next with the food?\nOptions:\n(A) Open.\n(B) Put down.\n(C) Throw.\n(D) Take."
+        },
+        {
+            "pred": "(B) Tidy up the clothes.",
+            "gt": "(C) Take the box.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/5ZDNU.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Put down the pillow.\n(B) Tidy up the clothes.\n(C) Take the box.\n(D) Put down the dish."
+        },
+        {
+            "pred": "(B) Take the box.",
+            "gt": "(C) Put down the blanket.",
+            "task_type": "Action Prediction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3ND23.mp4",
+            "question": "Question: What will the person do next?\nOptions:\n(A) Eat the sandwich.\n(B) Take the box.\n(C) Put down the blanket.\n(D) Put down the bag."
+        },
+        {
+            "pred": "(A) He is trying to catch the ping pong ball with his mouth.",
+            "gt": "(B) He is tapping his own abdomen.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_1227_0000_0191.mp4",
+            "question": "Question: What unusual action is the man next to the table tennis players performing?\nOptions:\n(A) He is trying to catch the ping pong ball with his mouth.\n(B) He is tapping his own abdomen.\n(C) He is trying to balance a paddle on his nose.\n(D) He is hitting a ping pong ball with his elbow."
+        },
+        {
+            "pred": "(D) The dog stepped on the snake, making it squirm.",
+            "gt": "(B) The dog pulled the snake towards itself, making it jump.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_471_0340_0411.mp4",
+            "question": "Question: What surprising action did the dog do to the snake in the video?\nOptions:\n(A) The dog barked at the snake, startling it.\n(B) The dog pulled the snake towards itself, making it jump.\n(C) The dog bit the snake, causing it to hiss.\n(D) The dog stepped on the snake, making it squirm."
+        },
+        {
+            "pred": "(A) He fell off the swing.",
+            "gt": "(C) He was tossing his shoes into the air.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_31_1484_1703.mp4",
+            "question": "Question: What unusual action did the man perform on the swing?\nOptions:\n(A) He fell off the swing.\n(B) He started to sing loudly.\n(C) He was tossing his shoes into the air.\n(D) His scarf flew away with the wind."
+        },
+        {
+            "pred": "(C) The person is shaking their buttocks amusingly.",
+            "gt": "(C) The person is shaking their buttocks amusingly.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_121_3397_3512.mp4",
+            "question": "Question: What amusing action does the person do to engage with the dog in the video?\nOptions:\n(A) The person is jumping around like a kangaroo.\n(B) The person is mimicking a cat.\n(C) The person is shaking their buttocks amusingly.\n(D) The person is pretending to be a tree."
+        },
+        {
+            "pred": "(C) Chopsticks and a spoon.",
+            "gt": "(C) Chopsticks and a spoon.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_41_1853_1959.mp4",
+            "question": "Question: What unusual item is being received by the hand emerged from beneath the toilet door panel?\nOptions:\n(A) A set of keys.\n(B) A roll of tissue paper.\n(C) Chopsticks and a spoon.\n(D) A bottle of water."
+        },
+        {
+            "pred": "(C) He is looking at the singer with disdain and a grimace.",
+            "gt": "(C) He is looking at the singer with disdain and a grimace.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_256_1314_1489.mp4",
+            "question": "Question: What is the reaction of the man sitting on the sofa in the KTV?\nOptions:\n(A) He is singing along with his friend and smiling.\n(B) He is cheering and clapping for the singer.\n(C) He is looking at the singer with disdain and a grimace.\n(D) He is asleep and not interested in what is happening."
+        },
+        {
+            "pred": "(C) The pedestrian ignored the incident and continued walking.",
+            "gt": "(A) The pedestrian removed the car door and pulled out the passenger.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_814_0031_0310.mp4",
+            "question": "Question: What unexpected action did the pedestrian take in response to being sprayed with water?\nOptions:\n(A) The pedestrian removed the car door and pulled out the passenger.\n(B) The pedestrian called the police and reported the incident.\n(C) The pedestrian ignored the incident and continued walking.\n(D) The pedestrian retaliated by throwing a rock at the car."
+        },
+        {
+            "pred": "(C) Adult retaliated to a kid's snowball with a shovel full of snow.",
+            "gt": "(A) Child tossed a snowball and adult poured snow from shovel onto kid.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_165_4617_4709.mp4",
+            "question": "Question: What actions led to the humorous event in the snowy setting?\nOptions:\n(A) Child tossed a snowball and adult poured snow from shovel onto kid.\n(B) Kid slipped in snow trying to hit adult.\n(C) Adult retaliated to a kid's snowball with a shovel full of snow.\n(D) Kid kicked a snowball onto the adult."
+        },
+        {
+            "pred": "(A) A person wearing a teddy bear outfit grabs a balloon and spins around.",
+            "gt": "(A) A person wearing a teddy bear outfit grabs a balloon and spins around.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_193_2012_2100.mp4",
+            "question": "Question: What happens in the peculiar scene of the video?\nOptions:\n(A) A person wearing a teddy bear outfit grabs a balloon and spins around.\n(B) A man wearing a magician costume performs a trick with a balloon.\n(C) A person in a clown suit juggles several balloons.\n(D) An individual in a bunny suit hops towards a balloon."
+        },
+        {
+            "pred": "(C) The man listens to the woman's heartbeat.",
+            "gt": "(A) The man has the woman speak into a stethoscope.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_103_0920_1010.mp4",
+            "question": "Question: What humorous action does the elderly man perform in the video?\nOptions:\n(A) The man has the woman speak into a stethoscope.\n(B) The man gives the stethoscope to the woman.\n(C) The man listens to the woman's heartbeat.\n(D) The man checks his own heartbeat."
+        },
+        {
+            "pred": "(D) The brick shifts causing the man on the pedestal to fall.",
+            "gt": "(D) The brick shifts causing the man on the pedestal to fall.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_132_1393_1497.mp4",
+            "question": "Question: What unexpected event happens in the video?\nOptions:\n(A) A man tries to lift the brick but it is too heavy.\n(B) The pedestal breaks under the weight of the man.\n(C) A man on a pedestal kicks another man.\n(D) The brick shifts causing the man on the pedestal to fall."
+        },
+        {
+            "pred": "(C) The kid, in orange, tumbles left, grasping a pole.",
+            "gt": "(C) The kid, in orange, tumbles left, grasping a pole.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_258_4389_4472.mp4",
+            "question": "Question: What amusing action does the kid in the video perform?\nOptions:\n(A) The youngster swims energetically in a pool.\n(B) The child jumps off a high bridge.\n(C) The kid, in orange, tumbles left, grasping a pole.\n(D) The kid performs gymnastics on a bar."
+        },
+        {
+            "pred": "(D) The man pushed the door open.",
+            "gt": "(D) The man pushed the door open.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_20_3372_3540.mp4",
+            "question": "Question: How did the man enter the lavatory in the video?\nOptions:\n(A) The man unlocked the door with a key.\n(B) The man used a code to unlock the door.\n(C) The man politely knocked before entering.\n(D) The man pushed the door open."
+        },
+        {
+            "pred": "(B) They ignored the child and continued eating.",
+            "gt": "(D) They quickly hid the ice cream inside the man's shirt.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_286_0000_0278.mp4",
+            "question": "Question: What did the couple do when they heard their child cry in the video?\nOptions:\n(A) They started to argue with each other.\n(B) They ignored the child and continued eating.\n(C) They rushed the ice cream back to the fridge.\n(D) They quickly hid the ice cream inside the man's shirt."
+        },
+        {
+            "pred": "(B) His own face.",
+            "gt": "(B) His own face.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_95_0700_0801.mp4",
+            "question": "Question: Who did the child unintentionally pour snow on in the video?\nOptions:\n(A) His best friend.\n(B) His own face.\n(C) His mother.\n(D) His pet dog."
+        },
+        {
+            "pred": "(A) A dog is pulling a person dressed in a panda costume.",
+            "gt": "(A) A dog is pulling a person dressed in a panda costume.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_192_0304_0384.mp4",
+            "question": "Question: What unusual event was captured in the video?\nOptions:\n(A) A dog is pulling a person dressed in a panda costume.\n(B) A person in a panda costume wrestling with a dog.\n(C) A man running after a dog dressed as a panda.\n(D) A panda chasing a dog on foot."
+        },
+        {
+            "pred": "(A) A voice calling out to her.",
+            "gt": "(A) A voice calling out to her.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_312_3848_3972.mp4",
+            "question": "Question: What caused the woman to respond without looking away from her computer screen?\nOptions:\n(A) A voice calling out to her.\n(B) A pop-up ad on her computer.\n(C) Her phone ringing off to the side.\n(D) A loud noise outside the window."
+        },
+        {
+            "pred": "(A) Making paddling gestures and moving in sync.",
+            "gt": "(A) Making paddling gestures and moving in sync.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_256_2755_2849.mp4",
+            "question": "Question: What actions are the three males performing at the KTV in the video?\nOptions:\n(A) Making paddling gestures and moving in sync.\n(B) Enjoying snacks while having casual chats.\n(C) Engaging in a heated karaoke song debate.\n(D) Singing different songs in a jovial mood."
+        },
+        {
+            "pred": "(C) Several passing cars produce varying shadows.",
+            "gt": "(B) The cement truck ladder interacts with tunnel lights.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_647_0000_0312.mp4",
+            "question": "Question: What causes the amusing shadows in the video?\nOptions:\n(A) The tunnel has a built-in light show.\n(B) The cement truck ladder interacts with tunnel lights.\n(C) Several passing cars produce varying shadows.\n(D) The truck driver uses a flashlight."
+        },
+        {
+            "pred": "(B) The dog raised its paw and pushed the kid.",
+            "gt": "(B) The dog raised its paw and pushed the kid.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_112_0436_0691.mp4",
+            "question": "Question: What unexpected action did the dog make in the video?\nOptions:\n(A) The dog started barking at the child.\n(B) The dog raised its paw and pushed the kid.\n(C) The dog retreated when it saw the child.\n(D) The dog started chasing its tail."
+        },
+        {
+            "pred": "(A) A car hit an e-bike, another e-bike fell.",
+            "gt": "(A) A car hit an e-bike, another e-bike fell.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_32_2136_2435.mp4",
+            "question": "Question: What unusual event occurred in the video?\nOptions:\n(A) A car hit an e-bike, another e-bike fell.\n(B) An automobile raced with an e-bike.\n(C) A pedestrian slipped on a banana peel.\n(D) A car collided with a lamp post."
+        },
+        {
+            "pred": "(A) The person throws it at the soap dispenser.",
+            "gt": "(A) The person throws it at the soap dispenser.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_199_1990_2259.mp4",
+            "question": "Question: What unusual action does the person in the video perform with their cleaning cloth?\nOptions:\n(A) The person throws it at the soap dispenser.\n(B) They use it to dry off a table.\n(C) The person uses it to polish the floor.\n(D) They use it to wipe down a mirror."
+        },
+        {
+            "pred": "(C) The reversing camera showed a false proximity to the bushes.",
+            "gt": "(C) The reversing camera showed a false proximity to the bushes.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_386_0000_0256.mp4",
+            "question": "Question: What caused the amusing surprise in the video?\nOptions:\n(A) The car was actually much closer to the bushes than expected.\n(B) The bushes magically moved away when the car owner approached.\n(C) The reversing camera showed a false proximity to the bushes.\n(D) The car owner found a hidden treasure in the bushes."
+        },
+        {
+            "pred": "(A) One of the men fumbled his jump, causing a big splash.",
+            "gt": "(A) One of the men fumbled his jump, causing a big splash.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_106_2022_2224.mp4",
+            "question": "Question: What was the amusing mistake made during the synchronized 3m springboard dive in the video?\nOptions:\n(A) One of the men fumbled his jump, causing a big splash.\n(B) Both men performed a flawless dive together.\n(C) The two divers collided mid-air.\n(D) One of the men hit the diving board while jumping."
+        },
+        {
+            "pred": "(B) Girl is adjusting her face, boy is shaking head.",
+            "gt": "(B) Girl is adjusting her face, boy is shaking head.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_258_3519_3609.mp4",
+            "question": "Question: What are the characters doing in the video?\nOptions:\n(A) Both are dancing with their fingers moving.\n(B) Girl is adjusting her face, boy is shaking head.\n(C) Girl is spinning rapidly, boy is just nodding.\n(D) Boy is making a funny face, girl is nodding."
+        },
+        {
+            "pred": "(C) The dog inadvertently bites the man in a sensitive area.",
+            "gt": "(C) The dog inadvertently bites the man in a sensitive area.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_617_0290_0344.mp4",
+            "question": "Question: What event causes the humor in the video?\nOptions:\n(A) The man playfully teases the dog with the chew toy.\n(B) The dog successfully retrieves its fallen chew toy.\n(C) The dog inadvertently bites the man in a sensitive area.\n(D) The man unexpectedly throws the chew toy away."
+        },
+        {
+            "pred": "(D) The dog slips due to the snow.",
+            "gt": "(C) A swing impedes its progress.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_135_3404_3567.mp4",
+            "question": "Question: What causes the dog to stumble and fall in the snowy landscape?\nOptions:\n(A) A cat distracts it, causing it to trip.\n(B) It gets caught on a branch and falls.\n(C) A swing impedes its progress.\n(D) The dog slips due to the snow."
+        },
+        {
+            "pred": "(D) It begins to paw at the water dish.",
+            "gt": "(D) It begins to paw at the water dish.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_295_0000_0165.mp4",
+            "question": "Question: What unusual action does the black dog perform after drinking water?\nOptions:\n(A) It runs away from the water dish.\n(B) It starts barking at the other dogs.\n(C) It lies down beside the water dish.\n(D) It begins to paw at the water dish."
+        },
+        {
+            "pred": "(C) He successfully retrieves the microphone from the speaker.",
+            "gt": "(B) He fails to reclaim the microphone once handed to the speaker.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_848_0000_0538.mp4",
+            "question": "Question: What happens to the person standing behind the speaker in the video?\nOptions:\n(A) He is handed a second microphone from someone else.\n(B) He fails to reclaim the microphone once handed to the speaker.\n(C) He successfully retrieves the microphone from the speaker.\n(D) He stumbles and loses his balance while reaching for the microphone."
+        },
+        {
+            "pred": "(D) He gets his head stuck and spins around fruitlessly.",
+            "gt": "(D) He gets his head stuck and spins around fruitlessly.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_3_0709_0916.mp4",
+            "question": "Question: What happens to the man as he tries to free himself from the narrow gap in the chair?\nOptions:\n(A) He manages to escape effortlessly.\n(B) He fixes the broken chair and sits back down.\n(C) He calmly calls for help and waits.\n(D) He gets his head stuck and spins around fruitlessly."
+        },
+        {
+            "pred": "(C) A blue shirt and black pants.",
+            "gt": "(C) A blue shirt and black pants.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_259_0848_0931.mp4",
+            "question": "Question: What is the man wearing in the humorous segment of the video during his exercise?\nOptions:\n(A) A red jacket with green trousers.\n(B) A white suit and red tie.\n(C) A blue shirt and black pants.\n(D) A black coat and gray jeans."
+        },
+        {
+            "pred": "(B) A dog grips bars and swings as another sleeps below.",
+            "gt": "(B) A dog grips bars and swings as another sleeps below.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_179_1690_1815.mp4",
+            "question": "Question: What is the unusual behavior of the dogs in the cage?\nOptions:\n(A) A dog runs around while another one sleeps.\n(B) A dog grips bars and swings as another sleeps below.\n(C) A dog sits quietly as another one eats.\n(D) One dog chases its tail while another barks."
+        },
+        {
+            "pred": "(A) The donkey starts munching on the grains on the plate.",
+            "gt": "(A) The donkey starts munching on the grains on the plate.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_23_2825_3046.mp4",
+            "question": "Question: What unexpected action did the blindfolded donkey take in the video?\nOptions:\n(A) The donkey starts munching on the grains on the plate.\n(B) The donkey jumped over the grinding stone.\n(C) The donkey began singing alongside a rooster.\n(D) The donkey started to roll on the ground."
+        },
+        {
+            "pred": "(D) The man bends over, holding his groin.",
+            "gt": "(D) The man bends over, holding his groin.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_2_3370_3451.mp4",
+            "question": "Question: What happens to the man in the video after the dog jumps?\nOptions:\n(A) The man jumps into the water.\n(B) The man starts laughing uncontrollably.\n(C) The man runs away from the dog.\n(D) The man bends over, holding his groin."
+        },
+        {
+            "pred": "(C) Dog trips, swing rotates and falls hilariously.",
+            "gt": "(C) Dog trips, swing rotates and falls hilariously.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_135_3404_3567.mp4",
+            "question": "Question: What event in the video contributes to its comedy?\nOptions:\n(A) Bird flies, swing twirls and humorously descends.\n(B) Cat jumps, swing spins and topples down.\n(C) Dog trips, swing rotates and falls hilariously.\n(D) Child bumps, swing twists and amusingly drops."
+        },
+        {
+            "pred": "(B) The cat is flailing after cup entrapment.",
+            "gt": "(B) The cat is flailing after cup entrapment.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_101_1433_1631.mp4",
+            "question": "Question: What elements in the video create a comedic effect?\nOptions:\n(A) The dog is chasing its tail playfully.\n(B) The cat is flailing after cup entrapment.\n(C) A mouse is swiftly skittering around the room.\n(D) The cat is napping calmly on the couch."
+        },
+        {
+            "pred": "(D) The man ends up falling down in a hilarious position.",
+            "gt": "(D) The man ends up falling down in a hilarious position.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_132_1393_1497.mp4",
+            "question": "Question: What makes the ending of the video unexpectedly funny?\nOptions:\n(A) The audience was startled by a sudden jump scare.\n(B) The man delivers an unexpected punchline.\n(C) The video concludes with a surprising plot twist.\n(D) The man ends up falling down in a hilarious position."
+        },
+        {
+            "pred": "(D) Hairdresser accidentally makes customer bald.",
+            "gt": "(D) Hairdresser accidentally makes customer bald.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_39_2925_3134.mp4",
+            "question": "Question: What makes the hairdressing scene in the video funny?\nOptions:\n(A) Hairdresser uses oversized scissors.\n(B) Customer is satisfied with hairstyle.\n(C) Hairdresser is wearing a stylish outfit.\n(D) Hairdresser accidentally makes customer bald."
+        },
+        {
+            "pred": "(A) The speaker was making funny faces.",
+            "gt": "(D) The location of item presentation kept shifting.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_848_0000_0538.mp4",
+            "question": "Question: What made the interaction between the speaker and the person at the back amusing?\nOptions:\n(A) The speaker was making funny faces.\n(B) Both were trying to grab the same object.\n(C) They were constantly arguing.\n(D) The location of item presentation kept shifting."
+        },
+        {
+            "pred": "(B) The dog is performing amusing tricks.",
+            "gt": "(C) The man is impersonating an ostrich, and it's hilarious.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_138_0681_0955.mp4",
+            "question": "Question: What adds humor to the video according to the description?\nOptions:\n(A) The man is dancing in a peculiar style.\n(B) The dog is performing amusing tricks.\n(C) The man is impersonating an ostrich, and it's hilarious.\n(D) The man is impersonating an elephant with grandeur."
+        },
+        {
+            "pred": "(C) She is coming down with her head directly facing the earth.",
+            "gt": "(C) She is coming down with her head directly facing the earth.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_203_2846_3053.mp4",
+            "question": "Question: What is the peculiar action of the woman in the video that amuses viewers?\nOptions:\n(A) The woman is dancing wildly while holding an umbrella.\n(B) She's running around aimlessly across the field.\n(C) She is coming down with her head directly facing the earth.\n(D) She is ascending to the sky with her feet facing upward."
+        },
+        {
+            "pred": "(D) The individual was startled by the person hiding under the cover.",
+            "gt": "(D) The individual was startled by the person hiding under the cover.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_135_0315_0478.mp4",
+            "question": "Question: What elements add an unexpected twist to the video?\nOptions:\n(A) The humor came from the exaggerated reactions of the crowd.\n(B) The comedy was influenced by the background music.\n(C) The funny part was due to the clumsy actions of the main character.\n(D) The individual was startled by the person hiding under the cover."
+        },
+        {
+            "pred": "(C) The woman's obvious struggle and facial expressions.",
+            "gt": "(C) The woman's obvious struggle and facial expressions.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_101_2970_3120.mp4",
+            "question": "Question: What element contributes to the comical nature of the video?\nOptions:\n(A) The appearance of unexpected characters in the video.\n(B) The high-quality resolution of the video.\n(C) The woman's obvious struggle and facial expressions.\n(D) The serene background setting of the video."
+        },
+        {
+            "pred": "(C) The dog's fur stood straight up like a porcupine when it got wet.",
+            "gt": "(C) The dog's fur stood straight up like a porcupine when it got wet.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_136_2847_2993.mp4",
+            "question": "Question: What was the amusing event in the video involving the dog?\nOptions:\n(A) The dog transformed into a cat after it drank water.\n(B) The dog started to float in air when it touched the water.\n(C) The dog's fur stood straight up like a porcupine when it got wet.\n(D) After swimming, the dog's fur turned blue."
+        },
+        {
+            "pred": "(C) The puppy was afraid of the elastic rope.",
+            "gt": "(D) The puppy stayed still and helped play elastic rope.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_3_0760_0950.mp4",
+            "question": "Question: What unusual behavior did the puppy display in the video?\nOptions:\n(A) The puppy barked loudly at the person playing with it.\n(B) The puppy quickly escaped after being restrained.\n(C) The puppy was afraid of the elastic rope.\n(D) The puppy stayed still and helped play elastic rope."
+        },
+        {
+            "pred": "(C) Someone struggling to find a broom that they themselves stored.",
+            "gt": "(C) Someone struggling to find a broom that they themselves stored.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_580_0000_0770.mp4",
+            "question": "Question: What is the comical element presented in the video?\nOptions:\n(A) Someone trying to cook but accidentally setting off the fire alarm.\n(B) A character misses his bus due to oversleeping.\n(C) Someone struggling to find a broom that they themselves stored.\n(D) A person is confused about where they placed a mop."
+        },
+        {
+            "pred": "(C) She smells her own feet.",
+            "gt": "(C) She smells her own feet.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_630_0000_0160.mp4",
+            "question": "Question: What surprising action does the girl perform after falling off the bench?\nOptions:\n(A) She starts laughing uncontrollably.\n(B) She starts crying loudly.\n(C) She smells her own feet.\n(D) She immediately stands up and runs away."
+        },
+        {
+            "pred": "(B) Incompetence of first two women.",
+            "gt": "(C) Third woman repeatedly gets her head stuck.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_31_0442_0688.mp4",
+            "question": "Question: What element of the video makes it humorous?\nOptions:\n(A) Expert dancing skills of the third woman.\n(B) Incompetence of first two women.\n(C) Third woman repeatedly gets her head stuck.\n(D) Comedic music in the video."
+        },
+        {
+            "pred": "(B) The legs surprisingly belong to a balding old man.",
+            "gt": "(B) The legs surprisingly belong to a balding old man.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_779_0000_0149.mp4",
+            "question": "Question: What element in the video creates a comical surprise?\nOptions:\n(A) The legs belong to an athletic male.\n(B) The legs surprisingly belong to a balding old man.\n(C) The legs are revealed to be from a young child.\n(D) The legs are of a famous model."
+        },
+        {
+            "pred": "(B) Her hair and wild upper body movements.",
+            "gt": "(B) Her hair and wild upper body movements.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_84_2310_2408.mp4",
+            "question": "Question: What makes the girl's appearance in the video amusing?\nOptions:\n(A) Her calm and serene expression.\n(B) Her hair and wild upper body movements.\n(C) The color of her dress.\n(D) Her use of eccentric makeup."
+        },
+        {
+            "pred": "(B) The serious uniform he wears while dancing.",
+            "gt": "(B) The serious uniform he wears while dancing.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_260_0697_0794.mp4",
+            "question": "Question: What makes the man's dance moves in the video funny?\nOptions:\n(A) The fusion of different dance styles.\n(B) The serious uniform he wears while dancing.\n(C) The intricate steps he performs.\n(D) His flawless rhythm and timing."
+        },
+        {
+            "pred": "(D) He mimicked mirror-gazing with swapped hands.",
+            "gt": "(D) He mimicked mirror-gazing with swapped hands.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_1230_0000_0285.mp4",
+            "question": "Question: What created the comic effect in the video?\nOptions:\n(A) He stumbled over objects intentionally.\n(B) The man sang a comedic song.\n(C) He performed a hilarious magic trick.\n(D) He mimicked mirror-gazing with swapped hands."
+        },
+        {
+            "pred": "(C) The dog hit the glass on its second try.",
+            "gt": "(C) The dog hit the glass on its second try.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_15_0000_0224.mp4",
+            "question": "Question: What unexpected event occurred that made the video entertaining?\nOptions:\n(A) The dog successfully leapt over the glass on its first try.\n(B) The dog comfortably passed through the glass on its second attempt.\n(C) The dog hit the glass on its second try.\n(D) The dog decided to stop attempting after the first success."
+        },
+        {
+            "pred": "(D) He tried numerous times, then jumped low and stumbled.",
+            "gt": "(D) He tried numerous times, then jumped low and stumbled.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_127_1628_1761.mp4",
+            "question": "Question: Why did the man in the video become a source of amusement?\nOptions:\n(A) The man made no attempts to jump and stayed still.\n(B) The man jumped incredibly high right from the start.\n(C) His jump was flawless with no stumbles or errors.\n(D) He tried numerous times, then jumped low and stumbled."
+        },
+        {
+            "pred": "(C) The dog seems bewildered and disoriented.",
+            "gt": "(C) The dog seems bewildered and disoriented.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_8_2919_3025.mp4",
+            "question": "Question: What makes the sight of a person and dog dancing together amusing?\nOptions:\n(A) Both are wearing matching outfits.\n(B) The dog appears composed and confident.\n(C) The dog seems bewildered and disoriented.\n(D) The dance routine is perfectly synchronized."
+        },
+        {
+            "pred": "(B) The narrative reveals that the membrane is a figment of her imagination.",
+            "gt": "(A) The girl realizes her head has already been split by looking in a mirror.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_42_0000_0826.mp4",
+            "question": "Question: What unexpected twist adds to the humorous aspect of the video?\nOptions:\n(A) The girl realizes her head has already been split by looking in a mirror.\n(B) The narrative reveals that the membrane is a figment of her imagination.\n(C) The girl successfully avoids the membrane.\n(D) The protagonist actually controls the transparent membrane."
+        },
+        {
+            "pred": "(C) The interactions between the characters are hilarious.",
+            "gt": "(A) The man accidentally hitting the car door generates fun.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_1273_0010_0640.mp4",
+            "question": "Question: What incidents in the video incite laughter?\nOptions:\n(A) The man accidentally hitting the car door generates fun.\n(B) The background music contributes to the comic timing.\n(C) The interactions between the characters are hilarious.\n(D) The funny dialogue delivered by the characters."
+        },
+        {
+            "pred": "(C) Using flames to style his hair and the man's partial baldness.",
+            "gt": "(C) Using flames to style his hair and the man's partial baldness.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_196_0303_0504.mp4",
+            "question": "Question: What elements in the video contribute to its comedic nature?\nOptions:\n(A) The man uses water to style his hair and he has a full head of hair.\n(B) The man is using a comb to style his hair and is completely bald.\n(C) Using flames to style his hair and the man's partial baldness.\n(D) The scene features a man cutting his own hair with scissors."
+        },
+        {
+            "pred": "(A) A student eating noodles and making funny face.",
+            "gt": "(A) A student eating noodles and making funny face.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_246_0293_0390.mp4",
+            "question": "Question: What specific incident made the video amusing?\nOptions:\n(A) A student eating noodles and making funny face.\n(B) A funny video clip accidentally played in class.\n(C) A student found sleeping in class.\n(D) A teacher was reciting a humorous poem."
+        },
+        {
+            "pred": "(B) A stuck basketball making a funny look.",
+            "gt": "(B) A stuck basketball making a funny look.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_888_0000_0173.mp4",
+            "question": "Question: What unexpected object was found on the character's head that caused laughter?\nOptions:\n(A) A soccer ball causing a strange silhouette.\n(B) A stuck basketball making a funny look.\n(C) A quickly thrown frisbee stuck in hair.\n(D) An oddly placed baseball cap."
+        },
+        {
+            "pred": "(C) His left hand did not offer support during the fall, surprising him.",
+            "gt": "(C) His left hand did not offer support during the fall, surprising him.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_258_4389_4472.mp4",
+            "question": "Question: What made the scene of the child falling funny in the video?\nOptions:\n(A) The child was running too fast and collided with his friend.\n(B) The child missed catching the ball and looked surprised.\n(C) His left hand did not offer support during the fall, surprising him.\n(D) The child was playing a prank on his siblings."
+        },
+        {
+            "pred": "(D) Two men hugged each other unexpectedly.",
+            "gt": "(D) Two men hugged each other unexpectedly.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_99_0000_0315.mp4",
+            "question": "Question: What unexpected event contributes to the humor in the video?\nOptions:\n(A) The man left without dancing.\n(B) Two women hugged each other at the end.\n(C) The man finally danced with the woman.\n(D) Two men hugged each other unexpectedly."
+        },
+        {
+            "pred": "(D) The dog jumped high, its long tail spinning like a propeller.",
+            "gt": "(D) The dog jumped high, its long tail spinning like a propeller.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_471_0280_0336.mp4",
+            "question": "Question: What unique action did the dog undertake that was entertaining?\nOptions:\n(A) A cat chased its tail in a playful manner.\n(B) A child performed an unexpected backflip.\n(C) A bird imitated human speech with surprising accuracy.\n(D) The dog jumped high, its long tail spinning like a propeller."
+        },
+        {
+            "pred": "(B) The boyfriend not noticing his girlfriend kissing a stranger on kisscam.",
+            "gt": "(B) The boyfriend not noticing his girlfriend kissing a stranger on kisscam.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_T_568_0000_0500.mp4",
+            "question": "Question: What aspect of the video makes it amusing?\nOptions:\n(A) The girlfriend getting angry at her boyfriend for missing the kisscam moment.\n(B) The boyfriend not noticing his girlfriend kissing a stranger on kisscam.\n(C) The girlfriend pranking her boyfriend by kissing a celebrity.\n(D) The couple having a heated argument after the kisscam incident."
+        },
+        {
+            "pred": "(D) Parrots utilizing sticks to scratch their heads.",
+            "gt": "(D) Parrots utilizing sticks to scratch their heads.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_A_125_2078_2286.mp4",
+            "question": "Question: What is an unusual behavior of parrots in the video that leads to its comedic element?\nOptions:\n(A) Parrots using sticks to build nests.\n(B) Parrots singing a melodious tune.\n(C) Parrots flying in a coordinated pattern.\n(D) Parrots utilizing sticks to scratch their heads."
+        },
+        {
+            "pred": "(D) The worker decided to quit his job.",
+            "gt": "(C) The wall was surprisingly knocked down with ease.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_125_2858_3029.mp4",
+            "question": "Question: What action in the video led to a comedic outcome?\nOptions:\n(A) The wall was unexpectedly strong.\n(B) The worker was unable to use the hammer effectively.\n(C) The wall was surprisingly knocked down with ease.\n(D) The worker decided to quit his job."
+        },
+        {
+            "pred": "(D) The child successfully poured the snow over her father.",
+            "gt": "(B) The snow fell back onto the child's face unexpectedly.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_humor/H_H_95_0700_0801.mp4",
+            "question": "Question: What event in the video causes an unexpected and funny outcome?\nOptions:\n(A) The father dodged when the child tried to pour the snow on him.\n(B) The snow fell back onto the child's face unexpectedly.\n(C) The child lost her balance while carrying the basin of snow.\n(D) The child successfully poured the snow over her father."
+        },
+        {
+            "pred": "(D) They crawl into a container marked with a \"W\".",
+            "gt": "(D) They crawl into a container marked with a \"W\".",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_18_3028_3042.mp4",
+            "question": "Question: What happens to the actors when they topple the cardboard boxes?\nOptions:\n(A) They kneel down and start eating hamburgers and fries.\n(B) They dance around them wearing yellow socks.\n(C) They disappear and only their white hats are visible.\n(D) They crawl into a container marked with a \"W\"."
+        },
+        {
+            "pred": "(C) A child dressed as a green waistband ran out and hopped onto the woman’s back.",
+            "gt": "(C) A child dressed as a green waistband ran out and hopped onto the woman’s back.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_14_3500_3554.mp4",
+            "question": "Question: What was the unexpected event in the video?\nOptions:\n(A) A child in a green waistband costume, with orange pants and yellow sleeves, quickly hid.\n(B) An individual wearing a vibrant orange and red kimono bellowed \"waistband\".\n(C) A child dressed as a green waistband ran out and hopped onto the woman’s back.\n(D) The woman turned to show off her expensive jewelry to the camera."
+        },
+        {
+            "pred": "(D) He catches the ball in his mouth after hitting it from his feet.",
+            "gt": "(D) He catches the ball in his mouth after hitting it from his feet.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_97_6421_6500.mp4",
+            "question": "Question: What surprising action does the man perform during his golf game?\nOptions:\n(A) He hits the ball with a tennis racket instead of a golf club.\n(B) He starts dancing after hitting the ball.\n(C) He falls over while swinging his golf club.\n(D) He catches the ball in his mouth after hitting it from his feet."
+        },
+        {
+            "pred": "(A) There is a red mark on their chest.",
+            "gt": "(A) There is a red mark on their chest.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_17_3643_3725.mp4",
+            "question": "Question: What is the distinctive feature of the person standing in the center of the design?\nOptions:\n(A) There is a red mark on their chest.\n(B) There is a green mark on their back.\n(C) They are wearing blue clothes.\n(D) They are making bird chirping sounds."
+        },
+        {
+            "pred": "(C) A person starts eating the pink ice cream.",
+            "gt": "(D) A pink pair of pants covers the person's head.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_21_8758_8835.mp4",
+            "question": "Question: What happens after the switch of the ice cream machine is turned on in the video?\nOptions:\n(A) The stage suddenly collapses due to the weight.\n(B) A blue pair of pants emerges from the machine.\n(C) A person starts eating the pink ice cream.\n(D) A pink pair of pants covers the person's head."
+        },
+        {
+            "pred": "(C) She climbs into a carriage pulled by a brown horse.",
+            "gt": "(D) She removes her blue headscarf and blue coat.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_12_1452_1602.mp4",
+            "question": "Question: What does the small girl do after lighting a match in the video?\nOptions:\n(A) She runs back to where she lit the match and curls up.\n(B) She begins to dance around the stage.\n(C) She climbs into a carriage pulled by a brown horse.\n(D) She removes her blue headscarf and blue coat."
+        },
+        {
+            "pred": "(A) A red costume.",
+            "gt": "(B) A watermelon prop.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_24_0623_0722.mp4",
+            "question": "Question: What prop does the second performer reveal from the primary performer?\nOptions:\n(A) A red costume.\n(B) A watermelon prop.\n(C) A fireworks prop.\n(D) A green leaf."
+        },
+        {
+            "pred": "(C) The individual behind forms a circle with hands and the man in front dances skillfully.",
+            "gt": "(C) The individual behind forms a circle with hands and the man in front dances skillfully.",
+            "task_type": "Unexpected Action",
+            "video_path": "DATAS/MVBench/video/FunQA_test/test/test_creative/C_KT_14_7911_8000.mp4",
+            "question": "Question: Describe the actions of the two individuals in the imaginative scene.\nOptions:\n(A) The man in front creates a circle while the person behind performs intricate maneuvers.\n(B) Both individuals are simply standing and observing something.\n(C) The individual behind forms a circle with hands and the man in front dances skillfully.\n(D) The person behind is dancing while the one in front makes a circular shape."
+        },
+        {
+            "pred": "(C) The blanket.",
+            "gt": "(C) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/J84TZ.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The dish.\n(B) The box.\n(C) The blanket.\n(D) The paper/notebook."
+        },
+        {
+            "pred": "(C) The blanket.",
+            "gt": "(C) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MQGVS.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The broom.\n(B) The closet/cabinet.\n(C) The blanket.\n(D) The table."
+        },
+        {
+            "pred": "(B) The clothes.",
+            "gt": "(C) The pillow.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XO8NL.mp4",
+            "question": "Question: Which object was thrown by the person?\nOptions:\n(A) The shoe.\n(B) The clothes.\n(C) The pillow.\n(D) The food."
+        },
+        {
+            "pred": "(B) The book.",
+            "gt": "(B) The book.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XYGU1.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The door.\n(B) The book.\n(C) The closet/cabinet.\n(D) The laptop."
+        },
+        {
+            "pred": "(A) The floor.",
+            "gt": "(A) The floor.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/F24GU.mp4",
+            "question": "Question: Which object was lied on by the person?\nOptions:\n(A) The floor.\n(B) The bed.\n(C) The sofa/couch.\n(D) The blanket."
+        },
+        {
+            "pred": "(C) The paper/notebook.",
+            "gt": "(C) The paper/notebook.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/ZS9XR.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The book.\n(B) The pillow.\n(C) The paper/notebook.\n(D) The towel."
+        },
+        {
+            "pred": "(B) The blanket.",
+            "gt": "(B) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/O2DXE.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The picture.\n(B) The blanket.\n(C) The phone/camera.\n(D) The laptop."
+        },
+        {
+            "pred": "(B) The floor.",
+            "gt": "(B) The floor.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HCM5Y.mp4",
+            "question": "Question: Which object was sat on by the person?\nOptions:\n(A) The table.\n(B) The floor.\n(C) The bed.\n(D) The sofa/couch."
+        },
+        {
+            "pred": "(D) The box.",
+            "gt": "(D) The box.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/AK9IB.mp4",
+            "question": "Question: Which object was closed by the person?\nOptions:\n(A) The refrigerator.\n(B) The book.\n(C) The laptop.\n(D) The box."
+        },
+        {
+            "pred": "(C) The door.",
+            "gt": "(A) The box.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/QRWQ3.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The box.\n(B) The closet/cabinet.\n(C) The door.\n(D) The book."
+        },
+        {
+            "pred": "(C) The blanket.",
+            "gt": "(C) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/K1D2G.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The clothes.\n(B) The broom.\n(C) The blanket.\n(D) The table."
+        },
+        {
+            "pred": "(B) The book.",
+            "gt": "(B) The book.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/8DSGI.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The cup/glass/bottle.\n(B) The book.\n(C) The clothes.\n(D) The towel."
+        },
+        {
+            "pred": "(C) The cup/glass/bottle.",
+            "gt": "(A) The dish.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MXATD.mp4",
+            "question": "Question: Which object was washed by the person?\nOptions:\n(A) The dish.\n(B) The table.\n(C) The cup/glass/bottle.\n(D) The clothes."
+        },
+        {
+            "pred": "(D) The phone/camera.",
+            "gt": "(D) The phone/camera.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/USNP1.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The clothes.\n(B) The pillow.\n(C) The shoe.\n(D) The phone/camera."
+        },
+        {
+            "pred": "(A) The refrigerator.",
+            "gt": "(A) The refrigerator.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3ZC4Y.mp4",
+            "question": "Question: Which object was closed by the person?\nOptions:\n(A) The refrigerator.\n(B) The book.\n(C) The laptop.\n(D) The box."
+        },
+        {
+            "pred": "(C) The bed.",
+            "gt": "(C) The bed.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XZ9C0.mp4",
+            "question": "Question: Which object was lied on by the person?\nOptions:\n(A) The book.\n(B) The sofa/couch.\n(C) The bed.\n(D) The floor."
+        },
+        {
+            "pred": "(C) The table.",
+            "gt": "(C) The table.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/YGQ7E.mp4",
+            "question": "Question: Which object was sat at by the person?\nOptions:\n(A) The floor.\n(B) The bed.\n(C) The table.\n(D) The sofa/couch."
+        },
+        {
+            "pred": "(D) The shoe.",
+            "gt": "(D) The shoe.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9LHP3.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The food.\n(B) The bag.\n(C) The clothes.\n(D) The shoe."
+        },
+        {
+            "pred": "(A) The broom.",
+            "gt": "(A) The broom.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/L29HE.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The broom.\n(B) The food.\n(C) The bag.\n(D) The sandwich."
+        },
+        {
+            "pred": "(D) The sandwich.",
+            "gt": "(A) The medicine.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/LY10X.mp4",
+            "question": "Question: Which object was eaten by the person?\nOptions:\n(A) The medicine.\n(B) The mirror.\n(C) The window.\n(D) The sandwich."
+        },
+        {
+            "pred": "(B) The sofa/couch.",
+            "gt": "(B) The sofa/couch.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HOI88.mp4",
+            "question": "Question: Which object was sat on by the person?\nOptions:\n(A) The table.\n(B) The sofa/couch.\n(C) The bed.\n(D) The floor."
+        },
+        {
+            "pred": "(D) The food.",
+            "gt": "(A) The towel.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/27JQL.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The towel.\n(B) The broom.\n(C) The dish.\n(D) The food."
+        },
+        {
+            "pred": "(B) The cup/glass/bottle.",
+            "gt": "(C) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2NV6L.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The picture.\n(B) The cup/glass/bottle.\n(C) The bag.\n(D) The food."
+        },
+        {
+            "pred": "(B) The bed.",
+            "gt": "(B) The bed.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/JY6TC.mp4",
+            "question": "Question: Which object was sat on by the person?\nOptions:\n(A) The sofa/couch.\n(B) The bed.\n(C) The floor.\n(D) The table."
+        },
+        {
+            "pred": "(A) The door.",
+            "gt": "(B) The laptop.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/JBJGX.mp4",
+            "question": "Question: Which object was closed by the person?\nOptions:\n(A) The door.\n(B) The laptop.\n(C) The closet/cabinet.\n(D) The box."
+        },
+        {
+            "pred": "(C) The sofa/couch.",
+            "gt": "(C) The sofa/couch.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/IWTWJ.mp4",
+            "question": "Question: Which object was sat on by the person?\nOptions:\n(A) The floor.\n(B) The bed.\n(C) The sofa/couch.\n(D) The table."
+        },
+        {
+            "pred": "(D) The sandwich.",
+            "gt": "(B) The towel.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/M704T.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The box.\n(B) The towel.\n(C) The book.\n(D) The sandwich."
+        },
+        {
+            "pred": "(D) The table.",
+            "gt": "(B) The floor.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/Z6HEA.mp4",
+            "question": "Question: Which object was sat on by the person?\nOptions:\n(A) The bed.\n(B) The floor.\n(C) The sofa/couch.\n(D) The table."
+        },
+        {
+            "pred": "(D) The clothes.",
+            "gt": "(B) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/84893.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The table.\n(B) The blanket.\n(C) The broom.\n(D) The clothes."
+        },
+        {
+            "pred": "(B) The food.",
+            "gt": "(B) The food.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/E18UD.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The cup/glass/bottle.\n(B) The food.\n(C) The pillow.\n(D) The bag."
+        },
+        {
+            "pred": "(D) The closet/cabinet.",
+            "gt": "(A) The book.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/52WDV.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The book.\n(B) The window.\n(C) The door.\n(D) The closet/cabinet."
+        },
+        {
+            "pred": "(A) The shoe.",
+            "gt": "(A) The shoe.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/F6A4W.mp4",
+            "question": "Question: Which object was thrown by the person?\nOptions:\n(A) The shoe.\n(B) The clothes.\n(C) The broom.\n(D) The pillow."
+        },
+        {
+            "pred": "(A) The towel.",
+            "gt": "(A) The towel.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/IIW0F.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The towel.\n(B) The closet/cabinet.\n(C) The broom.\n(D) The table."
+        },
+        {
+            "pred": "(B) The broom.",
+            "gt": "(A) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/Q3HZI.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The bag.\n(B) The broom.\n(C) The towel.\n(D) The sandwich."
+        },
+        {
+            "pred": "(C) The sandwich.",
+            "gt": "(C) The sandwich.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/TU1C9.mp4",
+            "question": "Question: Which object was eaten by the person?\nOptions:\n(A) The medicine.\n(B) The blanket.\n(C) The sandwich.\n(D) The window."
+        },
+        {
+            "pred": "(C) The laptop.",
+            "gt": "(D) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/YUEB9.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The door.\n(B) The window.\n(C) The laptop.\n(D) The bag."
+        },
+        {
+            "pred": "(D) The picture.",
+            "gt": "(D) The picture.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/2BO2G.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The book.\n(B) The blanket.\n(C) The broom.\n(D) The picture."
+        },
+        {
+            "pred": "(B) The table.",
+            "gt": "(A) The clothes.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/K71S1.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The clothes.\n(B) The table.\n(C) The towel.\n(D) The broom."
+        },
+        {
+            "pred": "(B) The food.",
+            "gt": "(B) The food.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/HL5OP.mp4",
+            "question": "Question: Which object was thrown by the person?\nOptions:\n(A) The towel.\n(B) The food.\n(C) The box.\n(D) The book."
+        },
+        {
+            "pred": "(C) The closet/cabinet.",
+            "gt": "(C) The closet/cabinet.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/937EW.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The clothes.\n(B) The blanket.\n(C) The closet/cabinet.\n(D) The table."
+        },
+        {
+            "pred": "(C) The cup/glass/bottle.",
+            "gt": "(C) The cup/glass/bottle.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/5CZRC.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The laptop.\n(B) The paper/notebook.\n(C) The cup/glass/bottle.\n(D) The broom."
+        },
+        {
+            "pred": "(B) The phone/camera.",
+            "gt": "(B) The phone/camera.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/EAKL5.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The towel.\n(B) The phone/camera.\n(C) The dish.\n(D) The clothes."
+        },
+        {
+            "pred": "(D) The food.",
+            "gt": "(A) The book.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/024PD.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The book.\n(B) The blanket.\n(C) The broom.\n(D) The food."
+        },
+        {
+            "pred": "(D) The cup/glass/bottle.",
+            "gt": "(A) The box.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/TIPFG.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The box.\n(B) The dish.\n(C) The food.\n(D) The cup/glass/bottle."
+        },
+        {
+            "pred": "(A) The table.",
+            "gt": "(A) The table.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/B8DL6.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The table.\n(B) The broom.\n(C) The towel.\n(D) The clothes."
+        },
+        {
+            "pred": "(D) The dish.",
+            "gt": "(D) The dish.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9335E.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The clothes.\n(B) The cup/glass/bottle.\n(C) The paper/notebook.\n(D) The dish."
+        },
+        {
+            "pred": "(B) The cup/glass/bottle.",
+            "gt": "(A) The food.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/34J80.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The food.\n(B) The cup/glass/bottle.\n(C) The clothes.\n(D) The broom."
+        },
+        {
+            "pred": "(C) The clothes.",
+            "gt": "(C) The clothes.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/3EIRZ.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The table.\n(B) The blanket.\n(C) The clothes.\n(D) The towel."
+        },
+        {
+            "pred": "(A) The sofa/couch.",
+            "gt": "(A) The sofa/couch.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/R9NRA.mp4",
+            "question": "Question: Which object was lied on by the person?\nOptions:\n(A) The sofa/couch.\n(B) The bed.\n(C) The refrigerator.\n(D) The floor."
+        },
+        {
+            "pred": "(C) The sandwich.",
+            "gt": "(C) The sandwich.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/9B93K.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The laptop.\n(B) The broom.\n(C) The sandwich.\n(D) The bag."
+        },
+        {
+            "pred": "(B) The clothes.",
+            "gt": "(B) The clothes.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/CII5H.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The broom.\n(B) The clothes.\n(C) The blanket.\n(D) The table."
+        },
+        {
+            "pred": "(D) The blanket.",
+            "gt": "(B) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/D1WYU.mp4",
+            "question": "Question: Which object was thrown by the person?\nOptions:\n(A) The pillow.\n(B) The bag.\n(C) The clothes.\n(D) The blanket."
+        },
+        {
+            "pred": "(A) The clothes.",
+            "gt": "(A) The clothes.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/N5PLR.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The clothes.\n(B) The cup/glass/bottle.\n(C) The sandwich.\n(D) The book."
+        },
+        {
+            "pred": "(C) The bag.",
+            "gt": "(C) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/1ZBUS.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The cup/glass/bottle.\n(B) The food.\n(C) The bag.\n(D) The clothes."
+        },
+        {
+            "pred": "(C) The bag.",
+            "gt": "(D) The shoe.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/16UNJ.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The food.\n(B) The blanket.\n(C) The bag.\n(D) The shoe."
+        },
+        {
+            "pred": "(D) The paper/notebook.",
+            "gt": "(A) The broom.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/Z7KC1.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The broom.\n(B) The box.\n(C) The bag.\n(D) The paper/notebook."
+        },
+        {
+            "pred": "(D) The box.",
+            "gt": "(D) The box.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/FM078.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The sandwich.\n(B) The laptop.\n(C) The pillow.\n(D) The box."
+        },
+        {
+            "pred": "(B) The broom.",
+            "gt": "(A) The table.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/330ZE.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The table.\n(B) The broom.\n(C) The clothes.\n(D) The blanket."
+        },
+        {
+            "pred": "(C) The food.",
+            "gt": "(C) The food.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/NR9L2.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The blanket.\n(B) The phone/camera.\n(C) The food.\n(D) The clothes."
+        },
+        {
+            "pred": "(B) The sofa/couch.",
+            "gt": "(B) The sofa/couch.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MZJ9D.mp4",
+            "question": "Question: Which object was sat on by the person?\nOptions:\n(A) The bed.\n(B) The sofa/couch.\n(C) The floor.\n(D) The table."
+        },
+        {
+            "pred": "(B) The clothes.",
+            "gt": "(D) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/K9UXS.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The table.\n(B) The clothes.\n(C) The towel.\n(D) The blanket."
+        },
+        {
+            "pred": "(C) The bag.",
+            "gt": "(C) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/CJ58B.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The phone/camera.\n(B) The cup/glass/bottle.\n(C) The bag.\n(D) The book."
+        },
+        {
+            "pred": "(A) The table.",
+            "gt": "(C) The clothes.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/IBX56.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The table.\n(B) The closet/cabinet.\n(C) The clothes.\n(D) The blanket."
+        },
+        {
+            "pred": "(A) The laptop.",
+            "gt": "(A) The laptop.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/KZODG.mp4",
+            "question": "Question: Which object was closed by the person?\nOptions:\n(A) The laptop.\n(B) The refrigerator.\n(C) The box.\n(D) The book."
+        },
+        {
+            "pred": "(C) The door.",
+            "gt": "(D) The closet/cabinet.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/1UI6I.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The window.\n(B) The refrigerator.\n(C) The door.\n(D) The closet/cabinet."
+        },
+        {
+            "pred": "(C) The bag.",
+            "gt": "(C) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/WE2PF.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The box.\n(B) The door.\n(C) The bag.\n(D) The refrigerator."
+        },
+        {
+            "pred": "(C) The broom.",
+            "gt": "(A) The bag.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XKU2U.mp4",
+            "question": "Question: Which object was thrown by the person?\nOptions:\n(A) The bag.\n(B) The box.\n(C) The broom.\n(D) The blanket."
+        },
+        {
+            "pred": "(B) The dish.",
+            "gt": "(B) The dish.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/5NG6Q.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The paper/notebook.\n(B) The dish.\n(C) The broom.\n(D) The book."
+        },
+        {
+            "pred": "(A) The paper/notebook.",
+            "gt": "(A) The paper/notebook.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/OKYYQ.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The paper/notebook.\n(B) The clothes.\n(C) The laptop.\n(D) The sandwich."
+        },
+        {
+            "pred": "(A) The box.",
+            "gt": "(A) The box.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/WN7T3.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The box.\n(B) The food.\n(C) The sandwich.\n(D) The dish."
+        },
+        {
+            "pred": "(B) The broom.",
+            "gt": "(B) The broom.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/7MRKY.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The cup/glass/bottle.\n(B) The broom.\n(C) The pillow.\n(D) The clothes."
+        },
+        {
+            "pred": "(A) The table.",
+            "gt": "(A) The table.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/8VSV6.mp4",
+            "question": "Question: Which object was sat at by the person?\nOptions:\n(A) The table.\n(B) The floor.\n(C) The bed.\n(D) The sofa/couch."
+        },
+        {
+            "pred": "(C) The picture.",
+            "gt": "(C) The picture.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/FX1T5.mp4",
+            "question": "Question: Which object was put down by the person?\nOptions:\n(A) The laptop.\n(B) The dish.\n(C) The picture.\n(D) The food."
+        },
+        {
+            "pred": "(A) The phone/camera.",
+            "gt": "(A) The phone/camera.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/IAHN3.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The phone/camera.\n(B) The clothes.\n(C) The laptop.\n(D) The book."
+        },
+        {
+            "pred": "(B) The cup/glass/bottle.",
+            "gt": "(C) The window.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/WM2J7.mp4",
+            "question": "Question: Which object was washed by the person?\nOptions:\n(A) The dish.\n(B) The cup/glass/bottle.\n(C) The window.\n(D) The mirror."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14727.mp4",
+            "question": "Question: What direction is the cyan sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Down and to the left.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(B) Up and to the left.",
+            "gt": "(D) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14366.mp4",
+            "question": "Question: What direction is the gray cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13584.mp4",
+            "question": "Question: What direction is the brown cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11281.mp4",
+            "question": "Question: In which direction does the blue cube move in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12803.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the right.\n(C) Up and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(C) Up and to the left.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14515.mp4",
+            "question": "Question: Can you identify the direction of the gray sphere's movement in the video?\nOptions:\n(A) Down and to the right.\n(B) The object is stationary.\n(C) Up and to the left.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10643.mp4",
+            "question": "Question: What direction is the cyan sphere moving in within the video?\nOptions:\n(A) Down and to the left.\n(B) The object is stationary.\n(C) Up and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(D) Down and to the left.",
+            "gt": "(B) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11140.mp4",
+            "question": "Question: Can you identify the direction of the brown sphere's movement in the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12645.mp4",
+            "question": "Question: Can you identify the direction of the red sphere's movement in the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(D) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10834.mp4",
+            "question": "Question: Can you identify the direction of the yellow sphere's movement in the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the right.\n(C) Up and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(B) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11006.mp4",
+            "question": "Question: In which direction does the yellow cylinder move in the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the right.\n(C) Down and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Down and to the left.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13860.mp4",
+            "question": "Question: Can you identify the direction of the red sphere's movement in the video?\nOptions:\n(A) Down and to the right.\n(B) The object is stationary.\n(C) Down and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14304.mp4",
+            "question": "Question: Can you identify the direction of the blue sphere's movement in the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(A) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11923.mp4",
+            "question": "Question: What direction is the yellow cylinder moving in within the video?\nOptions:\n(A) Down and to the left.\n(B) The object is stationary.\n(C) Down and to the right.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(B) Down and to the left.",
+            "gt": "(C) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12573.mp4",
+            "question": "Question: What direction is the brown sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Up and to the left.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11232.mp4",
+            "question": "Question: Can you identify the direction of the gray sphere's movement in the video?\nOptions:\n(A) Down and to the left.\n(B) The object is stationary.\n(C) Up and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(A) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12288.mp4",
+            "question": "Question: Can you identify the direction of the green sphere's movement in the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) Down and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12516.mp4",
+            "question": "Question: What direction is the blue sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(C) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11840.mp4",
+            "question": "Question: In which direction does the purple sphere move in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the right.\n(C) Up and to the left.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11650.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(A) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13833.mp4",
+            "question": "Question: Can you identify the direction of the purple sphere's movement in the video?\nOptions:\n(A) Up and to the right.\n(B) The object is stationary.\n(C) Down and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(C) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13022.mp4",
+            "question": "Question: In which direction does the yellow sphere move in the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Up and to the left.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(D) Up and to the left.",
+            "gt": "(C) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11574.mp4",
+            "question": "Question: Can you identify the direction of the purple cube's movement in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11859.mp4",
+            "question": "Question: In which direction does the gray sphere move in the video?\nOptions:\n(A) Up and to the left.\n(B) Up and to the right.\n(C) Down and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12151.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(A) Down and to the right.",
+            "gt": "(B) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10748.mp4",
+            "question": "Question: What direction is the gray cube moving in within the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the right.\n(C) The object is stationary.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(C) Up and to the left.",
+            "gt": "(A) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10901.mp4",
+            "question": "Question: What direction is the green sphere moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) The object is stationary.\n(C) Up and to the left.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10393.mp4",
+            "question": "Question: Can you identify the direction of the blue cube's movement in the video?\nOptions:\n(A) Up and to the left.\n(B) Up and to the right.\n(C) Down and to the left.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(A) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10924.mp4",
+            "question": "Question: What direction is the green sphere moving in within the video?\nOptions:\n(A) Down and to the left.\n(B) Down and to the right.\n(C) Up and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10909.mp4",
+            "question": "Question: In which direction does the purple sphere move in the video?\nOptions:\n(A) Down and to the right.\n(B) The object is stationary.\n(C) Up and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12052.mp4",
+            "question": "Question: In which direction does the blue sphere move in the video?\nOptions:\n(A) Up and to the right.\n(B) The object is stationary.\n(C) Up and to the left.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(A) Down and to the right.",
+            "gt": "(D) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12295.mp4",
+            "question": "Question: What direction is the gray sphere moving in within the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the right.\n(C) The object is stationary.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12844.mp4",
+            "question": "Question: What direction is the gray sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(A) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12219.mp4",
+            "question": "Question: In which direction does the yellow sphere move in the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(C) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11516.mp4",
+            "question": "Question: What direction is the purple sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Up and to the right.\n(C) The object is stationary.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(D) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10820.mp4",
+            "question": "Question: Can you identify the direction of the green cylinder's movement in the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(A) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13027.mp4",
+            "question": "Question: In which direction does the purple sphere move in the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(B) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14951.mp4",
+            "question": "Question: What direction is the purple cube moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Up and to the left.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(B) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14704.mp4",
+            "question": "Question: What direction is the blue sphere moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the right.\n(C) The object is stationary.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(A) Down and to the right.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14477.mp4",
+            "question": "Question: In which direction does the green sphere move in the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the left.\n(C) Down and to the left.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(A) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10094.mp4",
+            "question": "Question: What direction is the red cube moving in within the video?\nOptions:\n(A) Down and to the left.\n(B) The object is stationary.\n(C) Down and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11661.mp4",
+            "question": "Question: In which direction does the red sphere move in the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the left.\n(C) Down and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11535.mp4",
+            "question": "Question: What direction is the green cylinder moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Up and to the right.\n(C) The object is stationary.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Up and to the left.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13585.mp4",
+            "question": "Question: What direction is the green sphere moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Up and to the left.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(B) Up and to the left.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11804.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the left.\n(C) Down and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(A) Down and to the right.",
+            "gt": "(A) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13714.mp4",
+            "question": "Question: In which direction does the cyan cube move in the video?\nOptions:\n(A) Down and to the right.\n(B) Down and to the left.\n(C) Up and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11171.mp4",
+            "question": "Question: In which direction does the gray sphere move in the video?\nOptions:\n(A) Up and to the left.\n(B) The object is stationary.\n(C) Down and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(D) Up and to the right.",
+            "gt": "(A) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11871.mp4",
+            "question": "Question: What direction is the gray sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the left.\n(C) The object is stationary.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Up and to the left.",
+            "gt": "(C) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13519.mp4",
+            "question": "Question: In which direction does the cyan sphere move in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Up and to the left.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(D) Up and to the right.",
+            "gt": "(A) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13332.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the right.\n(C) Down and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(C) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13831.mp4",
+            "question": "Question: Can you identify the direction of the yellow cube's movement in the video?\nOptions:\n(A) Up and to the left.\n(B) The object is stationary.\n(C) Down and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(C) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13955.mp4",
+            "question": "Question: What direction is the green cylinder moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Down and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(D) Up and to the right.",
+            "gt": "(B) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12303.mp4",
+            "question": "Question: What direction is the yellow sphere moving in within the video?\nOptions:\n(A) Down and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(B) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10288.mp4",
+            "question": "Question: In which direction does the cyan sphere move in the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Down and to the left.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14213.mp4",
+            "question": "Question: In which direction does the blue sphere move in the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(A) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11541.mp4",
+            "question": "Question: What direction is the yellow sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Up and to the right.\n(C) The object is stationary.\n(D) Down and to the right."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11560.mp4",
+            "question": "Question: Can you identify the direction of the blue sphere's movement in the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the right.\n(C) The object is stationary.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(C) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14830.mp4",
+            "question": "Question: What direction is the brown sphere moving in within the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the right.\n(C) Down and to the left.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10995.mp4",
+            "question": "Question: What direction is the red cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the right.\n(C) Up and to the left.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(C) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11982.mp4",
+            "question": "Question: What direction is the brown cube moving in within the video?\nOptions:\n(A) Down and to the left.\n(B) The object is stationary.\n(C) Down and to the right.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12576.mp4",
+            "question": "Question: Can you identify the direction of the yellow cube's movement in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the right.\n(C) Up and to the left.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(C) Up and to the left.",
+            "gt": "(D) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11015.mp4",
+            "question": "Question: What direction is the gray sphere moving in within the video?\nOptions:\n(A) Down and to the left.\n(B) The object is stationary.\n(C) Up and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(A) Down and to the right.",
+            "gt": "(D) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14259.mp4",
+            "question": "Question: Can you identify the direction of the green sphere's movement in the video?\nOptions:\n(A) Down and to the right.\n(B) Down and to the left.\n(C) The object is stationary.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(B) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11176.mp4",
+            "question": "Question: In which direction does the brown sphere move in the video?\nOptions:\n(A) Down and to the right.\n(B) The object is stationary.\n(C) Up and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(B) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10079.mp4",
+            "question": "Question: Can you identify the direction of the yellow cube's movement in the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the right.\n(C) Down and to the left.\n(D) Up and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14966.mp4",
+            "question": "Question: Can you identify the direction of the brown cube's movement in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the right.\n(C) The object is stationary.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(A) Down and to the right.",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_10951.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) Down and to the right.\n(B) Down and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(C) Up and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12055.mp4",
+            "question": "Question: Can you identify the direction of the blue sphere's movement in the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the left.\n(C) Up and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13620.mp4",
+            "question": "Question: Can you identify the direction of the green sphere's movement in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the right.\n(C) Up and to the left.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(C) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11093.mp4",
+            "question": "Question: What direction is the brown cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) Down and to the right.\n(D) Down and to the left."
+        },
+        {
+            "pred": "(B) Down and to the left.",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13684.mp4",
+            "question": "Question: What direction is the yellow sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Up and to the left.\n(D) Up and to the right."
+        },
+        {
+            "pred": "(C) Down and to the right.",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11524.mp4",
+            "question": "Question: Can you identify the direction of the gray cube's movement in the video?\nOptions:\n(A) Up and to the left.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(C) Up and to the right.",
+            "gt": "(A) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11669.mp4",
+            "question": "Question: In which direction does the gray sphere move in the video?\nOptions:\n(A) Down and to the left.\n(B) Up and to the left.\n(C) Up and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(C) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12175.mp4",
+            "question": "Question: What direction is the cyan cube moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) The object is stationary."
+        },
+        {
+            "pred": "(C) Up and to the left.",
+            "gt": "(C) Up and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12725.mp4",
+            "question": "Question: Can you identify the direction of the purple sphere's movement in the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the left.\n(C) Up and to the left.\n(D) Up and to the right."
+        }
+    ]
+}

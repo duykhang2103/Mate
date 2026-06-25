@@ -131,6 +131,23 @@ def parse_args():
         default=1.0,
     )
     parser.add_argument(
+        "--use_entropy_adaptive",
+        action='store_true',
+        help="Use entropy-adaptive dynamic layer selection instead of fixed selected_layer.",
+    )
+    parser.add_argument(
+        "--tau_entropy",
+        type=float,
+        default=0.8,
+        help="Entropy threshold for triggering pruning (lower = prune later).",
+    )
+    parser.add_argument(
+        "--entropy_fallback_layer",
+        type=int,
+        default=20,
+        help="Fallback layer if no entropy trigger found.",
+    )
+    parser.add_argument(
         "--tasks", 
         type=str,
         default=None,
@@ -145,11 +162,12 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0):
+def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20):
     # remind that, once the model goes larger (30B+) may cause the memory to be heavily used up. Even Tearing Nodes.
     model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
         weight_dir=weight_dir, lora_alpha=lora_alpha, pooling_shape=pooling_shape, selected_layer=selected_layer, \
-            alpha=alpha, softmax=softmax, head=head, tau=tau, cluster_ratio=cluster_ratio, temporal_segment_ratio=temporal_segment_ratio)
+            alpha=alpha, softmax=softmax, head=head, tau=tau, cluster_ratio=cluster_ratio, temporal_segment_ratio=temporal_segment_ratio, \
+                use_entropy_adaptive=use_entropy_adaptive, tau_entropy=tau_entropy, entropy_fallback_layer=entropy_fallback_layer)
     logger.info('done loading llava')
 
     #  position embedding
@@ -261,7 +279,10 @@ def run(rank, args, world_size):
                                                        head=args.head,
                                                        tau=args.tau,
                                                        temporal_segment_ratio=args.temporal_segment_ratio,
-                                                       cluster_ratio=args.cluster_ratio)
+                                                       cluster_ratio=args.cluster_ratio,
+                                                       use_entropy_adaptive=args.use_entropy_adaptive,
+                                                       tau_entropy=args.tau_entropy,
+                                                       entropy_fallback_layer=args.entropy_fallback_layer)
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
 
@@ -311,25 +332,6 @@ def run(rank, args, world_size):
             acc_dict[task_type] = [0, 0] # correct, total
         acc_dict[task_type][1] += 1
         total += 1
-        # video_list = example["video_pils"]
-        # video_path = example['video_path']
-
-        # src_path = 'DATAS/MVBench/video/'
-        # dst_path = 'DATAS/MVBench/sampled_frames/'
-
-        # output_path = video_path.replace(src_path, dst_path)
-        # sampled_frames = np.stack(video_list, axis=0)
-        # if not os.path.isdir(video_path):
-        #     output_path = os.path.splitext(output_path)[0] + '.npy'
-        # else:
-        #     if os.path.exists(video_path + '.npy'):
-        #         os.remove(video_path + '.npy')
-        #     output_path = output_path + '.npy'
-        # print(output_path, total)
-        # if os.path.exists(output_path):
-        #     continue
-        # np.save(output_path, sampled_frames) # s
-        # print(video_path)
         pred = infer_mvbench(
             args,
             model,
@@ -364,26 +366,22 @@ def run(rank, args, world_size):
     return result_list
 
 def main():
-    multiprocess=True
-    mp.set_start_method('spawn')
     args = parse_args()
     save_path = args.save_path
     json_data = load_results(save_path)
     if json_data is None:
-        if multiprocess:
-            logger.info(f'started benchmarking, saving to: {save_path}')
-            n_gpus = torch.cuda.device_count()
-            # assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
-            world_size = n_gpus
+        logger.info(f'started benchmarking, saving to: {save_path}')
+        n_gpus = torch.cuda.device_count()
+        world_size = n_gpus
+        if world_size > 1:
+            mp.set_start_method('spawn', force=True)
             with Pool(world_size) as pool:
                 func = functools.partial(run, args=args, world_size=world_size)
                 result_lists = pool.map(func, range(world_size))
-            
-            logger.info('finished running')
-            result_list = [ res for res in itertools.chain(*result_lists)]
+            result_list = list(itertools.chain(*result_lists))
         else:
-            result_list = run(0, world_size=1, args=args) # debug
-
+            result_list = run(0, args=args, world_size=1)
+        logger.info('finished running')
     else:
         logger.info(f'loaded results from {save_path}')
         result_list = json_data
