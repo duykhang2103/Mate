@@ -1,0 +1,25 @@
+{
+  "acc_dict": {
+    "Action Sequence": [
+      45,
+      75
+    ],
+    "Action Prediction": [
+      40,
+      75
+    ],
+    "Unexpected Action": [
+      45,
+      75
+    ],
+    "Object Interaction": [
+      45,
+      75
+    ],
+    "Moving Direction": [
+      40,
+      75
+    ]
+  },
+  "result_list": []
+}
