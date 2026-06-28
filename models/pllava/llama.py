@@ -1307,6 +1307,8 @@ class LlamaModelVTP(LlamaModel):
         self.tau_entropy = getattr(config, 'tau_entropy', 0.8)
         self.entropy_fallback_layer = getattr(config, 'entropy_fallback_layer', 20)
         self.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
+        self.use_motion_adaptive = getattr(config, 'use_motion_adaptive', False)
+        self.motion_scale = getattr(config, 'motion_scale', 0.5)
 
         self.cache = VTPWindowCache(
             alpha=self.alpha,
@@ -1316,7 +1318,9 @@ class LlamaModelVTP(LlamaModel):
             head=self.head,
             softmax=self.softmax,
             num_frames=config.num_frames,
-            pad_token_id=config.pad_token_id
+            pad_token_id=config.pad_token_id,
+            use_motion_adaptive=self.use_motion_adaptive,
+            motion_scale=self.motion_scale
         )
         self.original_number = None
         self.current_number = None

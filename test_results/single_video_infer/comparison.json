@@ -1,17 +1,17 @@
 {
-  "raw_visual_tokens_after_projector": 2304,
+  "raw_visual_tokens_after_projector": 1024,
   "baseline": {
-    "vision_tokens_after_merge": 2304,
+    "vision_tokens_after_merge": 1024,
     "vision_retention_vs_raw": 1.0,
-    "llm_visual_tokens_after_layer_prune": 2304,
+    "llm_visual_tokens_after_layer_prune": 1024,
     "llm_visual_retention_vs_raw": 1.0,
-    "wall_time_sec": 0.0,
-    "answer": "[skipped generation]",
-    "raw_visual_tokens": 2304,
-    "after_vision_merge_tokens": 2304,
+    "wall_time_sec": 7.26777392578125,
+    "answer": "In the video, a woman is cooking a meal outdoors. She is wearing an apron and appears to be following a recipe or instructions for a dish. She is using various kitchen utensils and ingredients, such as a bowl, a spoon, and a cup. The setting is a balcony or deck with a view of the water, suggesting a pleasant and relaxed atmosphere. The woman seems to be enjoying the process of cooking and is focused on her task.",
+    "raw_visual_tokens": 1024,
+    "after_vision_merge_tokens": 1024,
     "vision_retention_ratio": 1.0,
     "static_tokens": 0,
-    "dynamic_tokens": 2304,
+    "dynamic_tokens": 1024,
     "temporal_windows": [
       1,
       1,
@@ -49,62 +49,62 @@
       0
     ],
     "dynamic_per_window": [
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144,
-      144
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64
     ],
     "frame_prune_masks": null
   },
   "pruned": {
-    "vision_tokens_after_merge": 646,
-    "vision_retention_vs_raw": 0.2803819444444444,
-    "llm_visual_tokens_after_layer_prune": 248,
-    "llm_visual_retention_vs_raw": 0.1076388888888889,
-    "wall_time_sec": 0.0,
-    "answer": "[skipped generation]",
-    "raw_visual_tokens": 2304,
-    "after_vision_merge_tokens": 646,
-    "vision_retention_ratio": 0.2803819444444444,
-    "static_tokens": 132,
-    "dynamic_tokens": 514,
+    "vision_tokens_after_merge": 221,
+    "vision_retention_vs_raw": 0.2158203125,
+    "llm_visual_tokens_after_layer_prune": 85,
+    "llm_visual_retention_vs_raw": 0.0830078125,
+    "wall_time_sec": 4.73687890625,
+    "answer": "In the video, a woman is cooking on a stove. She is wearing an apron and appears to be stirring something in a pot. The setting suggests an outdoor or open-air kitchen environment, possibly on a deck or patio. The woman is focused on her task and seems to be following a recipe or cooking method.",
+    "raw_visual_tokens": 1024,
+    "after_vision_merge_tokens": 221,
+    "vision_retention_ratio": 0.2158203125,
+    "static_tokens": 77,
+    "dynamic_tokens": 144,
     "temporal_windows": [
       2,
       7,
       7
     ],
     "static_per_window": [
-      59,
-      22,
-      51
+      31,
+      17,
+      29
     ],
     "dynamic_per_window": [
-      24,
-      343,
-      147
+      4,
+      105,
+      35
     ],
     "frame_prune_masks": null
   },
   "delta_pruned_vs_baseline": {
-    "vision_tokens_removed": 1658,
-    "vision_token_reduction_pct": 71.96180555555556,
-    "llm_visual_tokens_removed": 2056,
-    "llm_visual_token_reduction_pct": 89.23611111111111,
-    "overall_visual_retention_vs_raw_pct": 10.76388888888889,
-    "speedup_baseline_over_pruned": null,
-    "answers_match": true
+    "vision_tokens_removed": 803,
+    "vision_token_reduction_pct": 78.41796875,
+    "llm_visual_tokens_removed": 939,
+    "llm_visual_token_reduction_pct": 91.69921875,
+    "overall_visual_retention_vs_raw_pct": 8.30078125,
+    "speedup_baseline_over_pruned": 1.5342959086819594,
+    "answers_match": false
   },
   "pruning_hyperparameters": {
     "selected_layer": 10,
@@ -115,9 +115,11 @@
     "baseline_alpha": 1.0,
     "use_entropy_adaptive": true,
     "tau_entropy": 0.8,
-    "entropy_fallback_layer": 20
+    "entropy_fallback_layer": 20,
+    "use_motion_adaptive": true,
+    "motion_scale": 0.5
   },
   "video": "example/cooking.mp4",
-  "question": "Describe what happens in this video in detail.",
+  "question": "What is happening in this video?",
   "frame_sampling": "16 frames sampled at 0.2, 0.6, 1.0, 1.4, 1.8, 2.2, 2.6, 3.0, 3.4, 3.7, 4.1, 4.5, 4.9, 5.3, 5.7, 6.1 seconds."
 }

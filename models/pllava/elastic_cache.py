@@ -106,7 +106,7 @@ DIM_TO_SLICE = {
 }
 
 class VTPWindowCache:
-    def __init__(self, alpha=0.2, total_num_layers=32, selected_layer=9, pooling_shape=(16, 12, 12), num_frames=16, pad_token_id=None, head=0, softmax=1.0):
+    def __init__(self, alpha=0.2, total_num_layers=32, selected_layer=9, pooling_shape=(16, 12, 12), num_frames=16, pad_token_id=None, head=0, softmax=1.0, use_motion_adaptive=False, motion_scale=0.5):
         self.alpha = alpha
         self.total_num_layers = total_num_layers
         self.selected_layer = selected_layer
@@ -115,6 +115,8 @@ class VTPWindowCache:
         self.pad_token_id = pad_token_id
         self.head = head
         self.softmax = softmax
+        self.use_motion_adaptive = use_motion_adaptive
+        self.motion_scale = motion_scale
         self.img_start, self.img_end = None, None
 
     def process_attention(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes):
@@ -122,16 +124,21 @@ class VTPWindowCache:
         b, head_num, num_query, num_img = text_to_image_attentions.shape
         assert b == 1
         assert len(static_sizes) == len(dynamic_sizes) == len(window_sizes)
-        text_to_image_attentions = text_to_image_attentions[0].max(dim=0)[0].max(dim=0)[0] # num_img
+        
+        # Compute motion scores per window if motion-adaptive is enabled
+        motion_scores = self._compute_motion_scores(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes)
+        max_motion = max(motion_scores) if motion_scores else 1.0
+        max_motion = max(max_motion, 1e-6)  # avoid div by zero
 
         start_idx, end_idx = 0, 0
         topk_indices_list = []
         static_len, dynamic_len = np.sum(static_sizes), np.sum(dynamic_sizes)
 
         alpha = self.alpha
-        for static_size, dynamic_size, window_size in zip(static_sizes, dynamic_sizes, window_sizes):
+        for i, (static_size, dynamic_size, window_size) in enumerate(zip(static_sizes, dynamic_sizes, window_sizes)):
             end_idx = start_idx + static_size + dynamic_size
-            window_attentions = text_to_image_attentions[start_idx:end_idx]
+            window_attentions = text_to_image_attentions[0].max(dim=0)[0].max(dim=0)[0]  # [num_img]
+            window_attentions = window_attentions[start_idx:end_idx]
             static_attentions = window_attentions[:static_size]
             num_retain_static_tokens = int(static_size * alpha)
             _, static_topk_indices = torch.topk(static_attentions, k=num_retain_static_tokens, dim=-1) # num_retain_static_tokens
@@ -144,8 +151,8 @@ class VTPWindowCache:
             dynamic_topk_indices = dynamic_topk_indices + start_idx + static_size
             dynamic_topk_indices_list = []
 
-            for i in range(window_size):
-                dynamic_topk_indices_list.append(dynamic_topk_indices[i] + dynamic_attentions.shape[-1] * i)
+            for j in range(window_size):
+                dynamic_topk_indices_list.append(dynamic_topk_indices[j] + dynamic_attentions.shape[-1] * j)
             dynamic_topk_indices = torch.cat(dynamic_topk_indices_list, dim=0)
             topk_indices_list.append(dynamic_topk_indices)
             start_idx = end_idx
@@ -156,6 +163,37 @@ class VTPWindowCache:
         self.last_topk_indices = topk_indices.detach().cpu()
 
         return topk_indices
+
+    def _compute_motion_scores(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes):
+        """
+        Compute per-window motion score from attention temporal variance.
+        Returns list of floats, one per window.
+        """
+        b, head_num, num_query, num_img = text_to_image_attentions.shape
+        attn = text_to_image_attentions[0].max(dim=0)[0]  # [num_query, num_img]
+        
+        motion_scores = []
+        start_idx = 0
+        for static_size, dynamic_size, window_size in zip(static_sizes, dynamic_sizes, window_sizes):
+            end_idx = start_idx + static_size + dynamic_size
+            window_attn = attn[start_idx:end_idx]  # [window_total_tokens, num_img]
+            
+            # Dynamic tokens span multiple frames — compute variance across frame groups
+            dynamic_attn = window_attn[static_size:]  # tokens from dynamic region
+            if dynamic_attn.shape[0] > 0 and window_size > 1:
+                tokens_per_frame = dynamic_attn.shape[0] // window_size
+                if tokens_per_frame > 0:
+                    dynamic_grouped = dynamic_attn[:window_size * tokens_per_frame].view(window_size, tokens_per_frame, -1)
+                    temporal_var = dynamic_grouped.var(dim=0).mean().item()
+                else:
+                    temporal_var = 0.0
+            else:
+                temporal_var = 0.0
+            
+            motion_scores.append(temporal_var)
+            start_idx = end_idx
+        
+        return motion_scores
     
     def obtain_language_attention(self, input_ids, attentions, pad_token, text_indices=None):
         pad_token = self.pad_token_id

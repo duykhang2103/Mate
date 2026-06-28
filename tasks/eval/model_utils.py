@@ -170,7 +170,7 @@ def load_llava_next_video(repo_id, num_frames, use_lora=False, weight_dir=None, 
 
     return model, processor
 
-def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha=32, use_multi_gpus=False, pooling_shape=(16,12,12),selected_layer=10, alpha=0.1, head=0, softmax=1.0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20):
+def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha=32, use_multi_gpus=False, pooling_shape=(16,12,12),selected_layer=10, alpha=0.1, head=0, softmax=1.0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5):
     kwargs = {
         'num_frames': num_frames,
     }
@@ -192,6 +192,8 @@ def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha
             use_entropy_adaptive=use_entropy_adaptive,
             tau_entropy=tau_entropy,
             entropy_fallback_layer=entropy_fallback_layer,
+            use_motion_adaptive=use_motion_adaptive,
+            motion_scale=motion_scale,
             **kwargs,
         )
         with torch.no_grad():

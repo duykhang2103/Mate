@@ -25,7 +25,7 @@ python scripts/infer_single_video.py \
     --lora_alpha 14 \
     --question "What is happening in this video?" \
     --num_frames 16 \
-    --pooling_shape 16-12-12 \
+    --pooling_shape 16-8-8 \
     > loglog.log 2>&1
 
 echo "Done!"

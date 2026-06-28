@@ -106,6 +106,8 @@ class PllavaConfig(PretrainedConfig):
         tau_entropy=0.8,
         entropy_fallback_layer=20,
         entropy_computation_layers=None,
+        use_motion_adaptive=False,
+        motion_scale=0.5,
         **kwargs,
     ):
         self.ignore_index = ignore_index
@@ -127,6 +129,8 @@ class PllavaConfig(PretrainedConfig):
         self.tau_entropy = tau_entropy
         self.entropy_fallback_layer = entropy_fallback_layer
         self.entropy_computation_layers = entropy_computation_layers
+        self.use_motion_adaptive = use_motion_adaptive
+        self.motion_scale = motion_scale
         
         self.vision_config = vision_config
         

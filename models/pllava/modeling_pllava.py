@@ -589,17 +589,19 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         config.text_config.num_frames = config.num_frames
         config.text_config.head = config.head
         config.text_config.selected_layer = config.selected_layer
-        config.text_config.alpha = config.alpha
-        config.text_config.softmax = config.softmax
-        config.text_config.pooling_shape = config.pooling_shape
-        config.text_config.use_entropy_adaptive = getattr(config, 'use_entropy_adaptive', False)
-        config.text_config.tau_entropy = getattr(config, 'tau_entropy', 0.8)
-        config.text_config.entropy_fallback_layer = getattr(config, 'entropy_fallback_layer', 20)
-        config.text_config.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
+        self.config.text_config.alpha = config.alpha
+        self.config.text_config.softmax = config.softmax
+        self.config.text_config.pooling_shape = config.pooling_shape
+        self.config.text_config.use_entropy_adaptive = getattr(config, 'use_entropy_adaptive', False)
+        self.config.text_config.tau_entropy = getattr(config, 'tau_entropy', 0.8)
+        self.config.text_config.entropy_fallback_layer = getattr(config, 'entropy_fallback_layer', 20)
+        self.config.text_config.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
+        self.config.text_config.use_motion_adaptive = getattr(config, 'use_motion_adaptive', False)
+        self.config.text_config.motion_scale = getattr(config, 'motion_scale', 0.5)
         self.pad_token_id = self.config.pad_token_id if self.config.pad_token_id is not None else self.config.text_config.pad_token_id
         assert self.pad_token_id is not None, 'provide the model with pad_token_id, this would be used to arranging new embedings'
-        config.text_config.pad_token_id = self.pad_token_id
-        self.language_model = LlamaForCausalLMVTP(config.text_config)
+        self.config.text_config.pad_token_id = self.pad_token_id
+        self.language_model = LlamaForCausalLMVTP(self.config.text_config)
         self.config = config
         self.post_init()
 

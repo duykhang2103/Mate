@@ -73,6 +73,8 @@ class RunResult:
     use_entropy_adaptive: bool = False
     tau_entropy: float = 0.8
     entropy_fallback_layer: int = 20
+    use_motion_adaptive: bool = False
+    motion_scale: float = 0.5
     selected_layer_actual: int | None = None  # which layer was actually used for pruning
     layer_entropies: list[float] | None = None  # entropy profile across layers
 
@@ -133,6 +135,12 @@ def parse_args() -> argparse.Namespace:
                         help="Entropy threshold for triggering pruning (lower = later pruning)")
     parser.add_argument("--entropy_fallback_layer", type=int, default=20,
                         help="Fallback layer if no entropy trigger found")
+
+    # Motion-adaptive pruning
+    parser.add_argument("--use_motion_adaptive", action="store_true", default=False,
+                        help="Enable motion-adaptive pruning (per-window alpha based on attention variance)")
+    parser.add_argument("--motion_scale", type=float, default=0.5,
+                        help="Controls adaptive range: [alpha*(1-motion_scale), alpha]")
 
     # Baseline disables vision merge + LLM token pruning
     parser.add_argument("--baseline_alpha", type=float, default=1.0, help="alpha=1 keeps all vision tokens in the LLM stage.")
@@ -689,6 +697,8 @@ def main() -> None:
     model.config.use_entropy_adaptive = args.use_entropy_adaptive
     model.config.tau_entropy = args.tau_entropy
     model.config.entropy_fallback_layer = args.entropy_fallback_layer
+    model.config.use_motion_adaptive = args.use_motion_adaptive
+    model.config.motion_scale = args.motion_scale
     # Propagate to LlamaModelVTP
     lm = model.language_model
     if hasattr(lm, 'base_model'):
@@ -698,6 +708,8 @@ def main() -> None:
     lm.use_entropy_adaptive = args.use_entropy_adaptive
     lm.tau_entropy = args.tau_entropy
     lm.entropy_fallback_layer = args.entropy_fallback_layer
+    lm.use_motion_adaptive = args.use_motion_adaptive
+    lm.motion_scale = args.motion_scale
     LOGGER.info("Running PRUNED inference (entropy_adaptive=%s)...", args.use_entropy_adaptive)
     pruned = run_once(
         model,
@@ -727,6 +739,8 @@ def main() -> None:
         "use_entropy_adaptive": args.use_entropy_adaptive,
         "tau_entropy": args.tau_entropy,
         "entropy_fallback_layer": args.entropy_fallback_layer,
+        "use_motion_adaptive": args.use_motion_adaptive,
+        "motion_scale": args.motion_scale,
     }
     if pruned.selected_layer_actual is not None:
         summary["pruning_hyperparameters"]["selected_layer_actual"] = pruned.selected_layer_actual

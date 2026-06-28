@@ -1,0 +1,44 @@
+INFO:__main__:started benchmarking, saving to: test_results/mvbench_entropy_motion_pruned_5_tasks_75_samples
+INFO:__main__:loading model and constructing dataset to gpu 0...
+Traceback (most recent call last):
+  File "/venv/pllava/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/venv/pllava/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 406, in <module>
+    main()
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 397, in main
+    result_list = run(0, args=args, world_size=1)
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 280, in run
+    model, processor, dataset = load_model_and_dataset(rank,
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 178, in load_model_and_dataset
+    model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
+  File "/workspace/Mate/tasks/eval/model_utils.py", line 201, in load_pllava
+    model = PllavaForConditionalGeneration.from_pretrained(repo_id, config=config, torch_dtype=torch.bfloat16)
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/modeling_utils.py", line 3404, in from_pretrained
+    model = cls(config, *model_args, **model_kwargs)
+  File "/workspace/Mate/models/pllava/modeling_pllava.py", line 581, in __init__
+    self.vision_tower = AutoModel.from_config(config.vision_config)
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 417, in from_config
+    has_local_code = type(config) in cls._model_mapping.keys()
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 751, in keys
+    mapping_keys = [
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 752, in <listcomp>
+    self._load_attr_from_module(key, name)
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 748, in _load_attr_from_module
+    return getattribute_from_module(self._modules[module_name], attr)
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 692, in getattribute_from_module
+    if hasattr(module, attr):
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1462, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1472, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+  File "/venv/pllava/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 975, in get_code
+KeyboardInterrupt

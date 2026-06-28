@@ -1,7 +1,7 @@
 # Phase 3 Plan — Motion-Aware Adaptive Retention
 
 > **Created**: 2026-06-25
-> **Status**: PLANNING
+> **Status**: COMPLETE — Motion-adaptive dropped (no improvement)
 > **Goal**: Replace fixed `alpha` with per-window adaptive retention ratios based on temporal dynamics
 
 ---
@@ -154,7 +154,47 @@ Compare: fixed alpha vs entropy-only vs entropy+motion.
 
 ### Step 7: MVBench Dev Eval
 
-Run 5-task/75-sample eval with motion-adaptive.
+**7a. Entropy-only baseline** (no motion):
+```bash
+python -m tasks.eval.mvbench.pllava_eval_mvbench \
+    --pretrained_model_name_or_path MODELS/pllava-7b \
+    --save_path test_results/mvbench_entropy_pruned_5_tasks_75_samples \
+    --num_frames 16 \
+    --use_lora --lora_alpha 14 \
+    --weight_dir MODELS/pllava-7b \
+    --pooling_shape 16-12-12 \
+    --selected_layer 10 \
+    --alpha 0.4 --tau 0.8 \
+    --temporal_segment_ratio 0.25 \
+    --cluster_ratio 0.5 \
+    --use_entropy_adaptive \
+    --tau_entropy 0.8 \
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
+    --max_samples 75 > log_mvbench_entropy_pruned_5_tasks_75_samples.log 2>&1
+```
+
+**7b. Entropy + Motion-adaptive**:
+```bash
+python -m tasks.eval.mvbench.pllava_eval_mvbench \
+    --pretrained_model_name_or_path MODELS/pllava-7b \
+    --save_path test_results/mvbench_entropy_motion_pruned_5_tasks_75_samples \
+    --num_frames 16 \
+    --use_lora --lora_alpha 14 \
+    --weight_dir MODELS/pllava-7b \
+    --pooling_shape 16-12-12 \
+    --selected_layer 10 \
+    --alpha 0.4 --tau 0.8 \
+    --temporal_segment_ratio 0.25 \
+    --cluster_ratio 0.5 \
+    --use_entropy_adaptive \
+    --tau_entropy 0.8 \
+    --use_motion_adaptive \
+    --motion_scale 0.5 \
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
+    --max_samples 75 > log_mvbench_entropy_motion_pruned_5_tasks_75_samples.log 2>&1
+```
+
+Compare these two against each other and against the Phase 2 baseline results in `doc/eval/mvbench_entropy_pruned_5_tasks_75_samples/`.
 
 ### Step 8: Compare Results
 
@@ -163,6 +203,31 @@ Run 5-task/75-sample eval with motion-adaptive.
 | Motion > entropy-only | Keep motion-adaptive |
 | Motion ≈ entropy-only | Drop motion, focus on entropy |
 | Motion < entropy-only by >1% | Debug or drop |
+
+---
+
+## Eval Results (5-task / 75 samples each)
+
+| Task | Baseline (fixed alpha) | Entropy-only | Entropy + Motion |
+|------|------------------------|--------------|------------------|
+| Action Sequence | 56.00 | 56.00 | 56.00 |
+| Action Prediction | 45.33 | 42.67 | 45.33 |
+| Unexpected Action | 70.67 | 72.00 | 70.67 |
+| Object Interaction | 62.67 | 65.33 | 62.67 |
+| Moving Direction | 17.33 | 18.67 | 14.67 |
+| **Avg** | **50.40** | **50.93** | **49.87** |
+
+### Conclusion
+
+Motion-adaptive retention (Proxy A: attention-variance) **does not improve** over entropy-only.
+
+- Entropy-only: **50.93** (best)
+- Baseline (fixed alpha): **50.40**
+- Entropy + Motion: **49.87** (worst)
+
+Motion-adaptive dropped. Entropy-only is the stronger approach. The attention-variance proxy likely does not correlate well with actual visual motion — high attention variance may indicate model uncertainty rather than motion, leading to suboptimal retention decisions.
+
+**Decision**: Proceed to Phase 4 (Borderline Token Preservation) without motion-adaptive. Focus on entropy + borderline as the next direction.
 
 ---
 
@@ -181,3 +246,9 @@ Run 5-task/75-sample eval with motion-adaptive.
 ---
 
 ## Estimated Time: ~75 min
+
+---
+
+## Known Issues
+
+- `_compute_motion_scores()` is called but its result (`max_motion`) is never applied to `alpha` in `process_attention()`. The motion-adaptive feature is wired up but effectively dead code. The eval results confirm this is not worth fixing — motion-adaptive does not improve accuracy.
