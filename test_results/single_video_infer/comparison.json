@@ -5,7 +5,7 @@
     "vision_retention_vs_raw": 1.0,
     "llm_visual_tokens_after_layer_prune": 1024,
     "llm_visual_retention_vs_raw": 1.0,
-    "wall_time_sec": 7.26777392578125,
+    "wall_time_sec": 7.16446533203125,
     "answer": "In the video, a woman is cooking a meal outdoors. She is wearing an apron and appears to be following a recipe or instructions for a dish. She is using various kitchen utensils and ingredients, such as a bowl, a spoon, and a cup. The setting is a balcony or deck with a view of the water, suggesting a pleasant and relaxed atmosphere. The woman seems to be enjoying the process of cooking and is focused on her task.",
     "raw_visual_tokens": 1024,
     "after_vision_merge_tokens": 1024,
@@ -73,7 +73,7 @@
     "vision_retention_vs_raw": 0.2158203125,
     "llm_visual_tokens_after_layer_prune": 85,
     "llm_visual_retention_vs_raw": 0.0830078125,
-    "wall_time_sec": 4.73687890625,
+    "wall_time_sec": 4.6568017578125,
     "answer": "In the video, a woman is cooking on a stove. She is wearing an apron and appears to be stirring something in a pot. The setting suggests an outdoor or open-air kitchen environment, possibly on a deck or patio. The woman is focused on her task and seems to be following a recipe or cooking method.",
     "raw_visual_tokens": 1024,
     "after_vision_merge_tokens": 221,
@@ -103,7 +103,7 @@
     "llm_visual_tokens_removed": 939,
     "llm_visual_token_reduction_pct": 91.69921875,
     "overall_visual_retention_vs_raw_pct": 8.30078125,
-    "speedup_baseline_over_pruned": 1.5342959086819594,
+    "speedup_baseline_over_pruned": 1.5384948092350637,
     "answers_match": false
   },
   "pruning_hyperparameters": {
@@ -116,7 +116,7 @@
     "use_entropy_adaptive": true,
     "tau_entropy": 0.8,
     "entropy_fallback_layer": 20,
-    "use_motion_adaptive": true,
+    "use_motion_adaptive": false,
     "motion_scale": 0.5
   },
   "video": "example/cooking.mp4",

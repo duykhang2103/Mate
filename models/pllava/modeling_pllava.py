@@ -600,6 +600,7 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         self.config.text_config.motion_scale = getattr(config, 'motion_scale', 0.5)
         self.config.text_config.use_borderline_preservation = getattr(config, 'use_borderline_preservation', False)
         self.config.text_config.borderline_margin = getattr(config, 'borderline_margin', 0.1)
+        self.config.text_config.use_weighted_merge = getattr(config, 'use_weighted_merge', True)
         self.pad_token_id = self.config.pad_token_id if self.config.pad_token_id is not None else self.config.text_config.pad_token_id
         assert self.pad_token_id is not None, 'provide the model with pad_token_id, this would be used to arranging new embedings'
         self.config.text_config.pad_token_id = self.pad_token_id

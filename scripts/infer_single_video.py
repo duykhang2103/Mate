@@ -148,6 +148,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--borderline_margin", type=float, default=0.1,
                         help="Margin as fraction of cutoff score (0.1 = keep tokens within 10% of cutoff)")
 
+    # Weighted merge
+    parser.add_argument("--use_weighted_merge", action="store_true", default=True,
+                        help="Enable similarity-weighted token merge (default: True)")
+    parser.add_argument("--no_weighted_merge", action="store_true", default=False,
+                        help="Disable weighted merge, use 50/50 average instead")
+
     # Baseline disables vision merge + LLM token pruning
     parser.add_argument("--baseline_alpha", type=float, default=1.0, help="alpha=1 keeps all vision tokens in the LLM stage.")
 
@@ -673,6 +679,7 @@ def main() -> None:
         motion_scale=args.motion_scale,
         use_borderline_preservation=args.use_borderline_preservation,
         borderline_margin=args.borderline_margin,
+        use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge,
     )
     device = torch.device(args.device if torch.cuda.is_available() or args.device == "cpu" else "cpu")
     model = model.to(device).eval()

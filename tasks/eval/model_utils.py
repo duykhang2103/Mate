@@ -170,7 +170,7 @@ def load_llava_next_video(repo_id, num_frames, use_lora=False, weight_dir=None, 
 
     return model, processor
 
-def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha=32, use_multi_gpus=False, pooling_shape=(16,12,12),selected_layer=10, alpha=0.1, head=0, softmax=1.0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, use_borderline_preservation=False, borderline_margin=0.1):
+def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha=32, use_multi_gpus=False, pooling_shape=(16,12,12),selected_layer=10, alpha=0.1, head=0, softmax=1.0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, use_borderline_preservation=False, borderline_margin=0.1, use_weighted_merge=True):
     kwargs = {
         'num_frames': num_frames,
     }
@@ -196,6 +196,7 @@ def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha
             motion_scale=motion_scale,
             use_borderline_preservation=use_borderline_preservation,
             borderline_margin=borderline_margin,
+            use_weighted_merge=use_weighted_merge,
             **kwargs,
         )
         with torch.no_grad():

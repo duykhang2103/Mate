@@ -1603,7 +1603,8 @@ class TextPivotMerge_LayerWise:
         v_seq_dim=2,
         hh_ratio=None,
         recent_ratio=None,
-        layer_idx=None
+        layer_idx=None,
+        use_weighted_merge=True
     ):
         # print(f"H2OKVCache-LayerWise: {hh_size}, {recent_size}")
         self.hh_size = hh_size
@@ -1616,7 +1617,7 @@ class TextPivotMerge_LayerWise:
         self.recent_ratio = recent_ratio
         self.image_save_ratio = None
         self.layer_idx = layer_idx
-        # print(f"H2OKVCache-LayerWise: {recent_size}, {hh_size}")
+        self.use_weighted_merge = use_weighted_merge
         print(f"H2OKVCache-LayerWise:{recent_ratio}, {hh_ratio}")
 
     def __call__(self, q_len, past_key_values, attn_score_cache):
@@ -1666,11 +1667,18 @@ class TextPivotMerge_LayerWise:
         # pivot merge
         merged_indices = max_indices.unsqueeze(-1).repeat(1, 1, 1, 128)
         k_hh_selected = torch.gather(input=k_hh_recent, dim=2, index=merged_indices)
-        k_hh_merged = (k_hh_pruned + k_hh_selected)/2
-        k_hh_recent = torch.scatter_reduce(input=k_hh_recent, dim=2, index=merged_indices, src=k_hh_merged, reduce='mean', include_self=True) # include_self=True seems decrease the performance
+        if self.use_weighted_merge:
+            merge_weights = max_values.unsqueeze(-1)  # [batch, heads, num_pruned, 1]
+            k_hh_merged = merge_weights * k_hh_selected + (1 - merge_weights) * k_hh_pruned
+        else:
+            k_hh_merged = (k_hh_pruned + k_hh_selected) / 2
+        k_hh_recent = torch.scatter_reduce(input=k_hh_recent, dim=2, index=merged_indices, src=k_hh_merged, reduce='mean', include_self=True)
         v_hh_pruned = past_key_values.value_cache[self.layer_idx].squeeze()[~mask].view(bsz, num_heads, -1, head_dim)
         v_hh_selected = torch.gather(input=v_hh_recent, dim=2, index=merged_indices)
-        v_hh_merged = (v_hh_pruned + v_hh_selected)/2
+        if self.use_weighted_merge:
+            v_hh_merged = merge_weights * v_hh_selected + (1 - merge_weights) * v_hh_pruned
+        else:
+            v_hh_merged = (v_hh_pruned + v_hh_selected) / 2
         v_hh_recent = torch.scatter_reduce(input=v_hh_recent, dim=2, index=merged_indices, src=v_hh_merged, reduce='mean', include_self=True)
         ####################################only-image-merge#############################
         # reset the cache
@@ -2105,7 +2113,8 @@ class TextPivotLlamaAttention_drop(H2OLlamaAttention_drop):
             k_seq_dim=2,
             v_seq_dim=2,
             hh_ratio=config.hh_ratio,
-            recent_ratio=config.recent_ratio
+            recent_ratio=config.recent_ratio,
+            use_weighted_merge=getattr(config, 'use_weighted_merge', True)
         )
 
 class LlamaForCausalLM(LlamaPreTrainedModel):
