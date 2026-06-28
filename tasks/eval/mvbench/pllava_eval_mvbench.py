@@ -159,6 +159,17 @@ def parse_args():
         help="Scale factor for motion-adaptive alpha (alpha = motion_scale * motion_score).",
     )
     parser.add_argument(
+        "--use_borderline_preservation",
+        action='store_true',
+        help="Use borderline token preservation (keep tokens near the pruning cutoff).",
+    )
+    parser.add_argument(
+        "--borderline_margin",
+        type=float,
+        default=0.1,
+        help="Margin as fraction of cutoff score (0.1 = keep tokens within 10% of cutoff).",
+    )
+    parser.add_argument(
         "--tasks", 
         type=str,
         default=None,
@@ -173,13 +184,14 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5):
+def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, use_borderline_preservation=False, borderline_margin=0.1):
     # remind that, once the model goes larger (30B+) may cause the memory to be heavily used up. Even Tearing Nodes.
     model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
         weight_dir=weight_dir, lora_alpha=lora_alpha, pooling_shape=pooling_shape, selected_layer=selected_layer, \
             alpha=alpha, softmax=softmax, head=head, tau=tau, cluster_ratio=cluster_ratio, temporal_segment_ratio=temporal_segment_ratio, \
                 use_entropy_adaptive=use_entropy_adaptive, tau_entropy=tau_entropy, entropy_fallback_layer=entropy_fallback_layer,
-                use_motion_adaptive=use_motion_adaptive, motion_scale=motion_scale)
+                use_motion_adaptive=use_motion_adaptive, motion_scale=motion_scale,
+                use_borderline_preservation=use_borderline_preservation, borderline_margin=borderline_margin)
     logger.info('done loading llava')
 
     #  position embedding
@@ -295,8 +307,10 @@ def run(rank, args, world_size):
                                                        use_entropy_adaptive=args.use_entropy_adaptive,
                                                        tau_entropy=args.tau_entropy,
                                                         entropy_fallback_layer=args.entropy_fallback_layer,
-                                                        use_motion_adaptive=args.use_motion_adaptive,
-                                                        motion_scale=args.motion_scale)
+                                                         use_motion_adaptive=args.use_motion_adaptive,
+                                                         motion_scale=args.motion_scale,
+                                                         use_borderline_preservation=args.use_borderline_preservation,
+                                                         borderline_margin=args.borderline_margin)
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
 

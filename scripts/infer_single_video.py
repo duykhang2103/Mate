@@ -142,6 +142,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--motion_scale", type=float, default=0.5,
                         help="Controls adaptive range: [alpha*(1-motion_scale), alpha]")
 
+    # Borderline preservation
+    parser.add_argument("--use_borderline_preservation", action="store_true", default=False,
+                        help="Enable borderline token preservation (keep tokens near the pruning cutoff)")
+    parser.add_argument("--borderline_margin", type=float, default=0.1,
+                        help="Margin as fraction of cutoff score (0.1 = keep tokens within 10% of cutoff)")
+
     # Baseline disables vision merge + LLM token pruning
     parser.add_argument("--baseline_alpha", type=float, default=1.0, help="alpha=1 keeps all vision tokens in the LLM stage.")
 
@@ -663,6 +669,10 @@ def main() -> None:
         use_entropy_adaptive=args.use_entropy_adaptive,
         tau_entropy=args.tau_entropy,
         entropy_fallback_layer=args.entropy_fallback_layer,
+        use_motion_adaptive=args.use_motion_adaptive,
+        motion_scale=args.motion_scale,
+        use_borderline_preservation=args.use_borderline_preservation,
+        borderline_margin=args.borderline_margin,
     )
     device = torch.device(args.device if torch.cuda.is_available() or args.device == "cpu" else "cpu")
     model = model.to(device).eval()

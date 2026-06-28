@@ -108,6 +108,8 @@ class PllavaConfig(PretrainedConfig):
         entropy_computation_layers=None,
         use_motion_adaptive=False,
         motion_scale=0.5,
+        use_borderline_preservation=False,
+        borderline_margin=0.1,
         **kwargs,
     ):
         self.ignore_index = ignore_index
@@ -131,6 +133,8 @@ class PllavaConfig(PretrainedConfig):
         self.entropy_computation_layers = entropy_computation_layers
         self.use_motion_adaptive = use_motion_adaptive
         self.motion_scale = motion_scale
+        self.use_borderline_preservation = use_borderline_preservation
+        self.borderline_margin = borderline_margin
         
         self.vision_config = vision_config
         

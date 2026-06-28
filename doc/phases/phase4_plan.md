@@ -1,7 +1,7 @@
 # Phase 4 Plan — Borderline Token Preservation
 
 > **Created**: 2026-06-25
-> **Status**: IMPLEMENTED — Awaiting eval results
+> **Status**: COMPLETE — Borderline kept (marginal improvement over baseline)
 > **Goal**: Preserve borderline tokens (near the pruning cutoff) to reduce cascading errors
 
 ---
@@ -108,6 +108,29 @@ python -m tasks.eval.mvbench.pllava_eval_mvbench \
 | Borderline > entropy-only (50.93) | Keep borderline preservation |
 | Borderline ≈ entropy-only (±0.5%) | Keep borderline if tokens retained is higher (more robust) |
 | Borderline < entropy-only by >1% | Debug or drop |
+
+---
+
+## Eval Results (5-task / 75 samples each)
+
+| Task | Baseline | Entropy-only | Entropy + Borderline |
+|------|----------|--------------|----------------------|
+| Action Sequence | 56.00 | 56.00 | 56.00 |
+| Action Prediction | 45.33 | 42.67 | 45.33 |
+| Unexpected Action | 70.67 | 72.00 | 70.67 |
+| Object Interaction | 62.67 | 65.33 | 62.67 |
+| Moving Direction | 17.33 | 18.67 | 18.67 |
+| **Avg** | **50.40** | **50.93** | **50.67** |
+
+### Conclusion
+
+Borderline preservation is **within ±0.5% of entropy-only** (50.67 vs 50.93, delta = -0.26). Per the decision gate, **keep borderline** — it retains ~13% more tokens (35.6% → 49.0%) which may improve robustness on harder benchmarks (VideoMME, EgoSchema).
+
+- Entropy-only: **50.93** (best)
+- Entropy + Borderline: **50.67** (close second, more tokens retained)
+- Baseline: **50.40**
+
+Borderline does not hurt accuracy and retains more tokens. Worth keeping as the default pruning configuration.
 
 ---
 

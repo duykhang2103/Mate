@@ -1309,6 +1309,8 @@ class LlamaModelVTP(LlamaModel):
         self.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
         self.use_motion_adaptive = getattr(config, 'use_motion_adaptive', False)
         self.motion_scale = getattr(config, 'motion_scale', 0.5)
+        self.use_borderline_preservation = getattr(config, 'use_borderline_preservation', False)
+        self.borderline_margin = getattr(config, 'borderline_margin', 0.1)
 
         self.cache = VTPWindowCache(
             alpha=self.alpha,
@@ -1320,7 +1322,9 @@ class LlamaModelVTP(LlamaModel):
             num_frames=config.num_frames,
             pad_token_id=config.pad_token_id,
             use_motion_adaptive=self.use_motion_adaptive,
-            motion_scale=self.motion_scale
+            motion_scale=self.motion_scale,
+            use_borderline_preservation=self.use_borderline_preservation,
+            borderline_margin=self.borderline_margin
         )
         self.original_number = None
         self.current_number = None
