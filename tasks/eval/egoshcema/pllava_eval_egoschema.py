@@ -25,7 +25,7 @@ from tasks.eval.egoshcema import (
     load_results,
 )
 
-logging.basicConfig()
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
