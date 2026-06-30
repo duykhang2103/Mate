@@ -123,7 +123,20 @@ Result:
 
 ## Key Observations
 
-(To be filled during implementation)
+### [2026-06-30] Critical Bug Fixes
+
+Three bugs were found and fixed:
+
+1. **Fallback pruning unreachable (CRITICAL)**: When no entropy trigger fired, the fallback set `dynamic_selected_layer` AFTER the loop, so `self.cache()` was never called. Entropy-adaptive mode was silently doing NOTHING for many inputs.
+   - **Fix**: Store `fallback_layer_outputs` during loop, execute pruning after loop.
+
+2. **Entropy on pre-RoPE attention (SIGNIFICANT)**: Entropy was computed on attention weights BEFORE Rotary Position Embedding, but the model's actual attention uses RoPE.
+   - **Fix**: Compute entropy on post-RoPE, post-softmax `attn_weights`.
+
+3. **Aggressive max aggregation (MODERATE)**: `max(dim=0).max(dim=0)` collapsed all heads and text tokens into one scalar per image token.
+   - **Fix**: Per-head entropy computation, then mean aggregation.
+
+**Impact**: These fixes may significantly change results. Previous 5-task evals showed small deltas (~0.5%) which could be explained by the fallback bug causing inconsistent behavior.
 
 ---
 
