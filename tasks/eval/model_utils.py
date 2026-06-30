@@ -366,7 +366,23 @@ def pllava_answer(conv: Conversation, model, processor, img_list, do_sample=True
     ending = conv.sep if isinstance(conv.sep, str) else conv.sep[1]
     output_text = output_text.removesuffix(ending).strip()
     conv.messages[-1][1] = output_text
-    return output_text, conv
+
+    # Extract token counts for FLOPs computation
+    token_info = {}
+    try:
+        # Vision token counts are on the top-level model (PllavaForConditionalGeneration)
+        token_info['raw_vision_tokens'] = getattr(model, '_last_raw_vision_tokens', None)
+        token_info['merged_vision_tokens'] = getattr(model, '_last_merged_vision_tokens', None)
+        # LLM pruned token count is on the inner model (LlamaModelVTP)
+        lm_model = model.language_model.model
+        token_info['pruned_tokens'] = getattr(lm_model, 'last_pruned_token_count', None)
+        # Use dynamic layer if available, otherwise fixed layer
+        dynamic_layer = getattr(lm_model, 'last_dynamic_selected_layer', None)
+        token_info['pruning_layer'] = dynamic_layer if dynamic_layer is not None else getattr(lm_model, 'selected_layer', None)
+    except Exception:
+        pass
+
+    return output_text, conv, token_info
 
 def llava_next_video_answer(conv: Conversation, model, processor, img_list, do_sample=True, max_new_tokens=200, num_beams=1, min_length=1, top_p=0.9,
                repetition_penalty=1.0, length_penalty=1, temperature=1.0, stop_criteria_keywords=None, print_res=False):

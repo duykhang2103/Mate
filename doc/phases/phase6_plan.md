@@ -1,8 +1,8 @@
 # Phase 6 Plan — Full Benchmark Evaluation
 
 > **Created**: 2026-06-28
-> **Updated**: 2026-06-30 (after bug fixes)
-> **Status**: READY TO EXECUTE
+> **Updated**: 2026-06-30 (revised plan with TFLOPs instrumentation)
+> **Status**: IN PROGRESS — Step 1 (TFLOPs instrumentation)
 > **Goal**: Validate improvements across MVBench, EgoSchema, VideoMME with FLOPs comparison
 
 ---
@@ -54,19 +54,64 @@ FLOPs Ratio     = Our FLOPs / Baseline FLOPs
 ### Where to Compute
 
 The FLOPs ratio is computed from token counts collected during eval:
-- `raw_visual_tokens`: from `measure_vision_pruning()`
-- `after_vision_merge_tokens`: after Stage 1
-- `llm_pruned_tokens`: after Stage 2 (estimated from `alpha` and token counts)
+- `raw_visual_tokens`: from `measure_vision_pruning()` or model forward
+- `after_vision_merge_tokens`: after Stage 1 (stored on `PllavaForConditionalGeneration`)
+- `llm_pruned_tokens`: after Stage 2 (stored on `VTPWindowCache`)
 - `pruning_layer`: from `selected_layer` or `dynamic_selected_layer`
+
+---
+
+## TFLOPs Instrumentation (Step 1 — Code Changes)
+
+Token counts are now tracked in the model and exposed via `pllava_answer()`.
+
+### Changes Made
+
+| File | Change |
+|------|--------|
+| `models/pllava/elastic_cache.py` | `VTPWindowCache.prompt_prefill()`: store `self.num_tokens_after_prune = num_tokens_left` (line 255) |
+| `models/pllava/modeling_pllava.py` | `PllavaForConditionalGeneration.forward()`: store `self._last_raw_vision_tokens`, `self._last_merged_vision_tokens` after `merge_frames_dynamic()` (line ~976) |
+| `models/pllava/llama.py` | `LlamaModelVTP.forward()`: after cache call, store `self.last_pruned_token_count` on model |
+| `tasks/eval/model_utils.py` | `pllava_answer()`: returns 3rd element `token_info` dict |
+| `tasks/eval/mvbench/pllava_eval_mvbench.py` | `infer_mvbench()`: returns token_info alongside llm_message; result_list includes token counts |
+| `tasks/eval/egoshcema/pllava_eval_egoschema.py` | Same as mvbench |
+| `tasks/eval/videomme/pllava_eval_videomme.py` | Same as mvbench |
+
+### Token Info Dict Structure
+
+```python
+token_info = {
+    'raw_vision_tokens': int,        # from projector output (e.g., 2304)
+    'merged_vision_tokens': int,     # after vision merge Stage 1 (e.g., 627)
+    'pruned_tokens': int,            # after LLM prune Stage 2 (e.g., 245)
+    'pruning_layer': int,            # layer where pruning occurred (e.g., 10 or dynamic)
+    'original_total_tokens': int,    # total prefill tokens including text
+}
+```
+
+### FLOPs Ratio Computation (in eval results compilation)
+
+```python
+def compute_flops_ratio(token_info, total_layers=32):
+    merged = token_info['merged_vision_tokens']
+    pruned = token_info['pruned_tokens']
+    layer = token_info['pruning_layer']
+    original = 2304  # PLLaVA-7B default
+
+    baseline_flops = original * total_layers
+    our_flops = merged * layer + pruned * (total_layers - layer)
+    return our_flops / baseline_flops
+```
 
 ---
 
 ## Execution Plan
 
-### Step 1: Smoke Test (5 min)
+### Step 1: Instrument Token Count Tracking ✅
+5 files modified to track and expose token counts during inference.
 
-Verify bug fixes work without crashes:
-
+### Step 2: Smoke Test (~5 min)
+Verify token counts work:
 ```bash
 python scripts/infer_single_video.py \
     --video example/cooking.mp4 \
@@ -77,51 +122,49 @@ python scripts/infer_single_video.py \
     --use_borderline_preservation --borderline_margin 0.1 \
     --alpha 0.4 --skip_generation
 ```
+**Check**: Token counts printed: 2304 → ~600 → ~250
 
-**Check**:
-- No crashes
-- Entropy profile printed with trigger layer shown
-- Token counts: 2304 → ~600 → ~250
+### Step 3: Dev Re-Eval — 5 Tasks, All Samples (~4-6 hrs)
 
-### Step 2: Dev Eval — 3 configs, 5 tasks, 75 samples (~2.5 hrs)
+Re-run with bug fixes + token count tracking.
 
-#### Config A: Baseline (fixed layer 10)
+#### Run 3a: Baseline (fixed layer 10)
 ```bash
 python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_dev_baseline \
+    --save_path test_results/mvbench_dev_baseline_all \
     --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
     --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
     --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" 
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action"
 ```
 
-#### Config B: Entropy + Borderline (best method)
+#### Run 3b: Entropy + Borderline (best method)
 ```bash
 python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_dev_entropy_borderline \
+    --save_path test_results/mvbench_dev_entropy_borderline_all \
     --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
     --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
     --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
     --use_entropy_adaptive --tau_entropy 0.8 \
     --use_borderline_preservation --borderline_margin 0.1 \
-    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" 
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action"
 ```
 
-#### Config C: Entropy-only (ablation)
+#### Run 3c: Entropy-only (ablation)
 ```bash
 python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_dev_entropy_only \
+    --save_path test_results/mvbench_dev_entropy_only_all \
     --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
     --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
     --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
     --use_entropy_adaptive --tau_entropy 0.8 \
-    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" 
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action"
 ```
 
-### Step 3: Decision Gate
+### Step 4: Decision Gate
 
 Check results in `test_results/mvbench_dev_*/upload_leaderboard.json`:
 
@@ -132,9 +175,9 @@ Check results in `test_results/mvbench_dev_*/upload_leaderboard.json`:
 | Entropy+borderline ≈ baseline (±0.5%) | Still proceed — larger samples may reveal effect |
 | Entropy+borderline < baseline | Debug further, check if Bug 2 fix changed entropy behavior |
 
-### Step 4: Full MVBench — 20 tasks, 300 samples/task (~12 hrs × 2)
+### Step 5: Full MVBench — 20 Tasks, 300 Samples/Task (~12 hrs × 2)
 
-#### Run 4a: Baseline
+#### Run 5a: Baseline
 ```bash
 python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --pretrained_model_name_or_path MODELS/pllava-7b \
@@ -145,7 +188,7 @@ python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --max_samples 300
 ```
 
-#### Run 4b: Best config (entropy + borderline + weighted)
+#### Run 5b: Best config (entropy + borderline)
 ```bash
 python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --pretrained_model_name_or_path MODELS/pllava-7b \
@@ -158,140 +201,37 @@ python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --max_samples 300
 ```
 
-### Step 5: EgoSchema (~8 hrs × 2)
-
-#### Run 5a: Baseline
-```bash
-python -m tasks.eval.egoshcema.pllava_eval_egoschema \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/egoschema_baseline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5
-```
-
-#### Run 5b: Best config
-```bash
-python -m tasks.eval.egoshcema.pllava_eval_egoschema \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/egoschema_entropy_borderline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --use_entropy_adaptive --tau_entropy 0.8 \
-    --use_borderline_preservation --borderline_margin 0.1
-```
-
-### Step 6: VideoMME (~12 hrs × 2)
-
-#### Run 6a: Baseline
-```bash
-python -m tasks.eval.videomme.pllava_eval_videomme \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/videomme_baseline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5
-```
-
-#### Run 6b: Best config
-```bash
-python -m tasks.eval.videomme.pllava_eval_videomme \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/videomme_entropy_borderline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --use_entropy_adaptive --tau_entropy 0.8 \
-    --use_borderline_preservation --borderline_margin 0.1
-```
-
-### Step 7: MVBench Motion-Heavy Subset Analysis
-
-Use `--tasks` flag with task lists from `TEMPORAL_LONG_DATASET.md`:
+### Step 6: MVBench Motion-Heavy Subset Analysis (~12 hrs × 2)
 
 #### Motion-heavy tasks (14 tasks)
-```bash
-python -m tasks.eval.mvbench.pllava_eval_mvbench \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_motion_heavy_baseline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --tasks "Action Antonym,Action Count,Action Localization,Action Prediction,Action Sequence,Fine-grained Action,Fine-grained Pose,Moving Attribute,Moving Count,Moving Direction,Object Interaction,Object Shuffle,State Change,Unexpected Action" \
-    --max_samples 200
 ```
-
-```bash
-python -m tasks.eval.mvbench.pllava_eval_mvbench \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_motion_heavy_entropy_borderline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --use_entropy_adaptive --tau_entropy 0.8 \
-    --use_borderline_preservation --borderline_margin 0.1 \
-    --tasks "Action Antonym,Action Count,Action Localization,Action Prediction,Action Sequence,Fine-grained Action,Fine-grained Pose,Moving Attribute,Moving Count,Moving Direction,Object Interaction,Object Shuffle,State Change,Unexpected Action" \
-    --max_samples 200
+Action Antonym, Action Count, Action Localization, Action Prediction,
+Action Sequence, Fine-grained Action, Fine-grained Pose, Moving Attribute,
+Moving Count, Moving Direction, Object Interaction, Object Shuffle,
+State Change, Unexpected Action
 ```
 
 #### Temporally complex tasks (5 tasks)
-```bash
-# Baseline
-python -m tasks.eval.mvbench.pllava_eval_mvbench \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_temporal_baseline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --tasks "Action Sequence,Action Prediction,Character Order,Episodic Reasoning,Scene Transition" \
-    --max_samples 200
-
-# Best config
-python -m tasks.eval.mvbench.pllava_eval_mvbench \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_temporal_entropy_borderline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --use_entropy_adaptive --tau_entropy 0.8 \
-    --use_borderline_preservation --borderline_margin 0.1 \
-    --tasks "Action Sequence,Action Prediction,Character Order,Episodic Reasoning,Scene Transition" \
-    --max_samples 200
+```
+Action Sequence, Action Prediction, Character Order,
+Episodic Reasoning, Scene Transition
 ```
 
-#### Static tasks (control group, 6 tasks)
-```bash
-# Baseline
-python -m tasks.eval.mvbench.pllava_eval_mvbench \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_static_baseline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --tasks "Object Existence,Object Shuffle,Scene Transition,Character Order,Episodic Reasoning,Counterfactual Inference" \
-    --max_samples 200
-
-# Best config
-python -m tasks.eval.mvbench.pllava_eval_mvbench \
-    --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/mvbench_static_entropy_borderline \
-    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
-    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --use_entropy_adaptive --tau_entropy 0.8 \
-    --use_borderline_preservation --borderline_margin 0.1 \
-    --tasks "Object Existence,Object Shuffle,Scene Transition,Character Order,Episodic Reasoning,Counterfactual Inference" \
-    --max_samples 200
+#### Static tasks (control, 6 tasks)
+```
+Object Existence, Object Shuffle, Scene Transition,
+Character Order, Episodic Reasoning, Counterfactual Inference
 ```
 
----
+Run baseline and best config on each subset (200 samples/task).
 
-## Results Compilation
+### Step 7: EgoSchema + VideoMME (if dev results positive)
 
-After all runs, read `upload_leaderboard.json` from each `test_results/` directory and compile:
+Same pattern: baseline vs best config, with token count tracking.
 
-### Final Table Template
+### Step 8: Results Compilation
+
+After all runs, compile the final table:
 
 ```
 | Config | MVBench | MVBench-Motion | MVBench-Temporal | MVBench-Static | EgoSchema | VideoMME | FLOPs Ratio | Retained |
@@ -302,43 +242,37 @@ After all runs, read `upload_leaderboard.json` from each `test_results/` directo
 | Full method | ? | ? | ? | ? | ? | ? | ~0.23x | ~18% |
 ```
 
-### Key Metrics to Report
-
-1. **Accuracy**: MVBench (overall + per-subset), EgoSchema, VideoMME
-2. **Efficiency**: FLOPs ratio (our_flops / baseline_flops)
-3. **Token count**: retained_ratio = llm_pruned_tokens / original_tokens
-4. **Per-task breakdown**: Especially motion-heavy vs static tasks
-
 ---
 
 ## Execution Timeline
 
-| Step | Task | Est. Time | GPU-hours |
-|------|------|-----------|-----------|
-| 1 | Smoke test | 5 min | - |
-| 2 | Dev eval (3 configs × 5 tasks × 75 samples) | ~2.5 hrs | ~2.5 hrs |
-| 3 | Decision gate | 5 min | - |
-| 4 | Full MVBench (2 × 20 tasks × 300 samples) | ~24 hrs | ~24 hrs |
-| 5 | EgoSchema (2 runs) | ~16 hrs | ~16 hrs |
-| 6 | VideoMME (2 runs) | ~24 hrs | ~24 hrs |
-| 7 | Motion-heavy subset analysis | ~12 hrs | ~12 hrs |
-| **Total** | | | **~78.5 hrs** |
+| Step | Task | Est. Time |
+|------|------|-----------|
+| 1 | Instrument token count tracking | ✅ Done |
+| 2 | Smoke test | ~5 min |
+| 3 | Dev re-eval (5 tasks × all samples × 3 configs) | ~4-6 hrs |
+| 4 | Decision gate | ~5 min |
+| 5 | Full MVBench (2 configs × 20 tasks × 300 samples) | ~24 hrs |
+| 6 | Motion-heavy subset analysis (2 configs × 3 subsets) | ~24 hrs |
+| 7 | EgoSchema + VideoMME (if positive) | ~40 hrs |
+| 8 | Results compilation | ~1 hr |
+| **Total** | | **~94-107 hrs** |
 
-With 1 GPU: ~3.3 days continuous
-With 2 GPUs: ~1.7 days continuous
+With 1 GPU: ~4-5 days continuous
+With 2 GPUs: ~2-2.5 days continuous
 
 ---
 
 ## Decision Gates
 
-| After Step 2 (Dev Eval) | Action |
-|--------------------------|--------|
+| After Step 3 (Dev Re-Eval) | Action |
+|-----------------------------|--------|
 | Method > baseline by ≥1% | Proceed with confidence |
 | Method > baseline by 0.5-1% | Proceed, frame as "marginal improvement" |
 | Method ≈ baseline (±0.5%) | Still proceed — full benchmark may show effect |
 | Method < baseline | Debug entropy threshold, check if Bug 2 fix changed behavior |
 
-| After Step 4 (Full MVBench) | Action |
+| After Step 5 (Full MVBench) | Action |
 |------------------------------|--------|
 | Improvement ≥ 1% | Strong result, proceed to paper |
 | Improvement 0.5-1% | Moderate, include with caveats |
@@ -352,3 +286,4 @@ With 2 GPUs: ~1.7 days continuous
 - **VCGBench skipped**: Requires OpenAI API key for GPT-based scoring. Can add later if needed.
 - **Motion-adaptive dropped**: Phase 3 showed no improvement (49.87 vs 50.93). Not included in best config.
 - **Weighted merge**: Kept as default (marginal effect, doesn't hurt).
+- **All existing dev eval results are pre-bug-fix**: Must re-run to get valid comparisons.

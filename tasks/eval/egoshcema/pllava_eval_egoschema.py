@@ -166,7 +166,7 @@ def infer_mvbench(
     if answer_prompt is not None:
         conv.assistant_response(answer_prompt)
     
-    llm_message, conv = pllava_answer(
+    llm_message, conv, token_info = pllava_answer(
         conv=conv,
         model=model,
         processor=processor,
@@ -184,7 +184,7 @@ def infer_mvbench(
     if return_prompt is not None:
         llm_message = return_prompt + llm_message
 
-    return llm_message
+    return llm_message, token_info
     
 def single_test(args, model, processor, vid_path, num_frames=4, conv_mode="plain"):
     def get_index(num_frames, num_segments):
@@ -220,7 +220,7 @@ def single_test(args, model, processor, vid_path, num_frames=4, conv_mode="plain
     img_list = vid
     conv = conv_templates[conv_mode].copy()
     conv.user_query("Describe the video in details.", is_mm=True)
-    llm_response, conv = pllava_answer(conv=conv, model=model, processor=processor, do_sample=False, img_list=img_list, max_new_tokens=args.max_new_tokens, print_res=True)
+    llm_response, conv, _ = pllava_answer(conv=conv, model=model, processor=processor, do_sample=False, img_list=img_list, max_new_tokens=args.max_new_tokens, print_res=True)
 
 def run(rank, args, world_size):
     if rank != 0:
@@ -280,7 +280,7 @@ def run(rank, args, world_size):
         acc_dict[task_type][1] += 1
         total += 1
         
-        pred = infer_mvbench(
+        pred, token_info = infer_mvbench(
             args,
             model,
             processor,
@@ -299,7 +299,7 @@ def run(rank, args, world_size):
             'task_type': task_type,
             'video_path': example['video_path'],
             'question': example['question'],
-
+            'token_info': token_info,
         })
         if check_ans(pred=pred, gt=gt):
             acc_dict[task_type][0] += 1

@@ -131,7 +131,7 @@ def infer_recaption(
     if answer_prompt is not None:
         conv.assistant_response(answer_prompt)
 
-    llm_message, conv = pllava_answer(
+    llm_message, conv, _ = pllava_answer(
         conv=conv,
         model=model,
         processor=processor,
@@ -185,7 +185,7 @@ def single_test(model, processor, vid_path, num_frames=4, conv_mode="plain"):
 
     conv = conv_templates[conv_mode].copy()
     conv.user_query("Describe the video in details.", is_mm=True)
-    llm_response, conv = pllava_answer(conv=conv, model=model, processor=processor, do_sample=False, img_list=img_list, max_new_tokens=256, print_res=True)
+    llm_response, conv, _ = pllava_answer(conv=conv, model=model, processor=processor, do_sample=False, img_list=img_list, max_new_tokens=256, print_res=True)
 
 def run(rank, args, world_size):
     if rank != 0:

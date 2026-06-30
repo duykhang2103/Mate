@@ -1309,6 +1309,11 @@ class LlamaModelVTP(LlamaModel):
         self.use_borderline_preservation = getattr(config, 'use_borderline_preservation', False)
         self.borderline_margin = getattr(config, 'borderline_margin', 0.1)
 
+        # Token count tracking for FLOPs computation
+        self.last_pruned_token_count = None
+        self.last_layer_entropies = None
+        self.last_dynamic_selected_layer = None
+
         self.cache = VTPWindowCache(
             alpha=self.alpha,
             total_num_layers=len(self.layers),
@@ -1583,6 +1588,13 @@ class LlamaModelVTP(LlamaModel):
         else:
             self.last_layer_entropies = None
             self.last_dynamic_selected_layer = None
+
+        # Store pruned token count for FLOPs computation
+        if is_prefill and self.cache.num_tokens_after_prune is not None:
+            self.last_pruned_token_count = self.cache.num_tokens_after_prune
+        elif is_prefill:
+            self.last_pruned_token_count = hidden_states.shape[1]
+        # During decoding, don't update (keep the prefill value)
 
         self.count_flag = True
         if hidden_states.shape[1] == 1:

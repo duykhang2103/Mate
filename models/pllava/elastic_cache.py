@@ -120,6 +120,7 @@ class VTPWindowCache:
         self.use_borderline_preservation = use_borderline_preservation
         self.borderline_margin = borderline_margin
         self.img_start, self.img_end = None, None
+        self.num_tokens_after_prune = None
 
     def process_attention(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes):
         # [head_num, num_query, num_img]
@@ -253,6 +254,7 @@ class VTPWindowCache:
                 updated_hidden_states += (old_hidden_state[:,index_list,:], )
 
         num_tokens_left = index_list.shape[0]
+        self.num_tokens_after_prune = num_tokens_left
         position_ids = position_ids[:,index_list]
         cache_postition = torch.arange(num_tokens_left, device=input_ids.device)
 

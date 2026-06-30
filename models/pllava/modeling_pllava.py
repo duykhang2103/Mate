@@ -604,6 +604,10 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         self.pad_token_id = self.config.pad_token_id if self.config.pad_token_id is not None else self.config.text_config.pad_token_id
         assert self.pad_token_id is not None, 'provide the model with pad_token_id, this would be used to arranging new embedings'
         self.config.text_config.pad_token_id = self.pad_token_id
+
+        # Token count tracking for FLOPs computation
+        self._last_raw_vision_tokens = None
+        self._last_merged_vision_tokens = None
         self.language_model = LlamaForCausalLMVTP(self.config.text_config)
         self.config = config
         self.post_init()
@@ -973,7 +977,10 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
                                                             num_videos=pixel_values.shape[0]//self.config.num_frames//batch_size,
                                                             num_frames=self.config.num_frames)
 
+                # Store raw vision token count before merge (for FLOPs computation)
+                self._last_raw_vision_tokens = image_features.shape[1]
                 image_features, static_sizes, dynamic_sizes, window_sizes = self.merge_frames_dynamic(image_features, threshold=self.config.tau, k=7)
+                self._last_merged_vision_tokens = image_features.shape[1]
 
                 inputs_embeds, attention_mask, labels, position_ids, input_ids = self._merge_input_ids_with_image_features(
                     image_features, inputs_embeds, input_ids, attention_mask, labels
