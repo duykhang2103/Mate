@@ -374,7 +374,11 @@ def pllava_answer(conv: Conversation, model, processor, img_list, do_sample=True
         token_info['raw_vision_tokens'] = getattr(model, '_last_raw_vision_tokens', None)
         token_info['merged_vision_tokens'] = getattr(model, '_last_merged_vision_tokens', None)
         # LLM pruned token count is on the inner model (LlamaModelVTP)
+        # With LoRA: PeftModel -> LlamaForCausalLMVTP -> LlamaModelVTP
+        # Without LoRA: LlamaForCausalLMVTP -> LlamaModelVTP
         lm_model = model.language_model.model
+        if not hasattr(lm_model, 'last_pruned_token_count'):
+            lm_model = lm_model.model  # PeftModel wraps one extra level
         token_info['pruned_tokens'] = getattr(lm_model, 'last_pruned_token_count', None)
         # Use dynamic layer if available, otherwise fixed layer
         dynamic_layer = getattr(lm_model, 'last_dynamic_selected_layer', None)
