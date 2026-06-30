@@ -1582,10 +1582,11 @@ class LlamaModelVTP(LlamaModel):
                 logger.warning(f"[VTP-Entropy] Fallback layer {dynamic_selected_layer} has no attention output, skipping pruning")
 
         # Store entropy profile for external access (e.g., inference visualization)
+        # Only update during prefill; during decoding, keep the prefill values
         if self.use_entropy_adaptive and is_prefill:
             self.last_layer_entropies = layer_entropies
             self.last_dynamic_selected_layer = dynamic_selected_layer
-        else:
+        elif is_prefill:
             self.last_layer_entropies = None
             self.last_dynamic_selected_layer = None
 
