@@ -114,7 +114,7 @@ def compute_flops_ratio(token_info, total_layers=32):
 Verify token counts work:
 ```bash
 python scripts/infer_single_video.py \
-    --video example/cooking.mp4 \
+    --video DATAS/Video-MME/25Pt1AZO9EM.mp4 \
     --model_dir MODELS/pllava-7b \
     --weight_dir MODELS/pllava-7b \
     --use_lora --lora_alpha 14 \

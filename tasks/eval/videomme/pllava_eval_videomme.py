@@ -159,6 +159,11 @@ def parse_args():
         help="Scale factor for motion-adaptive alpha (alpha = alpha * (1 + motion_scale)).",
     )
     parser.add_argument(
+        "--motion_invert",
+        action='store_true',
+        help="Invert motion-adaptive: high motion -> FEWER tokens (motion = noise).",
+    )
+    parser.add_argument(
         "--use_borderline_preservation",
         action='store_true',
         help="Use borderline token preservation (keep tokens near the pruning cutoff).",
@@ -196,13 +201,13 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, use_borderline_preservation=False, borderline_margin=0.1, use_weighted_merge=True):
+def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, motion_invert=False, use_borderline_preservation=False, borderline_margin=0.1, use_weighted_merge=True):
     # remind that, once the model goes larger (30B+) may cause the memory to be heavily used up. Even Tearing Nodes.
     model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
         weight_dir=weight_dir, lora_alpha=lora_alpha, pooling_shape=pooling_shape, selected_layer=selected_layer, \
             alpha=alpha, softmax=softmax, head=head, tau=tau, cluster_ratio=cluster_ratio, temporal_segment_ratio=temporal_segment_ratio, \
                 use_entropy_adaptive=use_entropy_adaptive, tau_entropy=tau_entropy, entropy_fallback_layer=entropy_fallback_layer,
-                use_motion_adaptive=use_motion_adaptive, motion_scale=motion_scale,
+                use_motion_adaptive=use_motion_adaptive, motion_scale=motion_scale, motion_invert=motion_invert,
                 use_borderline_preservation=use_borderline_preservation, borderline_margin=borderline_margin,
                 use_weighted_merge=use_weighted_merge)
     logger.info('done loading llava')
@@ -325,8 +330,9 @@ def run(rank, args, world_size):
                                                        tau_entropy=args.tau_entropy,
                                                        entropy_fallback_layer=args.entropy_fallback_layer,
                                                        use_motion_adaptive=args.use_motion_adaptive,
-                                                       motion_scale=args.motion_scale,
-                                                       use_borderline_preservation=args.use_borderline_preservation,
+                                                        motion_scale=args.motion_scale,
+                                                        motion_invert=args.motion_invert,
+                                                        use_borderline_preservation=args.use_borderline_preservation,
                                                        borderline_margin=args.borderline_margin,
                                                        use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge)
     logger.info(f'done model and dataset...')
@@ -338,18 +344,31 @@ def run(rank, args, world_size):
         dataset.data_list = [d for d in dataset.data_list if d['task_type'] in allowed_tasks]
         logger.info(f'Filtered to splits: {allowed_tasks} ({len(dataset.data_list)} samples)')
 
+    # Check how many videos actually exist on disk
+    from collections import defaultdict
+    available_counts = defaultdict(int)
+    total_counts = defaultdict(int)
+    for d in dataset.data_list:
+        task = d['task_type']
+        total_counts[task] += 1
+        video_path = os.path.join(d['prefix'], d['data']['video'])
+        if os.path.exists(video_path):
+            available_counts[task] += 1
+    for task in sorted(total_counts.keys()):
+        logger.info(f'  {task}: {available_counts[task]}/{total_counts[task]} videos available on disk')
+
     # Limit samples per split if specified
     if args.max_samples is not None:
-        from collections import defaultdict
         task_counts = defaultdict(int)
         filtered = []
         for d in dataset.data_list:
             task = d['task_type']
-            if task_counts[task] < args.max_samples:
+            video_path = os.path.join(d['prefix'], d['data']['video'])
+            if task_counts[task] < args.max_samples and os.path.exists(video_path):
                 filtered.append(d)
                 task_counts[task] += 1
         dataset.data_list = filtered
-        logger.info(f'Limited to {args.max_samples} samples per split ({len(dataset.data_list)} total)')
+        logger.info(f'Limited to {args.max_samples} available samples per split ({len(dataset.data_list)} total)')
 
     logger.info('single test...')
 
@@ -413,25 +432,23 @@ def run(rank, args, world_size):
     return result_list
 
 def main():
-    multiprocess=True
-    mp.set_start_method('spawn')
+    mp.set_start_method('spawn', force=True)
     args = parse_args()
     save_path = args.save_path
     json_data = load_results(save_path)
     if json_data is None:
-        if multiprocess:
-            logger.info(f'started benchmarking, saving to: {save_path}')
-            n_gpus = torch.cuda.device_count()
-            # assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
+        n_gpus = torch.cuda.device_count()
+        if n_gpus > 1:
+            logger.info(f'started benchmarking with {n_gpus} GPUs, saving to: {save_path}')
             world_size = n_gpus
             with Pool(world_size) as pool:
                 func = functools.partial(run, args=args, world_size=world_size)
                 result_lists = pool.map(func, range(world_size))
-            
             logger.info('finished running')
             result_list = [ res for res in itertools.chain(*result_lists)]
         else:
-            result_list = run(0, world_size=1, args=args) # debug
+            logger.info(f'started benchmarking (single GPU), saving to: {save_path}')
+            result_list = run(0, world_size=1, args=args)
 
     else:
         logger.info(f'loaded results from {save_path}')

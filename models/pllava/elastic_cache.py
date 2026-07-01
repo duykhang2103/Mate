@@ -106,7 +106,7 @@ DIM_TO_SLICE = {
 }
 
 class VTPWindowCache:
-    def __init__(self, alpha=0.2, total_num_layers=32, selected_layer=9, pooling_shape=(16, 12, 12), num_frames=16, pad_token_id=None, head=0, softmax=1.0, use_motion_adaptive=False, motion_scale=0.5, use_borderline_preservation=False, borderline_margin=0.1):
+    def __init__(self, alpha=0.2, total_num_layers=32, selected_layer=9, pooling_shape=(16, 12, 12), num_frames=16, pad_token_id=None, head=0, softmax=1.0, use_motion_adaptive=False, motion_scale=0.5, motion_invert=False, use_borderline_preservation=False, borderline_margin=0.1):
         self.alpha = alpha
         self.total_num_layers = total_num_layers
         self.selected_layer = selected_layer
@@ -117,6 +117,7 @@ class VTPWindowCache:
         self.softmax = softmax
         self.use_motion_adaptive = use_motion_adaptive
         self.motion_scale = motion_scale
+        self.motion_invert = motion_invert
         self.use_borderline_preservation = use_borderline_preservation
         self.borderline_margin = borderline_margin
         self.img_start, self.img_end = None, None
@@ -137,9 +138,23 @@ class VTPWindowCache:
         topk_indices_list = []
         static_len, dynamic_len = np.sum(static_sizes), np.sum(dynamic_sizes)
 
-        alpha = self.alpha
         for i, (static_size, dynamic_size, window_size) in enumerate(zip(static_sizes, dynamic_sizes, window_sizes)):
             end_idx = start_idx + static_size + dynamic_size
+
+            # Motion-adaptive alpha: high motion -> keep more (or fewer if inverted) tokens
+            if self.use_motion_adaptive and motion_scores:
+                motion_ratio = motion_scores[i] / max_motion  # normalized to [0, 1]
+                if self.motion_invert:
+                    # Inverted: high motion -> FEWER tokens (motion = noise)
+                    alpha = self.alpha * (1.0 - self.motion_scale * motion_ratio)
+                    alpha = max(alpha, 0.1)  # floor at 10%
+                else:
+                    # Original: high motion -> MORE tokens (motion = information)
+                    alpha = self.alpha * (1.0 + self.motion_scale * motion_ratio)
+                    alpha = min(alpha, 1.0)  # cap at 1.0
+            else:
+                alpha = self.alpha
+
             window_attentions = text_to_image_attentions[0].max(dim=0)[0].max(dim=0)[0]  # [num_img]
             window_attentions = window_attentions[start_idx:end_idx]
             static_attentions = window_attentions[:static_size]
@@ -160,6 +175,7 @@ class VTPWindowCache:
 
             dynamic_attentions = window_attentions[static_size:].view(window_size, -1)
             num_retain_dynamic_tokens = int(dynamic_attentions.shape[-1] * alpha)
+            num_retain_dynamic_tokens = max(num_retain_dynamic_tokens, 1)  # keep at least 1 token per window
             _, dynamic_topk_indices = torch.topk(dynamic_attentions, k=num_retain_dynamic_tokens, dim=-1) # window_size num_retain_dynamic_tokens
 
             dynamic_topk_indices = dynamic_topk_indices + start_idx + static_size

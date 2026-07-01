@@ -108,6 +108,7 @@ class PllavaConfig(PretrainedConfig):
         entropy_computation_layers=None,
         use_motion_adaptive=False,
         motion_scale=0.5,
+        motion_invert=False,
         use_borderline_preservation=False,
         borderline_margin=0.1,
         use_weighted_merge=True,
@@ -134,6 +135,7 @@ class PllavaConfig(PretrainedConfig):
         self.entropy_computation_layers = entropy_computation_layers
         self.use_motion_adaptive = use_motion_adaptive
         self.motion_scale = motion_scale
+        self.motion_invert = motion_invert
         self.use_borderline_preservation = use_borderline_preservation
         self.borderline_margin = borderline_margin
         self.use_weighted_merge = use_weighted_merge

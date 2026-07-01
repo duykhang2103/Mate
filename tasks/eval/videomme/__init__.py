@@ -133,6 +133,8 @@ class VideoMMEDataset(EvalDataset):
                 'answer': answer,
                 'task_type': task_type,
             }
+        except IndexError:
+            raise
         except Exception:
             return None
         

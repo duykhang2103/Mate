@@ -1306,6 +1306,7 @@ class LlamaModelVTP(LlamaModel):
         self.entropy_computation_layers = getattr(config, 'entropy_computation_layers', None)
         self.use_motion_adaptive = getattr(config, 'use_motion_adaptive', False)
         self.motion_scale = getattr(config, 'motion_scale', 0.5)
+        self.motion_invert = getattr(config, 'motion_invert', False)
         self.use_borderline_preservation = getattr(config, 'use_borderline_preservation', False)
         self.borderline_margin = getattr(config, 'borderline_margin', 0.1)
 
@@ -1325,6 +1326,7 @@ class LlamaModelVTP(LlamaModel):
             pad_token_id=config.pad_token_id,
             use_motion_adaptive=self.use_motion_adaptive,
             motion_scale=self.motion_scale,
+            motion_invert=self.motion_invert,
             use_borderline_preservation=self.use_borderline_preservation,
             borderline_margin=self.borderline_margin
         )
