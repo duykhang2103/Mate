@@ -69,10 +69,10 @@ def parse_args():
         default=None,
     )
     parser.add_argument(
-        "--conv_mode", 
+        "--conv_mode",
         type=str,
         required=False,
-        default='eval_mvbench',
+        default='eval_videomme',
     )
     parser.add_argument(
         "--pooling_shape", 
@@ -126,18 +126,85 @@ def parse_args():
         default=1.0,
     )
     parser.add_argument(
-        "--cluster_ratio", 
+        "--cluster_ratio",
         type=float,
         default=1.0,
+    )
+    parser.add_argument(
+        "--use_entropy_adaptive",
+        action='store_true',
+        help="Use entropy-adaptive dynamic layer selection instead of fixed selected_layer.",
+    )
+    parser.add_argument(
+        "--tau_entropy",
+        type=float,
+        default=0.8,
+        help="Entropy threshold for triggering pruning (lower = prune later).",
+    )
+    parser.add_argument(
+        "--entropy_fallback_layer",
+        type=int,
+        default=20,
+        help="Fallback layer if no entropy trigger found.",
+    )
+    parser.add_argument(
+        "--use_motion_adaptive",
+        action='store_true',
+        help="Use motion-adaptive dynamic alpha per window instead of fixed alpha.",
+    )
+    parser.add_argument(
+        "--motion_scale",
+        type=float,
+        default=0.5,
+        help="Scale factor for motion-adaptive alpha (alpha = alpha * (1 + motion_scale)).",
+    )
+    parser.add_argument(
+        "--use_borderline_preservation",
+        action='store_true',
+        help="Use borderline token preservation (keep tokens near the pruning cutoff).",
+    )
+    parser.add_argument(
+        "--borderline_margin",
+        type=float,
+        default=0.1,
+        help="Margin as fraction of cutoff score (0.1 = keep tokens within 10% of cutoff).",
+    )
+    parser.add_argument(
+        "--use_weighted_merge",
+        action='store_true',
+        default=True,
+        help="Use similarity-weighted token merge (default: True).",
+    )
+    parser.add_argument(
+        "--no_weighted_merge",
+        action='store_true',
+        default=False,
+        help="Disable weighted merge, use 50/50 average instead.",
+    )
+    parser.add_argument(
+        "--tasks",
+        type=str,
+        default=None,
+        help="Comma-separated list of splits to evaluate (e.g. 'short,medium'). Default: all.",
+    )
+    parser.add_argument(
+        "--max_samples",
+        type=int,
+        default=None,
+        help="Max number of samples to evaluate per split. Default: all.",
     )
     args = parser.parse_args()
     return args
 
-def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0):
+def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, use_borderline_preservation=False, borderline_margin=0.1, use_weighted_merge=True):
     # remind that, once the model goes larger (30B+) may cause the memory to be heavily used up. Even Tearing Nodes.
     model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
         weight_dir=weight_dir, lora_alpha=lora_alpha, pooling_shape=pooling_shape, selected_layer=selected_layer, \
-            alpha=alpha, softmax=softmax, head=head, tau=tau, cluster_ratio=cluster_ratio, temporal_segment_ratio=temporal_segment_ratio)
+            alpha=alpha, softmax=softmax, head=head, tau=tau, cluster_ratio=cluster_ratio, temporal_segment_ratio=temporal_segment_ratio, \
+                use_entropy_adaptive=use_entropy_adaptive, tau_entropy=tau_entropy, entropy_fallback_layer=entropy_fallback_layer,
+                use_motion_adaptive=use_motion_adaptive, motion_scale=motion_scale,
+                use_borderline_preservation=use_borderline_preservation, borderline_margin=borderline_margin,
+                use_weighted_merge=use_weighted_merge)
     logger.info('done loading llava')
 
     #  position embedding
@@ -233,6 +300,10 @@ def run(rank, args, world_size):
     post_query_prompt = "\nOnly give the best option."
     if args.pooling_shape is not None:
         pooling_shape=tuple([int(x) for x in args.pooling_shape.split("-")])
+    else:
+        pooling_shape=(16, 12, 12)
+
+    weight_dir = args.weight_dir or args.pretrained_model_name_or_path
 
     logger.info(f'loading model and constructing dataset to gpu {rank}...')
     model, processor, dataset = load_model_and_dataset(rank,
@@ -241,7 +312,7 @@ def run(rank, args, world_size):
                                                        num_frames=args.num_frames,
                                                        use_lora=args.use_lora,
                                                        lora_alpha=args.lora_alpha,
-                                                       weight_dir=args.weight_dir,
+                                                       weight_dir=weight_dir,
                                                        pooling_shape=pooling_shape,
                                                        selected_layer=args.selected_layer,
                                                        alpha=args.alpha,
@@ -249,9 +320,37 @@ def run(rank, args, world_size):
                                                        softmax=args.softmax,
                                                        tau=args.tau,
                                                        temporal_segment_ratio=args.temporal_segment_ratio,
-                                                       cluster_ratio=args.cluster_ratio)
+                                                       cluster_ratio=args.cluster_ratio,
+                                                       use_entropy_adaptive=args.use_entropy_adaptive,
+                                                       tau_entropy=args.tau_entropy,
+                                                       entropy_fallback_layer=args.entropy_fallback_layer,
+                                                       use_motion_adaptive=args.use_motion_adaptive,
+                                                       motion_scale=args.motion_scale,
+                                                       use_borderline_preservation=args.use_borderline_preservation,
+                                                       borderline_margin=args.borderline_margin,
+                                                       use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge)
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
+
+    # Filter by splits if specified
+    if args.tasks:
+        allowed_tasks = set(t.strip() for t in args.tasks.split(','))
+        dataset.data_list = [d for d in dataset.data_list if d['task_type'] in allowed_tasks]
+        logger.info(f'Filtered to splits: {allowed_tasks} ({len(dataset.data_list)} samples)')
+
+    # Limit samples per split if specified
+    if args.max_samples is not None:
+        from collections import defaultdict
+        task_counts = defaultdict(int)
+        filtered = []
+        for d in dataset.data_list:
+            task = d['task_type']
+            if task_counts[task] < args.max_samples:
+                filtered.append(d)
+                task_counts[task] += 1
+        dataset.data_list = filtered
+        logger.info(f'Limited to {args.max_samples} samples per split ({len(dataset.data_list)} total)')
+
     logger.info('single test...')
 
     vid_path = "./example/yoga.mp4"

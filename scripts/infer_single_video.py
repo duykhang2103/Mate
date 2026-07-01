@@ -195,14 +195,20 @@ def load_video_frames(video_path: str, num_segments: int, resolution: int = RESO
     return LoadedVideo(images=images, frame_indices=list(frame_indices), total_frames=total_frames, fps=fps, msg=msg)
 
 
-def estimate_llm_visual_tokens(static_sizes: list[int], dynamic_sizes: list[int], window_sizes: list[int], alpha: float) -> int:
-    """Mirror VTPWindowCache.process_attention retention counts."""
+def estimate_llm_visual_tokens(static_sizes: list[int], dynamic_sizes: list[int], window_sizes: list[int], alpha: float, use_motion_adaptive: bool = False, motion_scale: float = 0.5) -> int:
+    """Mirror VTPWindowCache.process_attention retention counts with two-tier retention."""
     total = 0
     for static_size, dynamic_size, window_size in zip(static_sizes, dynamic_sizes, window_sizes):
+        # Static tokens: use base alpha
         total += int(static_size * alpha)
+        # Dynamic tokens: higher retention if motion-adaptive enabled
+        if use_motion_adaptive and dynamic_size > 0:
+            dynamic_alpha = min(alpha * (1.0 + motion_scale), 1.0)
+        else:
+            dynamic_alpha = alpha
         per_frame = dynamic_size // max(window_size, 1)
         for _ in range(window_size):
-            total += int(per_frame * alpha)
+            total += int(per_frame * dynamic_alpha)
     return total
 
 
@@ -296,6 +302,8 @@ def run_once(
         vision_stats.dynamic_per_window,
         vision_stats.temporal_windows,
         alpha=alpha,
+        use_motion_adaptive=getattr(model.config, 'use_motion_adaptive', False),
+        motion_scale=getattr(model.config, 'motion_scale', 0.5),
     )
 
     answer = "[skipped generation]"
