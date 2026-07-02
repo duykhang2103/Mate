@@ -1562,11 +1562,14 @@ class LlamaModelVTP(LlamaModel):
                     # Re-enable output_attentions for the pruning layer if needed (fixed mode)
                     if not self.use_entropy_adaptive:
                         pass  # attention already collected above
+                    # Get flow motion scores if available
+                    flow_scores = getattr(self, '_flow_motion_scores', None)
                     past_key_values, hidden_states, all_hidden_states, causal_mask, attention_mask, position_ids, cache_position = \
                         self.cache(past_key_values, input_ids_new, layer_outputs[1], hidden_states, all_hidden_states, causal_mask, \
                             attention_mask, self.pad_token_id, position_ids, text_indices, \
                                 static_sizes=static_sizes, dynamic_sizes=dynamic_sizes, window_sizes=window_sizes,
-                                dynamic_selected_layer=dynamic_selected_layer)
+                                dynamic_selected_layer=dynamic_selected_layer,
+                                flow_motion_scores=flow_scores)
             layer_idx += 1
 
         # Fallback: if entropy-adaptive was enabled but no layer triggered, use fallback layer
@@ -1575,11 +1578,13 @@ class LlamaModelVTP(LlamaModel):
             logger.info(f"[VTP-Entropy] No layer triggered (min entropy: {min(e for _, e in layer_entropies) if layer_entropies else 'N/A':.4f}), using fallback layer {dynamic_selected_layer}")
             # Execute pruning at fallback layer using stored layer outputs
             if fallback_layer_outputs is not None and fallback_layer_outputs[1] is not None:
+                flow_scores = getattr(self, '_flow_motion_scores', None)
                 past_key_values, hidden_states, all_hidden_states, causal_mask, attention_mask, position_ids, cache_position = \
                     self.cache(past_key_values, input_ids_new, fallback_layer_outputs[1], hidden_states, all_hidden_states, causal_mask, \
                         attention_mask, self.pad_token_id, position_ids, text_indices, \
                             static_sizes=static_sizes, dynamic_sizes=dynamic_sizes, window_sizes=window_sizes,
-                            dynamic_selected_layer=dynamic_selected_layer)
+                            dynamic_selected_layer=dynamic_selected_layer,
+                            flow_motion_scores=flow_scores)
             else:
                 logger.warning(f"[VTP-Entropy] Fallback layer {dynamic_selected_layer} has no attention output, skipping pruning")
 

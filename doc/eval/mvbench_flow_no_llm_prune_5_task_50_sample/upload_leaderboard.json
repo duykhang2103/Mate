@@ -1,0 +1,8 @@
+{
+    "Action Sequence": 60.0,
+    "Action Prediction": 32.0,
+    "Unexpected Action": 68.0,
+    "Object Interaction": 72.0,
+    "Moving Direction": 16.0,
+    "Avg": 49.6
+}

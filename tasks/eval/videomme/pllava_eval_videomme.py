@@ -187,6 +187,18 @@ def parse_args():
         help="Disable weighted merge, use 50/50 average instead.",
     )
     parser.add_argument(
+        "--use_flow_pruning",
+        action='store_true',
+        default=False,
+        help="Use optical flow magnitude for static/dynamic token classification instead of feature similarity.",
+    )
+    parser.add_argument(
+        "--flow_dynamic_ratio",
+        type=float,
+        default=0.5,
+        help="Fraction of tokens classified as dynamic based on flow magnitude (0.5 = top 50%% are dynamic).",
+    )
+    parser.add_argument(
         "--tasks",
         type=str,
         default=None,
@@ -201,7 +213,7 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, motion_invert=False, use_borderline_preservation=False, borderline_margin=0.1, use_weighted_merge=True):
+def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora, lora_alpha, weight_dir, pooling_shape=(16,12,12), selected_layer=10, alpha=0.1, softmax=1.0, head=0, tau=1.0, cluster_ratio=1.0, temporal_segment_ratio=1.0, use_entropy_adaptive=False, tau_entropy=0.8, entropy_fallback_layer=20, use_motion_adaptive=False, motion_scale=0.5, motion_invert=False, use_borderline_preservation=False, borderline_margin=0.1, use_weighted_merge=True, use_flow_pruning=False, flow_dynamic_ratio=0.5):
     # remind that, once the model goes larger (30B+) may cause the memory to be heavily used up. Even Tearing Nodes.
     model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
         weight_dir=weight_dir, lora_alpha=lora_alpha, pooling_shape=pooling_shape, selected_layer=selected_layer, \
@@ -209,7 +221,8 @@ def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_
                 use_entropy_adaptive=use_entropy_adaptive, tau_entropy=tau_entropy, entropy_fallback_layer=entropy_fallback_layer,
                 use_motion_adaptive=use_motion_adaptive, motion_scale=motion_scale, motion_invert=motion_invert,
                 use_borderline_preservation=use_borderline_preservation, borderline_margin=borderline_margin,
-                use_weighted_merge=use_weighted_merge)
+                use_weighted_merge=use_weighted_merge,
+                use_flow_pruning=use_flow_pruning, flow_dynamic_ratio=flow_dynamic_ratio)
     logger.info('done loading llava')
 
     #  position embedding
@@ -333,8 +346,10 @@ def run(rank, args, world_size):
                                                         motion_scale=args.motion_scale,
                                                         motion_invert=args.motion_invert,
                                                         use_borderline_preservation=args.use_borderline_preservation,
-                                                       borderline_margin=args.borderline_margin,
-                                                       use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge)
+                                                        borderline_margin=args.borderline_margin,
+                                                        use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge,
+                                                        use_flow_pruning=args.use_flow_pruning,
+                                                        flow_dynamic_ratio=args.flow_dynamic_ratio)
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
 

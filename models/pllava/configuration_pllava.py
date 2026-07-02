@@ -112,6 +112,8 @@ class PllavaConfig(PretrainedConfig):
         use_borderline_preservation=False,
         borderline_margin=0.1,
         use_weighted_merge=True,
+        use_flow_pruning=False,
+        flow_dynamic_ratio=0.5,
         **kwargs,
     ):
         self.ignore_index = ignore_index
@@ -139,6 +141,8 @@ class PllavaConfig(PretrainedConfig):
         self.use_borderline_preservation = use_borderline_preservation
         self.borderline_margin = borderline_margin
         self.use_weighted_merge = use_weighted_merge
+        self.use_flow_pruning = use_flow_pruning
+        self.flow_dynamic_ratio = flow_dynamic_ratio
         
         self.vision_config = vision_config
         

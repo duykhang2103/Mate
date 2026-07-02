@@ -123,14 +123,18 @@ class VTPWindowCache:
         self.img_start, self.img_end = None, None
         self.num_tokens_after_prune = None
 
-    def process_attention(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes):
+    def process_attention(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=None):
         # [head_num, num_query, num_img]
         b, head_num, num_query, num_img = text_to_image_attentions.shape
         assert b == 1
         assert len(static_sizes) == len(dynamic_sizes) == len(window_sizes)
         
-        # Compute motion scores per window if motion-adaptive is enabled
-        motion_scores = self._compute_motion_scores(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes)
+        # Compute motion scores per window
+        # Use flow-based scores if available, otherwise fall back to attention variance
+        if flow_motion_scores is not None:
+            motion_scores = self._compute_flow_motion_scores(flow_motion_scores, static_sizes, dynamic_sizes, window_sizes)
+        else:
+            motion_scores = self._compute_motion_scores(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes)
         max_motion = max(motion_scores) if motion_scores else 1.0
         max_motion = max(max_motion, 1e-6)  # avoid div by zero
 
@@ -224,6 +228,29 @@ class VTPWindowCache:
             start_idx = end_idx
         
         return motion_scores
+
+    def _compute_flow_motion_scores(self, flow_motion_scores, static_sizes, dynamic_sizes, window_sizes):
+        """
+        Compute per-window motion score from optical flow magnitude.
+        Args:
+            flow_motion_scores: [B, T, H*W] — per-token flow magnitude from vision merge
+        Returns:
+            list of floats, one per window
+        """
+        # flow_motion_scores: [B, T, H*W] where T = num_frames
+        # Each window covers a range of frames; average flow across those frames
+        motion_scores = []
+        frame_idx = 0
+        for static_size, dynamic_size, window_size in zip(static_sizes, dynamic_sizes, window_sizes):
+            # Average flow magnitude across all frames in this window
+            if flow_motion_scores is not None and frame_idx + window_size <= flow_motion_scores.shape[1]:
+                window_flow = flow_motion_scores[0, frame_idx:frame_idx+window_size, :]  # [window_size, H*W]
+                avg_flow = window_flow.mean().item()
+            else:
+                avg_flow = 0.0
+            motion_scores.append(avg_flow)
+            frame_idx += window_size
+        return motion_scores
     
     def obtain_language_attention(self, input_ids, attentions, pad_token, text_indices=None):
         pad_token = self.pad_token_id
@@ -238,10 +265,10 @@ class VTPWindowCache:
 
         return text_to_image_attentions, text_to_text_attentions, image_to_image_attentions, img_start, img_end, seq_len
     
-    def prompt_prefill(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None):
+    def prompt_prefill(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None, flow_motion_scores=None):
         text_to_image_attentions, text_to_text_attentions, image_to_image_attentions, img_start, img_end, seq_len = self.obtain_language_attention(input_ids, attentions, pad_token_id) # batch_size, head_num, num_query, num_img
         
-        topk_indices = self.process_attention(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes) # num
+        topk_indices = self.process_attention(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=flow_motion_scores) # num
 
         index_list = topk_indices
         index_list = index_list + img_start # consider that the image is not the first token
@@ -277,9 +304,9 @@ class VTPWindowCache:
         return past_key_values, hidden_states, updated_hidden_states, causal_mask, attention_mask, position_ids, cache_postition
 
 
-    def __call__(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None):
+    def __call__(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None, flow_motion_scores=None):
                 
-        return self.prompt_prefill(past_key_values, input_ids, attentions, hidden_states, past_hidden_states, causal_mask, attention_mask, pad_token_id, position_ids, text_indices, attn_shallower, static_sizes, dynamic_sizes, window_sizes, decoding_flag, dynamic_selected_layer)
+        return self.prompt_prefill(past_key_values, input_ids, attentions, hidden_states, past_hidden_states, causal_mask, attention_mask, pad_token_id, position_ids, text_indices, attn_shallower, static_sizes, dynamic_sizes, window_sizes, decoding_flag, dynamic_selected_layer, flow_motion_scores)
 
 class ElasticCache:
     def __init__(

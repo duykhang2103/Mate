@@ -1,0 +1,140 @@
+{
+    "acc_dict": {
+        "Long Video": [
+            3,
+            10
+        ]
+    },
+    "result_list": [
+        {
+            "pred": "(A) Tuberculosis.",
+            "gt": "(A) Tuberculosis.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/7D-gxaie6UI.mp4",
+            "question": "Question: In accordance with the video footage, which of the following diseases causes the most deaths?\nOptions:\n(A) Tuberculosis.\n(B) Malaria.\n(C) Cholera.\n(D) Typhoid.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 570,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) The course of the disease can be unpredictable, causing death within a few weeks or over many years.",
+            "gt": "(B) TB spread to the working class.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/7D-gxaie6UI.mp4",
+            "question": "Question: What was the event that put an end to the romanticization of TB in the video?\nOptions:\n(A) The prevalence of TB in colonial territories.\n(B) TB spread to the working class.\n(C) Mycobacterium tuberculosis has a thick cell wall that makes it resistant to infection-fighting cells.\n(D) The course of the disease can be unpredictable, causing death within a few weeks or over many years.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 623,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Roughly 30% of all northern Europeans were dying of TB, most of them were artists and writers.",
+            "gt": "(B) The consumption was thought to be only prevelant in white people.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/7D-gxaie6UI.mp4",
+            "question": "Question: Based on the video, which of the following statements is correct?\nOptions:\n(A) Roughly 30% of all northern Europeans were dying of TB, most of them were artists and writers.\n(B) The consumption was thought to be only prevelant in white people.\n(C) TB was incurable.\n(D) Southern California came to be known as \"the land of new lungs\" for the reason that the air there can heal TB diseases.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 623,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) The history of the Gypsies.",
+            "gt": "(C) The history of the Gypsies.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/0RxMZBLeqRI.mp4",
+            "question": "Question: What is the video mainly about?\nOptions:\n(A) The rise and fall of Gypsies.\n(B) How the Gypsies developed into the Roma.\n(C) The history of the Gypsies.\n(D) How the Roma became so prosperous.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 575,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) They became increasingly enslaved in the Balkans as the Ottomans expanded their territory.",
+            "gt": "(C) They fought with Selic.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/0RxMZBLeqRI.mp4",
+            "question": "Question: As depicted in the video, what happened when the Gypsies migrated to Europe?\nOptions:\n(A) Slavery was abolished.\n(B) They became increasingly enslaved in the Balkans as the Ottomans expanded their territory.\n(C) They fought with Selic.\n(D) They separated from the Turks.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 593,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) Several massacres and programs of gypsies took place in Germany during WW2.",
+            "gt": "(B) In England, the character 'V' on the skin of a Roma meant that he/she had tried to escape.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/0RxMZBLeqRI.mp4",
+            "question": "Question: Which of the following statements is not correct according to what is shown in the video?\nOptions:\n(A) The Gypsies didn't know their origin because of the lack of written language.\n(B) In England, the character 'V' on the skin of a Roma meant that he/she had tried to escape.\n(C) The Gypsies escaped from enslavement by living in the countryside.\n(D) Several massacres and programs of gypsies took place in Germany during WW2.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 629,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) Two of them in Egypt have not been found yet.",
+            "gt": "(C) Two of them in Egypt have not been found yet.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BoBapnk6TB8.mp4",
+            "question": "Question: As depicted in the video, which of the following statements about the seven wonders of the ancient world is not correct?\nOptions:\n(A) They include a huge statue on an island.\n(B) Only the Giza pyramid survives.\n(C) Two of them in Egypt have not been found yet.\n(D) There are two of them in Egypt.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1137,
+                "pruned_tokens": 596,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) A door can be accurately reconstructed in 3D images.",
+            "gt": "(C) It is estimated to be as high as a 30-story building.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BoBapnk6TB8.mp4",
+            "question": "Question: As depicted in the video, which of the following statements about the Lighthouse of Alexandria is not correct?\nOptions:\n(A) It acted as a landmark.\n(B) It stood in a beautiful city.\n(C) It is estimated to be as high as a 30-story building.\n(D) A door can be accurately reconstructed in 3D images.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1137,
+                "pruned_tokens": 602,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Sediment that makes the waters turbid.",
+            "gt": "(C) The Crocodiles.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BoBapnk6TB8.mp4",
+            "question": "Question: According to what is shown in the video, which is the most important element that makes it difficult to dive into Lake Nasser to find the lost fort?\nOptions:\n(A) Sediment that makes the waters turbid.\n(B) The depth of the lake.\n(C) The Crocodiles.\n(D) Its accurate location is unknown.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1137,
+                "pruned_tokens": 591,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) Artists paint on the cloth.",
+            "gt": "(A) It contains 10 stages.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/aansXcMqnNk.mp4",
+            "question": "Question: What is not true about Kyo-yuzen technique based on the video?\nOptions:\n(A) It contains 10 stages.\n(B) The artworks contain very fine lines in some places.\n(C) It includes the steaming process.\n(D) Artists paint on the cloth.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1136,
+                "pruned_tokens": 578,
+                "pruning_layer": 10
+            }
+        }
+    ]
+}

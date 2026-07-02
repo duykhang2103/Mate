@@ -1,0 +1,34 @@
+INFO:__main__:started benchmarking, saving to: test_results/mvbench_full_flow_1.0
+INFO:__main__:loading model and constructing dataset to gpu 0...
+Traceback (most recent call last):
+  File "/venv/pllava/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/venv/pllava/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 457, in <module>
+    main()
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 448, in main
+    result_list = run(0, args=args, world_size=1)
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 325, in run
+    model, processor, dataset = load_model_and_dataset(rank,
+  File "/workspace/Mate/tasks/eval/mvbench/pllava_eval_mvbench.py", line 218, in load_model_and_dataset
+    model, processor = load_pllava(pretrained_model_name_or_path, num_frames=num_frames, use_lora=use_lora, \
+  File "/workspace/Mate/tasks/eval/model_utils.py", line 207, in load_pllava
+    model = PllavaForConditionalGeneration.from_pretrained(repo_id, config=config, torch_dtype=torch.bfloat16)
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/modeling_utils.py", line 3531, in from_pretrained
+    ) = cls._load_pretrained_model(
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/modeling_utils.py", line 3807, in _load_pretrained_model
+    model.apply(model._initialize_weights)
+  File "/venv/pllava/lib/python3.10/site-packages/torch/nn/modules/module.py", line 890, in apply
+    module.apply(fn)
+  File "/venv/pllava/lib/python3.10/site-packages/torch/nn/modules/module.py", line 890, in apply
+    module.apply(fn)
+  File "/venv/pllava/lib/python3.10/site-packages/torch/nn/modules/module.py", line 890, in apply
+    module.apply(fn)
+  File "/venv/pllava/lib/python3.10/site-packages/torch/nn/modules/module.py", line 891, in apply
+    fn(self)
+  File "/venv/pllava/lib/python3.10/site-packages/transformers/modeling_utils.py", line 1630, in _initialize_weights
+    self._init_weights(module)
+  File "/workspace/Mate/models/pllava/modeling_pllava.py", line 486, in _init_weights
+    module.weight.data.normal_(mean=0.0, std=std)
+KeyboardInterrupt

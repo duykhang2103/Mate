@@ -1,45 +1,66 @@
-2026-07-01 16:59:02 | INFO | Logging to test_results/single_video_infer/infer_single_video.log
-2026-07-01 16:59:02 | INFO | Loading model from MODELS/pllava-7b (weight_dir=MODELS/pllava-7b)
-2026-07-01 16:59:02 | INFO | LoRA: True | lora_alpha=14
-2026-07-01 16:59:02 | INFO | Entropy-adaptive: False | tau_entropy=0.8 | fallback_layer=20
-2026-07-01 16:59:08 | INFO | Loading optical flow model
-2026-07-01 16:59:08 | INFO | Loading optical flow model failed, use default model
-2026-07-01 16:59:18 | INFO | Loaded video: 16 frames sampled at 62.1, 186.5, 310.7, 435.1, 559.4, 683.7, 808.0, 932.3, 1056.6, 1180.9, 1305.2, 1429.5, 1553.9, 1678.1, 1802.5, 1926.8 seconds.
-2026-07-01 16:59:18 | INFO | Running BASELINE inference...
-2026-07-01 16:59:20 | INFO | Running PRUNED inference (entropy_adaptive=False)...
-2026-07-01 16:59:22 | INFO | Wrote JSON report to test_results/single_video_infer/comparison.json
-2026-07-01 16:59:22 | INFO | ========================================================================
-2026-07-01 16:59:22 | INFO | Video: DATAS/Video-MME/data/25Pt1AZO9EM.mp4
-2026-07-01 16:59:22 | INFO | Question: Describe what happens in this video in detail.
-2026-07-01 16:59:22 | INFO | ------------------------------------------------------------------------
-2026-07-01 16:59:22 | INFO | Visual tokens (projector output): 2304  (16 sampled frames)
-2026-07-01 16:59:22 | INFO | 
-2026-07-01 16:59:22 | INFO | BASELINE (no vision merge, alpha=1.00)
-2026-07-01 16:59:22 | INFO |   Vision tokens after merge : 2304 (100.0% of raw)
-2026-07-01 16:59:22 | INFO |   LLM visual tokens (est.)  : 2304 (100.0% of raw)
-2026-07-01 16:59:22 | INFO |   Static / dynamic (vision) : 0 / 2304
-2026-07-01 16:59:22 | INFO |   Generate time             : 0.000 s
-2026-07-01 16:59:22 | INFO |   Answer:
-[skipped generation]
-2026-07-01 16:59:22 | INFO | 
-2026-07-01 16:59:22 | INFO | PRUNED (PruneVid)
-2026-07-01 16:59:22 | INFO |   tau=0.80  cluster_ratio=0.50  temporal_segment_ratio=0.25  alpha=0.40
-2026-07-01 16:59:22 | INFO |   Fixed pruning layer       : -1
-2026-07-01 16:59:22 | INFO |   Vision tokens after merge : 1152 (50.0% of raw)
-2026-07-01 16:59:22 | INFO |   LLM visual tokens (est.)  : 448 (19.4% of raw)
-2026-07-01 16:59:22 | INFO |   Static / dynamic (vision) : 0 / 1152
-2026-07-01 16:59:22 | INFO |   Temporal windows (frames) : [16]
-2026-07-01 16:59:22 | INFO |   Static per window         : [0]
-2026-07-01 16:59:22 | INFO |   Dynamic per window        : [1152]
-2026-07-01 16:59:22 | INFO |   Generate time             : 0.000 s
-2026-07-01 16:59:22 | INFO |   Answer:
-[skipped generation]
-2026-07-01 16:59:22 | INFO | 
-2026-07-01 16:59:22 | INFO | DIFFERENCE (pruned vs baseline)
-2026-07-01 16:59:22 | INFO |   Vision tokens removed     : 1152 (50.0% reduction)
-2026-07-01 16:59:22 | INFO |   LLM visual tokens removed : 1856 (80.6% reduction)
-2026-07-01 16:59:22 | INFO |   Overall retention vs raw  : 19.4%
-2026-07-01 16:59:22 | INFO |   Answers identical         : True
-2026-07-01 16:59:22 | INFO | ========================================================================
-2026-07-01 16:59:22 | INFO | Built prune masks for 16 frames (12x12)
-2026-07-01 16:59:22 | INFO | Visualization video saved  ->  output/25Pt1AZO9EM_20260701_165922.mp4
+2026-07-02 13:42:44 | INFO | Logging to test_results/single_video_infer/infer_single_video.log
+2026-07-02 13:42:44 | INFO | Loading model from MODELS/pllava-7b (weight_dir=MODELS/pllava-7b)
+2026-07-02 13:42:44 | INFO | LoRA: True | lora_alpha=14
+2026-07-02 13:42:44 | INFO | Entropy-adaptive: False | tau_entropy=0.8 | fallback_layer=20
+2026-07-02 13:42:50 | INFO | Loading optical flow model
+2026-07-02 13:42:50 | INFO | Loading optical flow model failed, use default model
+2026-07-02 13:43:08 | INFO | Loaded video: 16 frames sampled at 0.2, 0.6, 1.0, 1.4, 1.8, 2.2, 2.6, 3.0, 3.4, 3.7, 4.1, 4.5, 4.9, 5.3, 5.7, 6.1 seconds.
+2026-07-02 13:43:08 | INFO | Running BASELINE inference...
+2026-07-02 13:43:10 | WARNING | We detected that you are passing `past_key_values` as a tuple and this is deprecated and will be removed in v4.43. Please use an appropriate `Cache` class (https://huggingface.co/docs/transformers/v4.41.3/en/internal/generation_utils#transformers.Cache)
+2026-07-02 13:43:11 | WARNING | LlamaModel is using LlamaSdpaAttention, but `torch.nn.functional.scaled_dot_product_attention` does not support `output_attentions=True`. Falling back to the manual attention implementation, but specifying the manual implementation will be required from Transformers version v5.0.0 onwards. This warning can be removed using the argument `attn_implementation="eager"` when loading the model.
+2026-07-02 13:43:18 | INFO | DEBUG: input_ids shape=(1, 71)  output_ids shape=(1, 180)
+2026-07-02 13:43:18 | INFO | DEBUG: num new tokens=109
+2026-07-02 13:43:18 | INFO | DEBUG: raw decoded text (no skip_special) = <s> Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER: <image> 
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is cooking a meal outdoors. She is wearing an apron and appears to be following a recipe or instructions for a dish. She is using various kitchen utensils and ingr
+2026-07-02 13:43:18 | INFO | DEBUG: decoded text (skip_special) = Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER:  
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is cooking a meal outdoors. She is wearing an apron and appears to be following a recipe or instructions for a dish. She is using various kitchen utensils and ingredients, su
+2026-07-02 13:43:18 | INFO | Output <unk> count: 0
+2026-07-02 13:43:18 | INFO | Running PRUNED inference (entropy_adaptive=False)...
+2026-07-02 13:43:24 | INFO | DEBUG: input_ids shape=(1, 71)  output_ids shape=(1, 157)
+2026-07-02 13:43:24 | INFO | DEBUG: num new tokens=86
+2026-07-02 13:43:24 | INFO | DEBUG: raw decoded text (no skip_special) = <s> Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER: <image> 
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is cooking in a kitchen. She is stirring something in a pot and appears to be focused on her task. The kitchen is equipped with various appliances and utensils, an
+2026-07-02 13:43:24 | INFO | DEBUG: decoded text (skip_special) = Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.
+ USER:  
+ USER: What is happening in this video? ASSISTANT: In the video, a woman is cooking in a kitchen. She is stirring something in a pot and appears to be focused on her task. The kitchen is equipped with various appliances and utensils, and there is 
+2026-07-02 13:43:24 | INFO | Output <unk> count: 0
+2026-07-02 13:43:24 | INFO | Wrote JSON report to test_results/single_video_infer/comparison.json
+2026-07-02 13:43:24 | INFO | ========================================================================
+2026-07-02 13:43:24 | INFO | Video: example/cooking.mp4
+2026-07-02 13:43:24 | INFO | Question: What is happening in this video?
+2026-07-02 13:43:24 | INFO | ------------------------------------------------------------------------
+2026-07-02 13:43:24 | INFO | Visual tokens (projector output): 1024  (16 sampled frames)
+2026-07-02 13:43:24 | INFO | 
+2026-07-02 13:43:24 | INFO | BASELINE (no vision merge, alpha=1.00)
+2026-07-02 13:43:24 | INFO |   Vision tokens after merge : 1024 (100.0% of raw)
+2026-07-02 13:43:24 | INFO |   LLM visual tokens (est.)  : 1024 (100.0% of raw)
+2026-07-02 13:43:24 | INFO |   Static / dynamic (vision) : 0 / 1024
+2026-07-02 13:43:24 | INFO |   Generate time             : 8.061 s
+2026-07-02 13:43:24 | INFO |   Answer:
+In the video, a woman is cooking a meal outdoors. She is wearing an apron and appears to be following a recipe or instructions for a dish. She is using various kitchen utensils and ingredients, such as a bowl, a spoon, and a cup. The setting is a balcony or deck with a view of the water, suggesting a pleasant and relaxed atmosphere. The woman seems to be enjoying the process of cooking and is focused on her task.
+2026-07-02 13:43:24 | INFO | 
+2026-07-02 13:43:24 | INFO | PRUNED (PruneVid)
+2026-07-02 13:43:24 | INFO |   tau=0.80  cluster_ratio=0.50  temporal_segment_ratio=0.25  alpha=0.40
+2026-07-02 13:43:24 | INFO |   Fixed pruning layer       : -1
+2026-07-02 13:43:24 | INFO |   Vision tokens after merge : 221 (21.6% of raw)
+2026-07-02 13:43:24 | INFO |   LLM visual tokens (est.)  : 85 (8.3% of raw)
+2026-07-02 13:43:24 | INFO |   Static / dynamic (vision) : 77 / 144
+2026-07-02 13:43:24 | INFO |   Temporal windows (frames) : [2, 7, 7]
+2026-07-02 13:43:24 | INFO |   Static per window         : [31, 17, 29]
+2026-07-02 13:43:24 | INFO |   Dynamic per window        : [4, 105, 35]
+2026-07-02 13:43:24 | INFO |   Generate time             : 4.789 s
+2026-07-02 13:43:24 | INFO |   Answer:
+In the video, a woman is cooking in a kitchen. She is stirring something in a pot and appears to be focused on her task. The kitchen is equipped with various appliances and utensils, and there is a view of the outdoors through a window. The woman is wearing an apron, which suggests that she is engaged in some form of cooking or baking activity.
+2026-07-02 13:43:24 | INFO | 
+2026-07-02 13:43:24 | INFO | DIFFERENCE (pruned vs baseline)
+2026-07-02 13:43:24 | INFO |   Vision tokens removed     : 803 (78.4% reduction)
+2026-07-02 13:43:24 | INFO |   LLM visual tokens removed : 939 (91.7% reduction)
+2026-07-02 13:43:24 | INFO |   Overall retention vs raw  : 8.3%
+2026-07-02 13:43:24 | INFO |   Time ratio (baseline/pruned): 1.68x
+2026-07-02 13:43:24 | INFO |   Answers identical         : False
+2026-07-02 13:43:24 | INFO | ========================================================================
+2026-07-02 13:43:24 | INFO | Built prune masks for 16 frames (8x8)
+2026-07-02 13:43:24 | INFO | Visualization video saved  ->  output/cooking_20260702_134324.mp4

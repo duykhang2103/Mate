@@ -1,46 +1,94 @@
 # Current Situation
 
-## What Works
+> **Updated**: 2026-07-02
+> **Status**: All methods underperform baseline. Root cause identified.
 
-- Flow computation on VideoMME works (4x spread between high/low motion videos)
-- 183/900 VideoMME videos extracted on disk
-- Script written at `scripts/flow_correlation_sanity_check.py`
+---
 
-## What's Broken
+## Benchmark Results (5 tasks, ~1000 samples)
 
-### 1. Model Weights: LoRA Not Merged
+| Method | Avg | Action Seq | Action Pred | Unexpected | Obj Interact | Moving Dir |
+|--------|-----|-----------|-------------|-----------|-------------|-----------|
+| Baseline (fixed L10, alpha=0.4) | **50.71** | 55.85 | 51.50 | 62.50 | 63.50 | 20.50 |
+| Entropy + Borderline | 50.20 | 53.72 | 51.50 | 62.00 | 63.50 | 20.50 |
 
-`MODELS/pllava-7b` contains a **LoRA PEFT checkpoint**, not merged weights.
+**Moving Direction is at 20.5% — essentially random (1/5 = 20%).**
 
-Safetensors keys look like:
-```
-language_model.base_model.model.model.layers.X.self_attn.q_proj.base_layer.weight
-language_model.base_model.model.model.layers.X.self_attn.q_proj.lora_A.default.weight
-language_model.base_model.model.model.layers.X.self_attn.q_proj.lora_B.default.weight
-```
+---
 
-Model expects:
-```
-language_model.model.layers.X.self_attn.q_proj.weight
-```
+## What Failed and Why
 
-The LoRA merge logic in the script now correctly remaps the prefix (64 pairs merged, 0 unexpected). But **64 keys still missing**: `q_proj.weight` and `v_proj.weight` for all 32 layers — these are exactly the LoRA-adapted layers where the merged weight needs `base + lora_B @ lora_A`. The merge IS happening but the resulting tensor names don't match because the checkpoint has `.base_layer.weight` for LoRA-wrapped layers, and the merge logic loads those as `base_key` but the model expects `language_model.model.layers.X.self_attn.q_proj.weight`.
+### 1. Entropy-Adaptive Pruning — DEAD END
+- All 32 layers have entropy = 0.9999 (uniform attention)
+- Threshold τ=0.8 never fires
+- Falls back to layer 20 (worse than fixed layer 10)
+- **Verdict**: Abandon. PLLaVA attention is architecturally uniform.
 
-**Root cause**: For LoRA-wrapped layers (q_proj, v_proj), the checkpoint has `.base_layer.weight` not `.weight`. The merge logic stripped `.base_layer.weight` to get the key without `.weight`, but `load_state_dict` expects `.weight` suffix.
+### 2. Motion-Adaptive Pruning — FUNDAMENTALLY BROKEN
+- Motion scores computed from attention temporal variance
+- Because attention is uniform, variance ≈ 0 for all windows
+- Motion scores: [0.000000, 0.000000, ...]
+- The `--use_motion_adaptive` flag does literally nothing
+- **Verdict**: Need optical flow instead of attention-based motion.
 
-**Fix applied**: Changed `base_key = nk.replace('.base_layer.weight', '')` to `base_key = nk.replace('.base_layer.weight', '.weight')`. Same for lora_A/lora_B keys. This ensures the merged tensor is stored under `language_model.model.layers.X.self_attn.q_proj.weight` which matches what the model expects.
+### 3. Borderline Preservation — HARMFUL
+- Keeps tokens near pruning cutoff (low-importance tokens)
+- Added noise → Action Sequence dropped 2.13%
+- **Verdict**: Disable entirely.
 
-### 2. CUDA Initialization Fails
+### 4. Query-Conditioned Pruning — NOT IMPLEMENTED
+- `text_indices` is hardcoded to `None` and ignored
+- **Verdict**: Implement after fixing motion signal.
 
-`conda run -n pllava --no-capture-output bash -c 'python ...'` causes:
-```
-RuntimeError: random_device could not be read: Invalid argument
-```
+### 5. Temporal Pivot Anchoring — NOT IMPLEMENTED
+- Merge selects pivots by cosine similarity only
+- No temporal awareness → motion trajectories get smeared
+- **Verdict**: Implement after fixing motion signal.
 
-Direct execution also fails with the same error. The previous evals (which produced MVBench results at 50.71%) must have been run in a different environment or session. Need to figure out the user's working invocation method.
+---
 
-## Next Steps
+## Root Cause: The Motion Signal Doesn't Exist
 
-1. Debug the 64 missing keys — the LoRA merge should produce the right tensors
-2. Figure out the correct way to invoke Python with CUDA (the user's working method)
-3. Once model loads correctly, run the flow correlation check
+Every modification so far has relied on **attention-based signals** (entropy, attention variance, text-to-image attention). But PLLaVA's attention is **architecturally uniform** — all tokens receive equal attention regardless of content.
+
+This means:
+- Entropy = 0.9999 (always high, never triggers)
+- Attention variance ≈ 0 (always uniform)
+- Motion scores ≈ 0 (always the same)
+
+**The only way to get a real motion signal is to use optical flow** — actual pixel-level motion between frames.
+
+---
+
+## The Fix: Optical Flow (Phase 8)
+
+See `doc/phases/phase8_plan.md` for the full plan.
+
+**Summary of 4 changes**:
+1. **Optical-flow static/dynamic split** — Replace feature similarity with Farneback flow magnitude
+2. **Fix two-tier retention** — Use flow-based motion scores instead of attention variance
+3. **Kill borderline preservation** — Remove noise injection
+4. **Temporal pivot anchoring** — Bias merge toward temporally adjacent tokens
+
+---
+
+## Available Infrastructure
+
+| Component | Status | Location |
+|-----------|--------|----------|
+| Farneback flow | Working | `scripts/flow_correlation_sanity_check.py` |
+| RAFT flow model | Exists (unused) | `models/pllava/modeling_pllava_flow.py` |
+| Static/dynamic split | Working (wrong signal) | `models/pllava/modeling_pllava.py:777-840` |
+| Two-tier retention | Working (wrong signal) | `models/pllava/elastic_cache.py:126-195` |
+| Token counting | Working | `models/pllava/elastic_cache.py:272-273` |
+| FLOPs tracking | Working | `tasks/eval/model_utils.py` |
+| MVBench eval | Working | `tasks/eval/mvbench/pllava_eval_mvbench.py` |
+| VideoMME eval | Working | `tasks/eval/videomme/pllava_eval_videomme.py` |
+| VideoMME videos | 183/760 available | `DATAS/Video-MME/data/` |
+| VideoMME JSON | Unknown | `DATAS/Video-MME/json/` |
+
+---
+
+## Next Step
+
+Implement optical flow in `merge_frames_dynamic()` per `doc/phases/phase8_plan.md`.

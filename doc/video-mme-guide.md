@@ -31,12 +31,12 @@ Quick sanity check to make sure everything works.
 ```bash
 conda run -n pllava python -m tasks.eval.videomme.pllava_eval_videomme \
     --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path test_results/videomme_smoke_baseline \
+    --save_path test_results/videomme_smoke_baseline_long_10_samples \
     --num_frames 16 --use_lora --lora_alpha 14 \
     --conv_mode eval_videomme \
     --alpha 0.4 --selected_layer 10 --tau 0.8 \
     --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
-    --tasks short --max_samples 10 > log_videomme_smoke_baseline.log 2>&1
+    --tasks "Long Video" --max_samples 10 > log_videomme_smoke_baseline_long_10_samples.log 2>&1
 ```
 
 ### Your Method (motion adaptive, scale=1.0)

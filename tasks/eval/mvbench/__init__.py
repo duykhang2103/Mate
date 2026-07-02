@@ -45,7 +45,10 @@ def save_results(result_list, save_path):
 
     for k, v in acc_dict.items():
         final_res[k] = v[0] / v[1] * 100
-    final_res['Avg'] = sum(v[0] for v in acc_dict.values()) / sum(v[1] for v in acc_dict.values()) * 100
+    if acc_dict:
+        final_res['Avg'] = sum(v[0] for v in acc_dict.values()) / sum(v[1] for v in acc_dict.values()) * 100
+    else:
+        final_res['Avg'] = 0.0
 
     all_results = {
         "acc_dict": acc_dict,

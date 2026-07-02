@@ -188,6 +188,16 @@ python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --max_samples 300
 ```
 
+//// ----- flow
+python -m tasks.eval.mvbench.pllava_eval_mvbench \
+    --pretrained_model_name_or_path MODELS/pllava-7b \
+    --save_path test_results/mvbench_full_flow_1.0 \
+    --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
+    --pooling_shape 16-12-12 --selected_layer 10 --alpha 0.4 --tau 0.8 \
+    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
+    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
+    --use_motion_adaptive --motion_scale 1.0 --max_samples 300 --use_flow_pruning --flow_dynamic_ratio 0.5 > log_mvbench_full_flow_1.0.log 2>&1
+
 #### Run 5b: Best config (entropy + borderline)
 ```bash
 python -m tasks.eval.mvbench.pllava_eval_mvbench \

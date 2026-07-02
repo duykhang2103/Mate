@@ -1,0 +1,270 @@
+{
+    "acc_dict": {
+        "Long Video": [
+            10,
+            20
+        ]
+    },
+    "result_list": [
+        {
+            "pred": "(A) Tuberculosis.",
+            "gt": "(A) Tuberculosis.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/7D-gxaie6UI.mp4",
+            "question": "Question: In accordance with the video footage, which of the following diseases causes the most deaths?\nOptions:\n(A) Tuberculosis.\n(B) Malaria.\n(C) Cholera.\n(D) Typhoid.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 570,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) The course of the disease can be unpredictable, causing death within a few weeks or over many years.",
+            "gt": "(B) TB spread to the working class.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/7D-gxaie6UI.mp4",
+            "question": "Question: What was the event that put an end to the romanticization of TB in the video?\nOptions:\n(A) The prevalence of TB in colonial territories.\n(B) TB spread to the working class.\n(C) Mycobacterium tuberculosis has a thick cell wall that makes it resistant to infection-fighting cells.\n(D) The course of the disease can be unpredictable, causing death within a few weeks or over many years.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 623,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Roughly 30% of all northern Europeans were dying of TB, most of them were artists and writers.",
+            "gt": "(B) The consumption was thought to be only prevelant in white people.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/7D-gxaie6UI.mp4",
+            "question": "Question: Based on the video, which of the following statements is correct?\nOptions:\n(A) Roughly 30% of all northern Europeans were dying of TB, most of them were artists and writers.\n(B) The consumption was thought to be only prevelant in white people.\n(C) TB was incurable.\n(D) Southern California came to be known as \"the land of new lungs\" for the reason that the air there can heal TB diseases.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 623,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) The history of the Gypsies.",
+            "gt": "(C) The history of the Gypsies.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/0RxMZBLeqRI.mp4",
+            "question": "Question: What is the video mainly about?\nOptions:\n(A) The rise and fall of Gypsies.\n(B) How the Gypsies developed into the Roma.\n(C) The history of the Gypsies.\n(D) How the Roma became so prosperous.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 575,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) They became increasingly enslaved in the Balkans as the Ottomans expanded their territory.",
+            "gt": "(C) They fought with Selic.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/0RxMZBLeqRI.mp4",
+            "question": "Question: As depicted in the video, what happened when the Gypsies migrated to Europe?\nOptions:\n(A) Slavery was abolished.\n(B) They became increasingly enslaved in the Balkans as the Ottomans expanded their territory.\n(C) They fought with Selic.\n(D) They separated from the Turks.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 593,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) Several massacres and programs of gypsies took place in Germany during WW2.",
+            "gt": "(B) In England, the character 'V' on the skin of a Roma meant that he/she had tried to escape.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/0RxMZBLeqRI.mp4",
+            "question": "Question: Which of the following statements is not correct according to what is shown in the video?\nOptions:\n(A) The Gypsies didn't know their origin because of the lack of written language.\n(B) In England, the character 'V' on the skin of a Roma meant that he/she had tried to escape.\n(C) The Gypsies escaped from enslavement by living in the countryside.\n(D) Several massacres and programs of gypsies took place in Germany during WW2.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 629,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) Two of them in Egypt have not been found yet.",
+            "gt": "(C) Two of them in Egypt have not been found yet.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BoBapnk6TB8.mp4",
+            "question": "Question: As depicted in the video, which of the following statements about the seven wonders of the ancient world is not correct?\nOptions:\n(A) They include a huge statue on an island.\n(B) Only the Giza pyramid survives.\n(C) Two of them in Egypt have not been found yet.\n(D) There are two of them in Egypt.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1137,
+                "pruned_tokens": 596,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) A door can be accurately reconstructed in 3D images.",
+            "gt": "(C) It is estimated to be as high as a 30-story building.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BoBapnk6TB8.mp4",
+            "question": "Question: As depicted in the video, which of the following statements about the Lighthouse of Alexandria is not correct?\nOptions:\n(A) It acted as a landmark.\n(B) It stood in a beautiful city.\n(C) It is estimated to be as high as a 30-story building.\n(D) A door can be accurately reconstructed in 3D images.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1137,
+                "pruned_tokens": 602,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Sediment that makes the waters turbid.",
+            "gt": "(C) The Crocodiles.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BoBapnk6TB8.mp4",
+            "question": "Question: According to what is shown in the video, which is the most important element that makes it difficult to dive into Lake Nasser to find the lost fort?\nOptions:\n(A) Sediment that makes the waters turbid.\n(B) The depth of the lake.\n(C) The Crocodiles.\n(D) Its accurate location is unknown.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1137,
+                "pruned_tokens": 591,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(D) Artists paint on the cloth.",
+            "gt": "(A) It contains 10 stages.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/aansXcMqnNk.mp4",
+            "question": "Question: What is not true about Kyo-yuzen technique based on the video?\nOptions:\n(A) It contains 10 stages.\n(B) The artworks contain very fine lines in some places.\n(C) It includes the steaming process.\n(D) Artists paint on the cloth.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1136,
+                "pruned_tokens": 578,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) A workshop.",
+            "gt": "(D) An opera.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/aansXcMqnNk.mp4",
+            "question": "Question: To introduce Kyoto's traditional culture, where has the youtuber not been in the video?\nOptions:\n(A) A Buddhist temple.\n(B) A Restaurant.\n(C) A workshop.\n(D) An opera.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1136,
+                "pruned_tokens": 567,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) A Buddhist temple.",
+            "gt": "(A) A Buddhist temple.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/aansXcMqnNk.mp4",
+            "question": "Question: After introducing Tofu making, what kind of traditional technique or scenic spot did the youtuber introduce according to what is shown in the video?\nOptions:\n(A) A Buddhist temple.\n(B) Kyoto Museum.\n(C) Nishiki Market.\n(D) Folding fan workshop.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1136,
+                "pruned_tokens": 582,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) Three",
+            "gt": "(C) Three.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/B6tQyCH5hQM.mp4",
+            "question": "Question: How many colors of glaze are used in the video?\nOptions:\n(A) Five.\n(B) Four.\n(C) Three.\n(D) Two.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1149,
+                "pruned_tokens": 553,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) Brown",
+            "gt": "(C) Brown.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/B6tQyCH5hQM.mp4",
+            "question": "Question: As depicted in the video, what color does a ceramic object look like before it is burned in a furnace?\nOptions:\n(A) Yellow.\n(B) White.\n(C) Brown.\n(D) Blue.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1149,
+                "pruned_tokens": 569,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) She shaped the clay.",
+            "gt": "(A) She painted on them.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/B6tQyCH5hQM.mp4",
+            "question": "Question: According to what is shown in the video, what did the blogger do to these ceramic products after they were put into the furnace and burned?\nOptions:\n(A) She painted on them.\n(B) She dyed them three colors.\n(C) She shaped the clay.\n(D) She added some decorations to them.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1149,
+                "pruned_tokens": 593,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Enhancing metabolic health as a strategy to combat Alzheimer's disease.",
+            "gt": "(A) Enhancing metabolic health as a strategy to combat Alzheimer's disease.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/5LU_XY0z2ZY.mp4",
+            "question": "Question: What is the theme of the video?\nOptions:\n(A) Enhancing metabolic health as a strategy to combat Alzheimer's disease.\n(B) Research progress and application prospects of beta-amyloid as a therapeutic target for Alzheimer's disease.\n(C) Failed attempts to eradicate Alzheimer's disease through current medical treatments.\n(D) Research on how human behavioural science can be used to improve cognitive performance and its potential as a strategy to combat Alzheimer's disease.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1140,
+                "pruned_tokens": 634,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) Enhance metabolic health.",
+            "gt": "(B) Enhance metabolic health.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/5LU_XY0z2ZY.mp4",
+            "question": "Question: What could be the key to truly combating and even preventing the disease that the video mainly talks about?\nOptions:\n(A) Enhanced research into drugs that specifically target beta-amyloid proteins may hold the key to treating Alzheimer's disease.\n(B) Enhance metabolic health.\n(C) Increased investment in research and development of new brain surgeries.\n(D) Innovate on traditional cognitive therapy exercises.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1140,
+                "pruned_tokens": 621,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) Cultivating a positive mindset and scheduling regular health checkups.",
+            "gt": "(A) Adopting a low-carb diet and incorporating daily exercise.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/5LU_XY0z2ZY.mp4",
+            "question": "Question: What could we do in our daily life to help prevent the disease that the video mainly talks about?\nOptions:\n(A) Adopting a low-carb diet and incorporating daily exercise.\n(B) Cultivating a positive mindset and scheduling regular health checkups.\n(C) Ensuring proper intake of healthcare products and maintaining a balanced diet.\n(D) Optimizing sleep patterns to enhance brain activity.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1140,
+                "pruned_tokens": 613,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) The philosophical and scientific exploration of consciousness.",
+            "gt": "(B) The philosophical and scientific exploration of consciousness.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BjmPvovl-V4.mp4",
+            "question": "Question: What central theme is explored in the video?\nOptions:\n(A) The role of artificial intelligence in modern warfare.\n(B) The philosophical and scientific exploration of consciousness.\n(C) The economic impact of consciousness on global markets.\n(D) The history of consciousness in ancient civilizations.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 585,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) Neuroscientists, spiritual leaders, entrepreneurs, physicists.",
+            "gt": "(C) Neuroscientists, spiritual leaders, entrepreneurs, physicists.",
+            "task_type": "Long Video",
+            "video_path": "DATAS/Video-MME/data/BjmPvovl-V4.mp4",
+            "question": "Question: What kind of experts does Kmele consult in sequence in the video?\nOptions:\n(A) Spiritual leaders, neuroscientists, entrepreneurs, physicists.\n(B) Physicists, neuroscientists, entrepreneurs, neuroscientists.\n(C) Neuroscientists, spiritual leaders, entrepreneurs, physicists.\n(D) Entrepreneurs, spiritual leaders, physicists, neuroscientists.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 1152,
+                "pruned_tokens": 617,
+                "pruning_layer": 10
+            }
+        }
+    ]
+}

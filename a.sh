@@ -3,8 +3,7 @@
 set -e  # Exit immediately if a command fails
 
 echo "Installing PyTorch..."
-pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
-
+pip3 install torch torchvision
 
 echo "Installing requirements..."
 pip install -r requirements.txt
@@ -30,7 +29,18 @@ python scripts/infer_single_video.py \
 
 echo "Done!"
 
-wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/star.zip
-wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/sta.zip
-wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/FunQA_test.zip
-wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/clevrer.zip
+hf download lmms-lab/Video-MME \
+    --repo-type dataset \
+    --local-dir DATAS/Video-MME
+
+# cd DATAS/Video-MME && for f in videos_chunked_*.zip; do   unzip "$f"; done
+
+cd DATAS/Video-MME && for f in $(ls videos_chunked_*.zip | head -n 5); do    unzip "$f"; done
+
+
+
+
+# wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/star.zip
+# wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/sta.zip
+# wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/FunQA_test.zip
+# wget -P DATAS/MVBench/video https://huggingface.co/datasets/OpenGVLab/MVBench/resolve/main/video/clevrer.zip

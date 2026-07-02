@@ -774,6 +774,63 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         feature = self.compute_cluster_vectors(feature, cluster_idx, num_cluster=num_cluster)
         return feature
 
+    def _compute_flow_from_pixels(self, pixel_values, num_frames):
+        """
+        Compute optical flow magnitude from raw pixel values using Farneback.
+        Args:
+            pixel_values: [B*T, C, H, W] — all frames stacked, normalized
+            num_frames: int — number of frames
+        Returns:
+            flow_mag: [B, num_frames-1, H_grid, W_grid] — pooled flow magnitude per frame pair
+        """
+        import cv2
+
+        B = pixel_values.shape[0] // num_frames
+        # Denormalize: PLLaVA uses CLIP normalization
+        mean = torch.tensor([0.48145466, 0.4578275, 0.40821073], device=pixel_values.device, dtype=pixel_values.dtype)
+        std = torch.tensor([0.26862954, 0.26130258, 0.27577711], device=pixel_values.device, dtype=pixel_values.dtype)
+
+        frames = pixel_values.view(B, num_frames, *pixel_values.shape[1:])  # [B, T, C, H, W]
+        frames = frames * std.view(1, 1, 3, 1, 1) + mean.view(1, 1, 3, 1, 1)
+        frames = (frames * 255).clamp(0, 255).to(torch.uint8)
+
+        flow_mags = []
+        for b in range(B):
+            pair_mags = []
+            for t in range(num_frames - 1):
+                f1 = frames[b, t].permute(1, 2, 0).cpu().numpy()  # [H, W, 3]
+                f2 = frames[b, t + 1].permute(1, 2, 0).cpu().numpy()
+                g1 = cv2.cvtColor(f1, cv2.COLOR_RGB2GRAY)
+                g2 = cv2.cvtColor(f2, cv2.COLOR_RGB2GRAY)
+                flow = cv2.calcOpticalFlowFarneback(g1, g2, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+                mag, _ = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+                pair_mags.append(torch.from_numpy(mag).float().to(pixel_values.device))
+            flow_mags.append(torch.stack(pair_mags))  # [T-1, H, W]
+
+        return torch.stack(flow_mags)  # [B, T-1, H, W]
+
+    def _pool_flow_to_tokens(self, flow_mag, H=12, W=12):
+        """
+        Pool dense flow magnitude to match the token grid.
+        Args:
+            flow_mag: [B, T, h, w] — dense flow magnitude
+            H, W: target grid size (12x12 for PLLaVA)
+        Returns:
+            pooled: [B, T, H*W] — per-token motion score
+        """
+        B, T, h, w = flow_mag.shape
+        # Reshape for pooling: treat each frame's flow as a single-channel image
+        x = flow_mag.unsqueeze(1)  # [B, 1, T, h, w] — won't work for adaptive_avg_pool2d
+        # Pool each frame independently
+        pooled_frames = []
+        for t in range(T):
+            frame_flow = flow_mag[:, t, :, :]  # [B, h, w]
+            frame_flow = frame_flow.unsqueeze(1)  # [B, 1, h, w]
+            pooled = F.adaptive_avg_pool2d(frame_flow, (H, W))  # [B, 1, H, W]
+            pooled_frames.append(pooled.squeeze(1))  # [B, H, W]
+        result = torch.stack(pooled_frames, dim=1)  # [B, T, H, W]
+        return result.reshape(B, T, H * W)  # [B, T, H*W]
+
     def merge_frames_dynamic(self, frames, threshold=0.8, k=7):
         B, L, C = frames.shape
         assert L == self.config.num_frames * self.config.pooling_shape[1] * self.config.pooling_shape[2]
@@ -783,35 +840,55 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         window_list = segment_lengths(idx_clusters)
 
         L = self.config.pooling_shape[1]*self.config.pooling_shape[2]
-        
+
+        # Get flow-based motion scores if available
+        flow_mag = getattr(self, '_last_flow_mag', None)  # [B, T-1, H, W]
+
         static_features = []
         dynamic_features = []
         static_sizes = []
         dynamic_sizes = []
-        
+
         start_idx = 0
-        for window_size in window_list[0]:  # 假设window_list的形状为(B, S)
-            # 获取当前window的帧
+        for window_size in window_list[0]:
             current_frames = frames[:, start_idx:start_idx+window_size, :, :] # B W L C
-            
-            # 计算相似度
-            frames_normed = F.normalize(current_frames, p=2, dim=-1)
-            frames_sim = einsum('b w l c, b t l c -> b w t l', frames_normed, frames_normed)
-            frames_sim = (frames_sim.sum(dim=-2) - 1).sum(dim=-2) / (window_size*(window_size-1)) # B L
-            
-            # 创建mask
-            mask = frames_sim > threshold
-            mask_expand = mask.view(B, 1, L, 1).expand(-1, window_size, -1, C) # B W L C
-            
-            # 处理静态特征
+
+            if flow_mag is not None and window_size > 1:
+                # Flow-based static/dynamic classification
+                # Flow indices: start_idx to start_idx+window_size-1 (window_size-1 pairs for window_size frames)
+                window_flow = flow_mag[:, start_idx:min(start_idx+window_size-1, flow_mag.shape[1]), :, :]  # [B, W-1, H, W_grid]
+                avg_flow = window_flow.mean(dim=1)  # [B, H, W_grid] — average flow across window
+
+                # Pool to token grid
+                avg_flow_pooled = F.adaptive_avg_pool2d(
+                    avg_flow.unsqueeze(1),  # [B, 1, H, W_grid]
+                    (self.config.pooling_shape[1], self.config.pooling_shape[2])
+                ).flatten(1)  # [B, 144]
+
+                # Top flow_dynamic_ratio% by flow magnitude are dynamic
+                dynamic_ratio = getattr(self.config, 'flow_dynamic_ratio', 0.5)
+                k_dynamic = max(1, int(L * dynamic_ratio))
+                _, topk_idx = avg_flow_pooled.topk(k_dynamic, dim=-1)
+                mask = torch.zeros(B, L, dtype=torch.bool, device=frames.device)
+                mask.scatter_(1, topk_idx, True)
+                mask_expand = mask.view(B, 1, L, 1).expand(-1, window_size, -1, C)  # B W L C
+            else:
+                # Fallback: feature similarity (original behavior)
+                frames_normed = F.normalize(current_frames, p=2, dim=-1)
+                frames_sim = einsum('b w l c, b t l c -> b w t l', frames_normed, frames_normed)
+                frames_sim = (frames_sim.sum(dim=-2) - 1).sum(dim=-2) / (window_size*(window_size-1)) # B L
+                mask = frames_sim > threshold
+                mask_expand = mask.view(B, 1, L, 1).expand(-1, window_size, -1, C) # B W L C
+
+            # Process static features
             static_mask = mask_expand
             static_feat = torch.masked_select(current_frames, static_mask).view(B, window_size, -1, C).mean(dim=1)
             if static_feat.shape[1] > 14:
                 static_feat = self.spatial_merge_tokens(static_feat, num_cluster=int(static_feat.shape[1]*self.config.cluster_ratio), k=7)
             static_features.append(static_feat)
             static_sizes.append(static_feat.shape[1])
-            
-            # 处理动态特征
+
+            # Process dynamic features
             dynamic_mask = ~mask_expand
             dynamic_feat = torch.masked_select(current_frames, dynamic_mask).view(B, window_size, -1, C)
             dynamic_window_list = []
@@ -821,21 +898,20 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
                     dynamic_feat_window = self.spatial_merge_tokens(dynamic_feat_window, num_cluster=int(dynamic_feat_window.shape[1]*self.config.cluster_ratio), k=7)
                 dynamic_window_list.append(dynamic_feat_window)
             dynamic_feat = torch.cat(dynamic_window_list, dim=1)
-            # dynamic_feat = torch.masked_select(current_frames, dynamic_mask).view(B, -1, C)
-                
+
             dynamic_features.append(dynamic_feat)
             dynamic_sizes.append(dynamic_feat.shape[1])
-            
+
             start_idx += window_size
 
-        # 合并所有特征
+        # Combine all features
         final_features = []
         for static_feature, dynamic_feature in zip(static_features, dynamic_features):
             final_features.append(static_feature)
             final_features.append(dynamic_feature)
         final_features = torch.cat(final_features, dim=1)
 
-        window_sizes = window_list[0].tolist()  # 转换为列表形式
+        window_sizes = window_list[0].tolist()
 
         return final_features, static_sizes, dynamic_sizes, window_sizes
     
@@ -945,6 +1021,7 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         )
         text_indices = None
         static_sizes, dynamic_sizes, window_sizes = [], [], []
+        self._last_flow_mag = None  # reset flow cache
         time1 = time.time()
         if inputs_embeds is None:
             # 1. Extra the input embeddings
@@ -957,6 +1034,16 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
             # 2. Merge text and images
             flag = False
             if pixel_values is not None and input_ids.shape[1] != 1:
+                # Compute optical flow from pixels BEFORE vision tower (for flow-based pruning)
+                if getattr(self.config, 'use_flow_pruning', False) and pixel_values.shape[0] > 1:
+                    try:
+                        self._last_flow_mag = self._compute_flow_from_pixels(
+                            pixel_values, self.config.num_frames
+                        )
+                    except Exception as e:
+                        logger.warning(f"Flow computation failed, falling back to feature similarity: {e}")
+                        self._last_flow_mag = None
+
                 image_outputs = self.vision_tower(pixel_values, output_hidden_states=True, output_attentions=False)
                 # this is not memory efficient at all (output_hidden_states=True) will save all the hidden stated.
                 selected_image_feature = image_outputs.hidden_states[vision_feature_layer] #  ( b, img_seqlen, embed_dim)
@@ -1033,6 +1120,13 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         # print("input_ids", input_ids, input_ids.shape, inputs_embeds.shape, self.pad_token_id)
         
         output_attentions = True
+
+        # Store flow scores on language model for cache access
+        if hasattr(self, '_last_flow_mag') and self._last_flow_mag is not None:
+            self.language_model._flow_motion_scores = self._last_flow_mag
+        else:
+            self.language_model._flow_motion_scores = None
+
         outputs = self.language_model(
             input_ids=input_ids,
             attention_mask=attention_mask,
