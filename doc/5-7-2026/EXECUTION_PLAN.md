@@ -224,24 +224,29 @@ if self.use_self_attention_selection:
 
 ---
 
-## P4: Switch to LLaVA-OneVision (Only If P1-P3 Fail)
+## P4: Switch to LLaVA-OneVision (ACTIVE)
 
-### Why This Last
+### Status: Baseline Working ✅
 
-- Highest effort (4-5 hours of implementation)
-- Highest ceiling (non-uniform attention)
-- But only needed if PLLaVA paths all fail
+LLaVA-OneVision eval pipeline is complete and working:
+- Model loads correctly with `load_llava_ov()`
+- Eval script `ov_eval_mvbench.py` runs end-to-end
+- Baseline results: **52.0% average** (20 samples/task, 5 tasks)
+- Ready for VTP implementation
 
-### When to Trigger
+### Next: Implement VTP on LLaVA-OV
 
-If after P1-P3:
-- Moving Direction still at 20% (random)
-- No improvement on any task
-- Then switch to LLaVA-OneVision
+1. Create `models/llava_ov/qwen2_vtp.py` — VTP wrapper for Qwen2
+2. Create `models/llava_ov/elastic_cache_ov.py` — Token merge + pruning
+3. Hook into LLaVA-OV's forward pass at selected layer
+4. Run baseline vs VTP comparison
 
-### Plan
+### Key Learnings
 
-See `PLAN_SWITCH.md` for full implementation details.
+- PLLaVA conv templates are incompatible with LLaVA-OV processor
+- Must use `"type": "video"` in chat template for video input
+- Vision tower needs explicit bfloat16 casting for float parameters only
+- transformers 4.46.3 required (not 4.39.3 or 5.x)
 
 ---
 

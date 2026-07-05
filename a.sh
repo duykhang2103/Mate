@@ -29,13 +29,13 @@ python scripts/infer_single_video.py \
 
 echo "Done!"
 
-hf download lmms-lab/Video-MME \
-    --repo-type dataset \
-    --local-dir DATAS/Video-MME
+# hf download lmms-lab/Video-MME \
+#     --repo-type dataset \
+#     --local-dir DATAS/Video-MME
 
 # cd DATAS/Video-MME && for f in videos_chunked_*.zip; do   unzip "$f"; done
 
-cd DATAS/Video-MME && for f in $(ls videos_chunked_*.zip | head -n 5); do    unzip "$f"; done
+# cd DATAS/Video-MME && for f in $(ls videos_chunked_*.zip | head -n 5); do    unzip "$f"; done
 
 
 

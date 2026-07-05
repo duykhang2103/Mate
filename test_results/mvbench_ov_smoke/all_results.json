@@ -1,0 +1,50 @@
+{
+    "acc_dict": {
+        "Moving Direction": [
+            0,
+            5
+        ]
+    },
+    "result_list": [
+        {
+            "pred": "C",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14727.mp4",
+            "question": "Question: What direction is the cyan sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Down and to the left.\n(D) Down and to the right.",
+            "token_info": {}
+        },
+        {
+            "pred": "B",
+            "gt": "(D) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14366.mp4",
+            "question": "Question: What direction is the gray cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the right.",
+            "token_info": {}
+        },
+        {
+            "pred": "B",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13584.mp4",
+            "question": "Question: What direction is the brown cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the left.",
+            "token_info": {}
+        },
+        {
+            "pred": "C",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11281.mp4",
+            "question": "Question: In which direction does the blue cube move in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) The object is stationary.",
+            "token_info": {}
+        },
+        {
+            "pred": "C",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12803.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the right.\n(C) Up and to the right.\n(D) Up and to the left.",
+            "token_info": {}
+        }
+    ]
+}

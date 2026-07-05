@@ -8,6 +8,7 @@ from tasks.eval.eval_utils import Conversation
 from models.pllava import PllavaProcessor, PllavaForConditionalGeneration, PllavaConfig
 from accelerate import init_empty_weights, dispatch_model, infer_auto_device_map,load_checkpoint_in_model
 from accelerate.utils import get_balanced_memory
+from transformers import LlavaOnevisionForConditionalGeneration
 # from mmcv.runner import load_checkpoint
 load_checkpoint = None
 import logging
@@ -322,6 +323,43 @@ def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha
     return model, processor
 
 
+def load_llava_ov(pretrained_model_name_or_path, num_frames=16, use_lora=False, weight_dir=None, lora_alpha=32, 
+                  selected_layer=10, alpha=0.4, tau=0.8, **kwargs):
+    """Load LLaVA-OneVision with VTP support."""
+    from transformers import AutoProcessor
+    
+    logger.info(f"Loading LLaVA-OneVision from {pretrained_model_name_or_path}")
+    
+    # Load model with eager attention for VTP
+    model = LlavaOnevisionForConditionalGeneration.from_pretrained(
+        pretrained_model_name_or_path,
+        torch_dtype=torch.bfloat16,
+        device_map="auto",
+        attn_implementation="eager",  # Required for attention weights
+        **kwargs
+    )
+    
+    # Explicitly cast vision tower to bfloat16 to fix dtype mismatch
+    # Only cast floating point parameters and buffers, NOT integer ones like position_ids
+    for name, param in model.vision_tower.named_parameters():
+        if param.is_floating_point():
+            param.data = param.data.to(torch.bfloat16)
+    for name, buf in model.vision_tower.named_buffers():
+        if buf.is_floating_point():
+            buf.data = buf.data.to(torch.bfloat16)
+    
+    # Load processor
+    try:
+        processor = AutoProcessor.from_pretrained(pretrained_model_name_or_path)
+    except Exception as e:
+        logger.warning(f"Failed to load processor: {e}, trying fallback")
+        processor = AutoProcessor.from_pretrained('llava-hf/llava-1.5-7b-hf')
+    
+    model = model.eval()
+    
+    return model, processor
+
+
 def load_adapters(model, adapter_model_name_or_paths):
 
     for adapter_model_name_or_path in adapter_model_name_or_paths:
@@ -392,6 +430,46 @@ def pllava_answer(conv: Conversation, model, processor, img_list, do_sample=True
         pass
 
     return output_text, conv, token_info
+
+def ov_answer(conv: Conversation, model, processor, img_list, do_sample=True, max_new_tokens=200, num_beams=1, min_length=1, top_p=0.9,
+               repetition_penalty=1.0, length_penalty=1, temperature=1.0, stop_criteria_keywords=None, print_res=False):
+    """Answer function for LLaVA-OneVision using native apply_chat_template."""
+    # Build conversation for LLaVA-OV's chat template
+    # conv.messages[-1][0] is the user message (question)
+    user_msg = conv.messages[-1][0]
+    conversation = [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": user_msg}]}]
+
+    text = processor.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
+    inputs = processor(text=[text], images=img_list, return_tensors="pt")
+    # Move to device, only cast float tensors to bfloat16
+    inputs = {k: v.to(model.device) if not v.is_floating_point() else v.to(model.device, dtype=torch.bfloat16) for k, v in inputs.items()}
+
+    if stop_criteria_keywords is not None:
+        stopping_criteria = [KeywordsStoppingCriteria(stop_criteria_keywords, processor.tokenizer, inputs["input_ids"])]
+    else:
+        stopping_criteria = None
+
+    with torch.no_grad():
+        output_token = model.generate(**inputs,
+                                      do_sample=do_sample, max_new_tokens=max_new_tokens, num_beams=num_beams, min_length=min_length,
+                                      top_p=top_p, repetition_penalty=repetition_penalty, length_penalty=length_penalty, temperature=temperature,
+                                      stopping_criteria=stopping_criteria, use_cache=True)
+        output_text = processor.batch_decode(output_token, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
+
+    if print_res:
+        print('### PROMPTING LM WITH: ', text)
+        print('### LM OUTPUT TEXT:  ', output_text)
+
+    # Extract just the assistant response
+    if "assistant\n" in output_text:
+        output_text = output_text.split("assistant\n")[-1]
+    output_text = output_text.strip()
+
+    conv.messages[-1][1] = output_text
+
+    token_info = {}
+    return output_text, conv, token_info
+
 
 def llava_next_video_answer(conv: Conversation, model, processor, img_list, do_sample=True, max_new_tokens=200, num_beams=1, min_length=1, top_p=0.9,
                repetition_penalty=1.0, length_penalty=1, temperature=1.0, stop_criteria_keywords=None, print_res=False):
