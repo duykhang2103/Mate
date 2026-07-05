@@ -1,0 +1,144 @@
+{
+    "acc_dict": {
+        "Object Interaction": [
+            3,
+            5
+        ],
+        "Moving Direction": [
+            0,
+            5
+        ]
+    },
+    "result_list": [
+        {
+            "pred": "(C) The blanket.",
+            "gt": "(C) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/J84TZ.mp4",
+            "question": "Question: Which object was taken by the person?\nOptions:\n(A) The dish.\n(B) The box.\n(C) The blanket.\n(D) The paper/notebook.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 612,
+                "pruned_tokens": 358,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) The closet/cabinet.",
+            "gt": "(C) The blanket.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/MQGVS.mp4",
+            "question": "Question: Which object was tidied up by the person?\nOptions:\n(A) The broom.\n(B) The closet/cabinet.\n(C) The blanket.\n(D) The table.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 720,
+                "pruned_tokens": 404,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) The pillow.",
+            "gt": "(C) The pillow.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XO8NL.mp4",
+            "question": "Question: Which object was thrown by the person?\nOptions:\n(A) The shoe.\n(B) The clothes.\n(C) The pillow.\n(D) The food.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 684,
+                "pruned_tokens": 383,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(C) The closet/cabinet.",
+            "gt": "(B) The book.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/XYGU1.mp4",
+            "question": "Question: Which object was opened by the person?\nOptions:\n(A) The door.\n(B) The book.\n(C) The closet/cabinet.\n(D) The laptop.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 648,
+                "pruned_tokens": 372,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) The floor.",
+            "gt": "(A) The floor.",
+            "task_type": "Object Interaction",
+            "video_path": "DATAS/MVBench/video/star/Charades_v1_480/F24GU.mp4",
+            "question": "Question: Which object was lied on by the person?\nOptions:\n(A) The floor.\n(B) The bed.\n(C) The sofa/couch.\n(D) The blanket.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 684,
+                "pruned_tokens": 388,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) Up and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14727.mp4",
+            "question": "Question: What direction is the cyan sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Up and to the right.\n(C) Down and to the left.\n(D) Down and to the right.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 720,
+                "pruned_tokens": 412,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(D) Down and to the right.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_14366.mp4",
+            "question": "Question: What direction is the gray cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the right.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 684,
+                "pruned_tokens": 398,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) Up and to the left.",
+            "gt": "(D) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_13584.mp4",
+            "question": "Question: What direction is the brown cylinder moving in within the video?\nOptions:\n(A) Up and to the right.\n(B) Up and to the left.\n(C) The object is stationary.\n(D) Down and to the left.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 720,
+                "pruned_tokens": 412,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(A) Up and to the right.",
+            "gt": "(B) Down and to the left.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_11281.mp4",
+            "question": "Question: In which direction does the blue cube move in the video?\nOptions:\n(A) Up and to the right.\n(B) Down and to the left.\n(C) Down and to the right.\n(D) The object is stationary.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 684,
+                "pruned_tokens": 397,
+                "pruning_layer": 10
+            }
+        },
+        {
+            "pred": "(B) Down and to the right.",
+            "gt": "(A) The object is stationary.",
+            "task_type": "Moving Direction",
+            "video_path": "DATAS/MVBench/video/clevrer/video_validation/video_12803.mp4",
+            "question": "Question: What direction is the red sphere moving in within the video?\nOptions:\n(A) The object is stationary.\n(B) Down and to the right.\n(C) Up and to the right.\n(D) Up and to the left.",
+            "token_info": {
+                "raw_vision_tokens": 2304,
+                "merged_vision_tokens": 684,
+                "pruned_tokens": 397,
+                "pruning_layer": 10
+            }
+        }
+    ]
+}

@@ -1309,6 +1309,8 @@ class LlamaModelVTP(LlamaModel):
         self.motion_invert = getattr(config, 'motion_invert', False)
         self.use_borderline_preservation = getattr(config, 'use_borderline_preservation', False)
         self.borderline_margin = getattr(config, 'borderline_margin', 0.1)
+        self.use_cluster_pruning = getattr(config, 'use_cluster_pruning', False)
+        self.cluster_pruning_topk = getattr(config, 'cluster_pruning_topk', 0.4)
 
         # Token count tracking for FLOPs computation
         self.last_pruned_token_count = None
@@ -1328,7 +1330,9 @@ class LlamaModelVTP(LlamaModel):
             motion_scale=self.motion_scale,
             motion_invert=self.motion_invert,
             use_borderline_preservation=self.use_borderline_preservation,
-            borderline_margin=self.borderline_margin
+            borderline_margin=self.borderline_margin,
+            use_cluster_pruning=getattr(config, 'use_cluster_pruning', False),
+            cluster_pruning_topk=getattr(config, 'cluster_pruning_topk', 0.4)
         )
         self.original_number = None
         self.current_number = None

@@ -106,7 +106,7 @@ DIM_TO_SLICE = {
 }
 
 class VTPWindowCache:
-    def __init__(self, alpha=0.2, total_num_layers=32, selected_layer=9, pooling_shape=(16, 12, 12), num_frames=16, pad_token_id=None, head=0, softmax=1.0, use_motion_adaptive=False, motion_scale=0.5, motion_invert=False, use_borderline_preservation=False, borderline_margin=0.1):
+    def __init__(self, alpha=0.2, total_num_layers=32, selected_layer=9, pooling_shape=(16, 12, 12), num_frames=16, pad_token_id=None, head=0, softmax=1.0, use_motion_adaptive=False, motion_scale=0.5, motion_invert=False, use_borderline_preservation=False, borderline_margin=0.1, use_cluster_pruning=False, cluster_pruning_topk=0.4):
         self.alpha = alpha
         self.total_num_layers = total_num_layers
         self.selected_layer = selected_layer
@@ -120,14 +120,20 @@ class VTPWindowCache:
         self.motion_invert = motion_invert
         self.use_borderline_preservation = use_borderline_preservation
         self.borderline_margin = borderline_margin
+        self.use_cluster_pruning = use_cluster_pruning
+        self.cluster_pruning_topk = cluster_pruning_topk
         self.img_start, self.img_end = None, None
         self.num_tokens_after_prune = None
 
-    def process_attention(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=None):
+    def process_attention(self, text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=None, hidden_states=None, img_start=None, img_end=None):
         # [head_num, num_query, num_img]
         b, head_num, num_query, num_img = text_to_image_attentions.shape
         assert b == 1
         assert len(static_sizes) == len(dynamic_sizes) == len(window_sizes)
+
+        # Cluster-based pruning: use DPC-KNN on hidden states instead of attention topk
+        if self.use_cluster_pruning and hidden_states is not None and img_start is not None and img_end is not None:
+            return self._cluster_prune(hidden_states, img_start, img_end, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores)
         
         # Compute motion scores per window
         # Use flow-based scores if available, otherwise fall back to attention variance
@@ -195,6 +201,86 @@ class VTPWindowCache:
 
         # Save pruning decision for visualization
         self.last_topk_indices = topk_indices.detach().cpu()
+
+        return topk_indices
+
+    def _cluster_prune(self, hidden_states, img_start, img_end, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=None):
+        """
+        Content-adaptive pruning using DPC-KNN clustering on LLM hidden states.
+        Instead of attention-based topk, clusters tokens by feature similarity
+        and keeps tokens from the largest/most important clusters.
+        """
+        num_img_tokens = img_end - img_start + 1
+        total_static = sum(static_sizes)
+        total_dynamic = sum(dynamic_sizes)
+        
+        # Extract hidden states for image tokens: [1, num_img, hidden_dim]
+        img_hidden = hidden_states[:, img_start:img_end+1, :]
+
+        # Compute motion-adaptive alpha per window (same as attention path)
+        # For cluster pruning, we use a global alpha but weight clusters by motion
+        motion_scores = None
+        if flow_motion_scores is not None:
+            motion_scores = self._compute_flow_motion_scores(flow_motion_scores, static_sizes, dynamic_sizes, window_sizes)
+        
+        # Determine number of tokens to keep
+        num_keep = int(num_img_tokens * self.alpha)
+        num_keep = max(num_keep, 1)
+        
+        # Determine number of clusters: keep enough clusters to cover num_keep tokens
+        # Each cluster should have ~num_keep/num_clusters tokens
+        # Use more clusters for better spatial coverage
+        num_clusters = min(num_keep, num_img_tokens // 2) if num_img_tokens > 2 else num_img_tokens
+        num_clusters = max(num_clusters, 1)
+
+        # Run DPC-KNN clustering on image token features
+        # img_hidden shape: [1, num_img, hidden_dim]
+        idx_cluster, actual_clusters = cluster_dpc_knn(img_hidden, cluster_num=num_clusters, k=5)
+        # idx_cluster shape: [1, num_img] — cluster assignment for each token
+
+        # Count tokens per cluster
+        cluster_sizes = torch.zeros(actual_clusters, device=img_hidden.device, dtype=torch.long)
+        for c in range(actual_clusters):
+            cluster_sizes[c] = (idx_cluster[0] == c).sum()
+
+        # Rank clusters by size (largest first = most tokens = most important region)
+        _, sorted_cluster_indices = torch.sort(cluster_sizes, descending=True)
+
+        # Greedily select clusters until we have enough tokens
+        selected_mask = torch.zeros(num_img_tokens, device=img_hidden.device, dtype=torch.bool)
+        tokens_selected = 0
+        
+        for cluster_idx in sorted_cluster_indices:
+            if tokens_selected >= num_keep:
+                break
+            cluster_mask = (idx_cluster[0] == cluster_idx)
+            cluster_count = cluster_mask.sum().item()
+            
+            if tokens_selected + cluster_count <= num_keep:
+                # Take all tokens from this cluster
+                selected_mask |= cluster_mask
+                tokens_selected += cluster_count
+            else:
+                # Take partial: keep top tokens by attention score within this cluster
+                # Fall back to attention-based selection within the cluster
+                cluster_token_indices = torch.where(cluster_mask)[0]
+                # Compute simple importance: L2 norm of hidden state (higher = more unique)
+                cluster_hidden = img_hidden[0, cluster_token_indices, :]
+                importance = cluster_hidden.norm(dim=-1)
+                num_to_take = num_keep - tokens_selected
+                if num_to_take > 0 and len(cluster_token_indices) > 0:
+                    num_to_take = min(num_to_take, len(cluster_token_indices))
+                    _, topk_within = torch.topk(importance, k=num_to_take)
+                    selected_mask[cluster_token_indices[topk_within]] = True
+                    tokens_selected += num_to_take
+
+        # Convert mask to indices (relative to image token range)
+        topk_indices = torch.where(selected_mask)[0]
+
+        # Save pruning decision for visualization
+        self.last_topk_indices = topk_indices.detach().cpu()
+        self.last_cluster_sizes = cluster_sizes.detach().cpu()
+        self.last_num_clusters = actual_clusters
 
         return topk_indices
 
@@ -268,7 +354,7 @@ class VTPWindowCache:
     def prompt_prefill(self, past_key_values=None, input_ids=None, attentions=None, hidden_states=None, past_hidden_states=None, causal_mask=None, attention_mask=None, pad_token_id=None, position_ids=None, text_indices=None, attn_shallower=None, static_sizes=[], dynamic_sizes=[], window_sizes=[], decoding_flag=False, dynamic_selected_layer=None, flow_motion_scores=None):
         text_to_image_attentions, text_to_text_attentions, image_to_image_attentions, img_start, img_end, seq_len = self.obtain_language_attention(input_ids, attentions, pad_token_id) # batch_size, head_num, num_query, num_img
         
-        topk_indices = self.process_attention(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=flow_motion_scores) # num
+        topk_indices = self.process_attention(text_to_image_attentions, static_sizes, dynamic_sizes, window_sizes, flow_motion_scores=flow_motion_scores, hidden_states=hidden_states, img_start=img_start, img_end=img_end) # num
 
         index_list = topk_indices
         index_list = index_list + img_start # consider that the image is not the first token

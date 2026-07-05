@@ -114,6 +114,8 @@ class PllavaConfig(PretrainedConfig):
         use_weighted_merge=True,
         use_flow_pruning=False,
         flow_dynamic_ratio=0.5,
+        use_cluster_pruning=False,
+        cluster_pruning_topk=0.4,
         **kwargs,
     ):
         self.ignore_index = ignore_index
@@ -143,6 +145,8 @@ class PllavaConfig(PretrainedConfig):
         self.use_weighted_merge = use_weighted_merge
         self.use_flow_pruning = use_flow_pruning
         self.flow_dynamic_ratio = flow_dynamic_ratio
+        self.use_cluster_pruning = use_cluster_pruning
+        self.cluster_pruning_topk = cluster_pruning_topk
         
         self.vision_config = vision_config
         
