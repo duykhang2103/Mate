@@ -324,13 +324,17 @@ def load_pllava(repo_id, num_frames, use_lora=False, weight_dir=None, lora_alpha
 
 
 def load_llava_ov(pretrained_model_name_or_path, num_frames=16, use_lora=False, weight_dir=None, lora_alpha=32, 
-                  selected_layer=10, alpha=0.4, tau=0.8, **kwargs):
-    """Load LLaVA-OneVision with VTP support."""
-    from transformers import AutoProcessor
+                  selected_layer=10, alpha=0.4, tau=0.8, use_vtp=True,
+                  use_cluster_pruning=False, cluster_pruning_topk=0.4,
+                  **kwargs):
+    """Load LLaVA-OneVision with optional VTP support."""
+    from transformers import AutoProcessor, LlavaOnevisionForConditionalGeneration
+    from models.llava_ov.qwen2_vtp import Qwen2ModelVTP
+    from models.llava_ov.elastic_cache_ov import ElasticCacheOV
     
     logger.info(f"Loading LLaVA-OneVision from {pretrained_model_name_or_path}")
     
-    # Load model with eager attention for VTP
+    # Always load base model first (device_map="auto" works with this)
     model = LlavaOnevisionForConditionalGeneration.from_pretrained(
         pretrained_model_name_or_path,
         torch_dtype=torch.bfloat16,
@@ -339,8 +343,40 @@ def load_llava_ov(pretrained_model_name_or_path, num_frames=16, use_lora=False, 
         **kwargs
     )
     
+    if use_vtp:
+        # Create pruning cache
+        image_token_id = getattr(model.config, 'image_token_index', 151646)
+        video_token_id = getattr(model.config, 'video_token_index', 151647)
+        cache = ElasticCacheOV(
+            alpha=alpha,
+            total_num_layers=model.config.text_config.num_hidden_layers,
+            selected_layer=selected_layer,
+            image_token_id=image_token_id,
+            video_token_id=video_token_id,
+            use_cluster_pruning=use_cluster_pruning,
+            cluster_pruning_topk=cluster_pruning_topk,
+        )
+        
+        # Replace Qwen2Model with Qwen2ModelVTP
+        original_model = model.language_model.model
+        model.language_model.model = Qwen2ModelVTP(original_model, cache)
+        
+        # Store cache reference on top-level model for token counting
+        model.cache = cache
+        
+        # Use forward pre-hook to capture input_ids before parent converts them to inputs_embeds
+        def _capture_input_ids(module, args, kwargs):
+            if 'input_ids' in kwargs and kwargs['input_ids'] is not None:
+                module.cache._input_ids = kwargs['input_ids']
+            elif len(args) > 0:
+                module.cache._input_ids = args[0]
+        model.register_forward_pre_hook(_capture_input_ids, with_kwargs=True)
+        
+        logger.info(f"Loaded with VTP (alpha={alpha}, layer={selected_layer}, cluster={use_cluster_pruning})")
+    else:
+        logger.info("Loaded base model (no VTP)")
+    
     # Explicitly cast vision tower to bfloat16 to fix dtype mismatch
-    # Only cast floating point parameters and buffers, NOT integer ones like position_ids
     for name, param in model.vision_tower.named_parameters():
         if param.is_floating_point():
             param.data = param.data.to(torch.bfloat16)

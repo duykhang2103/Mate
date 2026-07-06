@@ -108,12 +108,29 @@ def parse_args():
         default=None,
         help="Max number of samples to evaluate per task. Default: all samples.",
     )
+    parser.add_argument(
+        "--use_vtp",
+        action="store_true",
+        help="Enable Visual Token Pruning.",
+    )
+    parser.add_argument(
+        "--use_cluster_pruning",
+        action="store_true",
+        help="Use DPC-KNN cluster pruning instead of attention-based pruning.",
+    )
+    parser.add_argument(
+        "--cluster_pruning_topk",
+        type=float,
+        default=0.4,
+        help="Top-k ratio for cluster pruning.",
+    )
     args = parser.parse_args()
     return args
 
 
 def load_model_and_dataset(pretrained_model_name_or_path, num_frames, use_lora=False, 
-                          lora_alpha=32, weight_dir=None, selected_layer=10, alpha=0.4, tau=0.8):
+                          lora_alpha=32, weight_dir=None, selected_layer=10, alpha=0.4, tau=0.8,
+                          use_vtp=False, use_cluster_pruning=False, cluster_pruning_topk=0.4):
     """Load LLaVA-OneVision model and MVBench dataset."""
     model, processor = load_llava_ov(
         pretrained_model_name_or_path, 
@@ -124,6 +141,9 @@ def load_model_and_dataset(pretrained_model_name_or_path, num_frames, use_lora=F
         selected_layer=selected_layer,
         alpha=alpha,
         tau=tau,
+        use_vtp=use_vtp,
+        use_cluster_pruning=use_cluster_pruning,
+        cluster_pruning_topk=cluster_pruning_topk,
     )
     logger.info('Done loading LLaVA-OneVision')
     # device_map="auto" in load_llava_ov already handles GPU placement
@@ -200,6 +220,9 @@ def run(args):
         selected_layer=args.selected_layer,
         alpha=args.alpha,
         tau=args.tau,
+        use_vtp=args.use_vtp,
+        use_cluster_pruning=args.use_cluster_pruning,
+        cluster_pruning_topk=args.cluster_pruning_topk,
     )
     logger.info('Done loading model and dataset')
 
@@ -267,9 +290,12 @@ def run(args):
             correct += 1
         
         tbar.update(len(result_list) - done_count)
+        token_str = ""
+        if hasattr(model, 'cache') and model.cache.num_tokens_after_prune is not None:
+            token_str = f", Tokens: {model.cache.num_tokens_after_prune}"
         tbar.set_description_str(
             f"Task: {task_type}, Acc: {acc_dict[task_type][0] / acc_dict[task_type][1] * 100:.2f}%; "
-            f"Total: {correct / total * 100:.2f}%"
+            f"Total: {correct / total * 100:.2f}%{token_str}"
         )
         done_count = len(result_list)
     

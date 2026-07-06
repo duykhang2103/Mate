@@ -1,0 +1,26 @@
+{
+    "acc_dict": {
+        "Action Antonym": [
+            2,
+            2
+        ]
+    },
+    "result_list": [
+        {
+            "pred": "B",
+            "gt": "(B) Pushing something onto something",
+            "task_type": "Action Antonym",
+            "video_path": "DATAS/MVBench/video/ssv2_video/92623.webm",
+            "question": "Question: What is the action performed by the person in the video?\nOptions:\n(A) Pulling something onto something\n(B) Pushing something onto something\n(C) Not sure",
+            "token_info": {}
+        },
+        {
+            "pred": "A",
+            "gt": "(A) Plugging something into something",
+            "task_type": "Action Antonym",
+            "video_path": "DATAS/MVBench/video/ssv2_video/59204.webm",
+            "question": "Question: Which one of these descriptions correctly matches the actions in the video?\nOptions:\n(A) Plugging something into something\n(B) Removing something into something\n(C) Not sure",
+            "token_info": {}
+        }
+    ]
+}

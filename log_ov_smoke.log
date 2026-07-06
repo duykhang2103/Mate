@@ -1,0 +1,11 @@
+usage: ov_eval_mvbench.py [-h] --pretrained_model_name_or_path
+                          PRETRAINED_MODEL_NAME_OR_PATH --save_path SAVE_PATH
+                          --num_frames NUM_FRAMES [--use_lora]
+                          [--lora_alpha LORA_ALPHA] [--weight_dir WEIGHT_DIR]
+                          [--conv_mode CONV_MODE] [--top_p TOP_P]
+                          [--temperature TEMPERATURE]
+                          [--max_new_tokens MAX_NEW_TOKENS]
+                          [--selected_layer SELECTED_LAYER] [--alpha ALPHA]
+                          [--tau TAU] [--tasks TASKS]
+                          [--max_samples MAX_SAMPLES]
+ov_eval_mvbench.py: error: the following arguments are required: --pretrained_model_name_or_path, --save_path
