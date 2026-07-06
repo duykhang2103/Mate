@@ -361,13 +361,14 @@ python -m tasks.eval.mvbench.ov_eval_mvbench \
 ```bash
 # Full evaluation on MVBench
 python -m tasks.eval.mvbench.ov_eval_mvbench \
+
     --model_path MODELS/llava-onevision-7b \
     --save_path test_results/mvbench_ov \
     --num_frames 16 \
     --alpha 0.4 \
     --tau 0.8 \
-    --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
     > log_ov_full.log 2>&1
+    # --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
 ```
 
 ---

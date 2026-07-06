@@ -1,12 +1,6 @@
-import functools
-import itertools
 import logging
 from tqdm import tqdm
-from PIL import Image
-from multiprocessing import Pool
-import multiprocessing as mp
 from argparse import ArgumentParser
-import numpy as np
 
 import torch
 import torchvision
@@ -118,7 +112,7 @@ def parse_args():
     return args
 
 
-def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_frames, use_lora=False, 
+def load_model_and_dataset(pretrained_model_name_or_path, num_frames, use_lora=False, 
                           lora_alpha=32, weight_dir=None, selected_layer=10, alpha=0.4, tau=0.8):
     """Load LLaVA-OneVision model and MVBench dataset."""
     model, processor = load_llava_ov(
@@ -132,12 +126,10 @@ def load_model_and_dataset(rank, world_size, pretrained_model_name_or_path, num_
         tau=tau,
     )
     logger.info('Done loading LLaVA-OneVision')
-
-    model = model.to(torch.device(rank))
-    model = model.eval()
+    # device_map="auto" in load_llava_ov already handles GPU placement
+    # Do NOT call model.to() — it breaks device_map distribution
 
     dataset = MVBenchDataset(num_segments=num_frames)
-    dataset.set_rank_and_world_size(rank, world_size)
     return model, processor, dataset
 
 
@@ -189,20 +181,17 @@ def infer_mvbench(
     return pred, token_info
 
 
-def run(rank, args, world_size):
+def run(args):
     """Main evaluation loop."""
-    if rank != 0:
-        transformers.utils.logging.set_verbosity_error()
-        logger.setLevel(transformers.logging.ERROR)
+    transformers.utils.logging.set_verbosity_error()
 
     print_res = False
     conv_mode = args.conv_mode
     pre_query_prompt = None
     post_query_prompt = "\nOnly give the best option."
 
-    logger.info(f'Loading model and constructing dataset to GPU {rank}...')
+    logger.info('Loading model and constructing dataset...')
     model, processor, dataset = load_model_and_dataset(
-        rank, world_size,
         pretrained_model_name_or_path=args.pretrained_model_name_or_path,
         num_frames=args.num_frames,
         use_lora=args.use_lora,
@@ -233,8 +222,7 @@ def run(rank, args, world_size):
         dataset.data_list = filtered
         logger.info(f'Limited to {args.max_samples} samples per task ({len(dataset.data_list)} total)')
 
-    if rank == 0:
-        tbar = tqdm(total=len(dataset))
+    tbar = tqdm(total=len(dataset))
 
     correct = 0
     total = 0
@@ -278,13 +266,12 @@ def run(rank, args, world_size):
             acc_dict[task_type][0] += 1
             correct += 1
         
-        if rank == 0:
-            tbar.update(len(result_list) - done_count)
-            tbar.set_description_str(
-                f"Task: {task_type}, Acc: {acc_dict[task_type][0] / acc_dict[task_type][1] * 100:.2f}%; "
-                f"Total: {correct / total * 100:.2f}%"
-            )
-            done_count = len(result_list)
+        tbar.update(len(result_list) - done_count)
+        tbar.set_description_str(
+            f"Task: {task_type}, Acc: {acc_dict[task_type][0] / acc_dict[task_type][1] * 100:.2f}%; "
+            f"Total: {correct / total * 100:.2f}%"
+        )
+        done_count = len(result_list)
     
     return result_list
 
@@ -296,18 +283,7 @@ def main():
     
     if json_data is None:
         logger.info(f'Started benchmarking, saving to: {save_path}')
-        n_gpus = torch.cuda.device_count()
-        world_size = n_gpus
-        
-        if world_size > 1:
-            mp.set_start_method('spawn', force=True)
-            with Pool(world_size) as pool:
-                func = functools.partial(run, args=args, world_size=world_size)
-                result_lists = pool.map(func, range(world_size))
-            result_list = list(itertools.chain(*result_lists))
-        else:
-            result_list = run(0, args=args, world_size=1)
-        
+        result_list = run(args)
         logger.info('Finished running')
     else:
         logger.info(f'Loaded results from {save_path}')
