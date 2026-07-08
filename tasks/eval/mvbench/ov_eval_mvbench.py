@@ -176,7 +176,10 @@ def infer_mvbench(
         question = question + post_query_prompt
 
     # Build conversation for LLaVA-OV using video format
-    conversation = [{"role": "user", "content": [{"type": "video"}, {"type": "text", "text": question}]}]
+    conversation = [
+        {"role": "system", "content": "Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question."},
+        {"role": "user", "content": [{"type": "video"}, {"type": "text", "text": question}]}
+    ]
     text = processor.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
 
     inputs = processor(text=[text], videos=video_list, return_tensors="pt")
@@ -196,6 +199,15 @@ def infer_mvbench(
     if "assistant\n" in output_text:
         output_text = output_text.split("assistant\n")[-1]
     pred = output_text.strip()
+
+    # Handle answer_prompt/return_prompt for consistent formatting
+    if answer_prompt and return_prompt:
+        # Pre-fill answer_prompt if missing
+        if not pred.startswith(answer_prompt):
+            pred = answer_prompt + pred
+        # Strip return_prompt from end if present
+        if pred.endswith(return_prompt):
+            pred = pred[:-len(return_prompt)]
 
     token_info = {}
     return pred, token_info
