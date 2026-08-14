@@ -43,3 +43,6 @@ for duration in result:
         json.dump(result[duration], f, ensure_ascii=False, indent=2)
 
 print("Done.")
+
+# Command to run this script:
+# python videomme-json-converter.py

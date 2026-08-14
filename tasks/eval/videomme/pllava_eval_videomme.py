@@ -336,6 +336,16 @@ def run(rank, args, world_size):
 
     weight_dir = args.weight_dir or args.pretrained_model_name_or_path
 
+    if rank == 0:
+        logger.info("Dataset path preflight:")
+        logger.info("  cwd: %s", os.getcwd())
+        logger.info("  dataset json root: %s (exists=%s)", os.path.abspath(VideoMMEDataset.data_dir), os.path.exists(VideoMMEDataset.data_dir))
+        for split_name, (json_name, data_root, _, _) in VideoMMEDataset.data_list_info.items():
+            json_path = os.path.join(VideoMMEDataset.data_dir, json_name)
+            logger.info("  split=%s", split_name)
+            logger.info("    json_path: %s (exists=%s)", os.path.abspath(json_path), os.path.exists(json_path))
+            logger.info("    data_root: %s (exists=%s)", os.path.abspath(data_root), os.path.exists(data_root))
+
     logger.info(f'loading model and constructing dataset to gpu {rank}...')
     model, processor, dataset = load_model_and_dataset(rank,
                                                        world_size,
@@ -367,6 +377,17 @@ def run(rank, args, world_size):
                                                          cluster_pruning_topk=args.cluster_pruning_topk)
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
+
+    # Diagnostic logs to trace why no results are produced
+    logger.info('Dataset diagnostics:')
+    try:
+        logger.info('  reported dataset length (len(dataset)): %s', len(dataset))
+    except Exception:
+        logger.exception('  failed to get len(dataset)')
+    # show a few example entries from data_list (no large dumps)
+    for i, d in enumerate(dataset.data_list[:5]):
+        sample_video = os.path.join(d['prefix'], d['data'].get('video', '<no-video>'))
+        logger.info('  sample[%d] task=%s video=%s exists=%s', i, d['task_type'], sample_video, os.path.exists(sample_video))
 
     # Filter by splits if specified
     if args.tasks:
@@ -418,9 +439,13 @@ def run(rank, args, world_size):
     result_list = []
     acc_dict = {}
     done_count = 0
+    skipped_examples = 0
+    inference_errors = 0
 
     for example in dataset:
         if example is None:
+            skipped_examples += 1
+            logger.debug('Skipped a dataset entry (returned None) -- skipped so far: %s', skipped_examples)
             continue
         task_type = example['task_type']
         if task_type not in acc_dict:
@@ -428,18 +453,23 @@ def run(rank, args, world_size):
         acc_dict[task_type][1] += 1
         total += 1
 
-        pred, token_info = infer_mvbench(
-            args,
-            model,
-            processor,
-            example,
-            conv_mode=conv_mode,
-            pre_query_prompt=pre_query_prompt,
-            post_query_prompt=post_query_prompt,
-            answer_prompt="Best option:(",
-            return_prompt='(',
-            print_res=print_res,
-        )
+        try:
+            pred, token_info = infer_mvbench(
+                args,
+                model,
+                processor,
+                example,
+                conv_mode=conv_mode,
+                pre_query_prompt=pre_query_prompt,
+                post_query_prompt=post_query_prompt,
+                answer_prompt="Best option:(",
+                return_prompt='(',
+                print_res=print_res,
+            )
+        except Exception:
+            inference_errors += 1
+            logger.exception('Inference failed for video %s', example.get('video_path'))
+            continue
         gt = example['answer']
         result_list.append({
             'pred': pred,

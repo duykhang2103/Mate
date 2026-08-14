@@ -428,7 +428,7 @@ def pllava_answer(conv: Conversation, model, processor, img_list, do_sample=True
                                         top_p=top_p, repetition_penalty=repetition_penalty, length_penalty=length_penalty, temperature=temperature, 
                                         stopping_criteria=stopping_criteria,use_cache=True)
         except:
-            output_token = model.generate(**inputs,
+            output_token = model.generate(**inputs, media_type='video',
                                         do_sample=do_sample, max_new_tokens=max_new_tokens, num_beams=num_beams, min_length=min_length, 
                                         top_p=top_p, repetition_penalty=repetition_penalty, length_penalty=length_penalty, temperature=temperature, 
                                         stopping_criteria=stopping_criteria,use_cache=True)

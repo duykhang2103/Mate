@@ -39,7 +39,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tasks.eval.eval_utils import conv_templates
-from tasks.eval.model_utils import load_pllava, pllava_answer
+from tasks.eval.model_utils import load_pllava, pllava_answer, load_llava_ov
 
 RESOLUTION = 672
 LOGGER = logging.getLogger("prunevid.infer_single")
@@ -163,6 +163,23 @@ def parse_args() -> argparse.Namespace:
         help="Path for output MP4. Default: output/{video_stem}_{timestamp}.mp4",
     )
     parser.add_argument("--save_masks", action="store_true", help="Save individual overlay frames as PNGs.")
+
+    parser.add_argument(
+        "--use_vtp",
+        action="store_true",
+        help="Enable Visual Token Pruning.",
+    )
+    parser.add_argument(
+        "--use_cluster_pruning",
+        action="store_true",
+        help="Use DPC-KNN cluster pruning instead of attention-based pruning.",
+    )
+    parser.add_argument(
+        "--cluster_pruning_topk",
+        type=float,
+        default=0.4,
+        help="Top-k ratio for cluster pruning.",
+    )
     return parser.parse_args()
 
 
@@ -668,26 +685,40 @@ def main() -> None:
     LOGGER.info("Loading model from %s (weight_dir=%s)", args.model_dir, weight_dir)
     LOGGER.info("LoRA: %s | lora_alpha=%s", args.use_lora, args.lora_alpha)
     LOGGER.info("Entropy-adaptive: %s | tau_entropy=%s | fallback_layer=%s", args.use_entropy_adaptive, args.tau_entropy, args.entropy_fallback_layer)
-    model, processor = load_pllava(
-        args.model_dir,
+    # model, processor = load_pllava(
+    #     args.model_dir,
+    #     num_frames=args.num_frames,
+    #     use_lora=args.use_lora,
+    #     weight_dir=weight_dir,
+    #     lora_alpha=args.lora_alpha,
+    #     pooling_shape=pooling_shape,
+    #     selected_layer=args.selected_layer,
+    #     alpha=args.alpha,
+    #     tau=args.tau,
+    #     cluster_ratio=args.cluster_ratio,
+    #     temporal_segment_ratio=args.temporal_segment_ratio,
+    #     use_entropy_adaptive=args.use_entropy_adaptive,
+    #     tau_entropy=args.tau_entropy,
+    #     entropy_fallback_layer=args.entropy_fallback_layer,
+    #     use_motion_adaptive=args.use_motion_adaptive,
+    #     motion_scale=args.motion_scale,
+    #     use_borderline_preservation=args.use_borderline_preservation,
+    #     borderline_margin=args.borderline_margin,
+    #     use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge,
+    # )
+
+    model, processor = load_llava_ov(
+        pretrained_model_name_or_path=args.model_dir,
         num_frames=args.num_frames,
         use_lora=args.use_lora,
         weight_dir=weight_dir,
         lora_alpha=args.lora_alpha,
-        pooling_shape=pooling_shape,
         selected_layer=args.selected_layer,
         alpha=args.alpha,
         tau=args.tau,
-        cluster_ratio=args.cluster_ratio,
-        temporal_segment_ratio=args.temporal_segment_ratio,
-        use_entropy_adaptive=args.use_entropy_adaptive,
-        tau_entropy=args.tau_entropy,
-        entropy_fallback_layer=args.entropy_fallback_layer,
-        use_motion_adaptive=args.use_motion_adaptive,
-        motion_scale=args.motion_scale,
-        use_borderline_preservation=args.use_borderline_preservation,
-        borderline_margin=args.borderline_margin,
-        use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge,
+        use_vtp=args.use_vtp,
+        use_cluster_pruning=args.use_cluster_pruning,
+        cluster_pruning_topk=args.cluster_pruning_topk,
     )
     device = torch.device(args.device if torch.cuda.is_available() or args.device == "cpu" else "cpu")
     model = model.to(device).eval()

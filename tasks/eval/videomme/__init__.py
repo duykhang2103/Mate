@@ -1,11 +1,15 @@
 import os
 import json
+import logging
 import numpy as np
 from tasks.eval.eval_utils import (
     dump_json,
     load_json,
     EvalDataset,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 def check_ans(pred, gt):
@@ -28,7 +32,9 @@ def check_ans(pred, gt):
     return flag
 
 def save_results(result_list, save_path):
-
+    if not result_list:
+        print("WARNING: No results to save (0 samples processed). Check that video files exist on disk.")
+        return
     final_res, acc_dict = {}, {}
     correct, total = 0, 0
     for res in result_list:
@@ -54,21 +60,33 @@ def save_results(result_list, save_path):
     dump_json(all_results, save_path, 'all_results.json')
     dump_json(final_res, save_path, 'upload_leaderboard.json')
 
+    # Console logging
+    print("\n" + "="*50)
+    print("EVALUATION RESULTS")
+    print("="*50)
+    for task_type, accuracy in final_res.items():
+        if task_type != 'Avg':
+            correct_count, total_count = acc_dict[task_type]
+            print(f"{task_type}: {accuracy:.2f}% ({correct_count}/{total_count})")
+    print("-"*50)
+    print(f"Average Accuracy: {final_res['Avg']:.2f}%")
+    print("="*50 + "\n")
+
+
 def load_results(save_path):
     all_results = load_json(save_path, 'all_results.json')
-    if all_results is not None:
+    if all_results is not None and all_results.get('result_list'):
         result_list = all_results['result_list']
     else:
         result_list = None
-    # json_data = load_json(save_path, 'all_results.json')['result_list']
     return result_list
 
 class VideoMMEDataset(EvalDataset):
     data_list_info = {
         # "task_type (sub task name)": ("json file name", "image/video prefix", "data_type", "bound")
-        "Short Video": ("short.json", "DATAS/Video-MME/data", "video", False), # has start & end
-        "Medium Video": ("medium.json", "DATAS/Video-MME/data", "video", False), # has start & end
-        "Long Video": ("long.json", "DATAS/Video-MME/data", "video", False),
+        "short": ("short.json", "DATAS/Video-MME/data", "video", False), # has start & end
+        "medium": ("medium.json", "DATAS/Video-MME/data", "video", False), # has start & end
+        "long": ("long.json", "DATAS/Video-MME/data", "video", False),
     }
     data_dir = "DATAS/Video-MME/json"
 
@@ -78,14 +96,25 @@ class VideoMMEDataset(EvalDataset):
         data_list_info = self.data_list_info
         data_dir = self.data_dir
 
+        logger.info("Initializing VideoMMEDataset")
+        logger.info("  cwd: %s", os.getcwd())
+        logger.info("  data_dir: %s (exists=%s)", os.path.abspath(data_dir), os.path.exists(data_dir))
+
         self.data_list = []
         for k, v in data_list_info.items():
-            with open(os.path.join(data_dir, v[0]), 'r') as f:
+            json_path = os.path.join(data_dir, v[0])
+            video_root = v[1]
+            logger.info("  loading split=%s", k)
+            logger.info("    json_path: %s (exists=%s)", os.path.abspath(json_path), os.path.exists(json_path))
+            logger.info("    video_root: %s (exists=%s)", os.path.abspath(video_root), os.path.exists(video_root))
+
+            with open(json_path, 'r') as f:
                 json_data = json.load(f)
+            logger.info("    samples loaded: %s", len(json_data))
             for data in json_data:
                 self.data_list.append({
                     'task_type': k,
-                    'prefix': v[1],
+                    'prefix': video_root,
                     'data_type': v[2],
                     'bound': v[3],
                     'data': data
@@ -97,6 +126,8 @@ class VideoMMEDataset(EvalDataset):
             'frame': self.read_frame,
             'npy': self.read_npy,
         }
+
+        logger.info("VideoMMEDataset total samples: %s", len(self.data_list))
                 
         # # transform
         # crop_size = resolution
@@ -124,7 +155,17 @@ class VideoMMEDataset(EvalDataset):
                 )
             video_path = os.path.join(self.data_list[idx]['prefix'], self.data_list[idx]['data']['video'])
 
-            images_group = decord_method(video_path, bound)
+            # Trace video path and existence before attempting to read
+            logger.debug("__getitem__ idx=%s task=%s video=%s", idx, task_type, video_path)
+            if not os.path.exists(video_path):
+                logger.warning("Video file does not exist: %s (idx=%s, task=%s)", video_path, idx, task_type)
+                return None
+
+            try:
+                images_group = decord_method(video_path, bound)
+            except Exception:
+                logger.exception("Failed to read video %s (idx=%s, task=%s)", video_path, idx, task_type)
+                return None
 
             return {
                 'video_path': video_path, 

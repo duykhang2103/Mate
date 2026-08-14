@@ -282,8 +282,6 @@ def run(args):
             conv_mode=conv_mode,
             pre_query_prompt=pre_query_prompt,
             post_query_prompt=post_query_prompt,
-            answer_prompt="Best option:(",
-            return_prompt='(',
             print_res=print_res,
         )
         

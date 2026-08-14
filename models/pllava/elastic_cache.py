@@ -169,7 +169,12 @@ class VTPWindowCache:
             window_attentions = window_attentions[start_idx:end_idx]
             static_attentions = window_attentions[:static_size]
             num_retain_static_tokens = int(static_size * alpha)
-            _, static_topk_indices = torch.topk(static_attentions, k=num_retain_static_tokens, dim=-1) # num_retain_static_tokens
+            num_retain_static_tokens = max(num_retain_static_tokens, 0)
+            num_retain_static_tokens = min(num_retain_static_tokens, static_size)
+            if num_retain_static_tokens > 0:
+                _, static_topk_indices = torch.topk(static_attentions, k=num_retain_static_tokens, dim=-1)
+            else:
+                static_topk_indices = torch.zeros(0, dtype=torch.long, device=static_attentions.device)
 
             if self.use_borderline_preservation and num_retain_static_tokens > 0:
                 cutoff_score = static_attentions[static_topk_indices[-1]]
@@ -186,6 +191,7 @@ class VTPWindowCache:
             dynamic_attentions = window_attentions[static_size:].view(window_size, -1)
             num_retain_dynamic_tokens = int(dynamic_attentions.shape[-1] * alpha)
             num_retain_dynamic_tokens = max(num_retain_dynamic_tokens, 1)  # keep at least 1 token per window
+            num_retain_dynamic_tokens = min(num_retain_dynamic_tokens, dynamic_attentions.shape[-1])
             _, dynamic_topk_indices = torch.topk(dynamic_attentions, k=num_retain_dynamic_tokens, dim=-1) # window_size num_retain_dynamic_tokens
 
             dynamic_topk_indices = dynamic_topk_indices + start_idx + static_size
