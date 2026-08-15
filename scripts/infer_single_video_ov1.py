@@ -180,10 +180,6 @@ def parse_args() -> argparse.Namespace:
         default=0.4,
         help="Top-k ratio for cluster pruning.",
     )
-    parser.add_argument("--use_flow_pruning", action="store_true", default=False,
-                    help="Use optical flow for static/dynamic token classification.")
-    parser.add_argument("--flow_dynamic_ratio", type=float, default=0.5,
-                    help="Fraction of tokens classified as dynamic based on flow magnitude.")
     return parser.parse_args()
 
 
@@ -689,43 +685,41 @@ def main() -> None:
     LOGGER.info("Loading model from %s (weight_dir=%s)", args.model_dir, weight_dir)
     LOGGER.info("LoRA: %s | lora_alpha=%s", args.use_lora, args.lora_alpha)
     LOGGER.info("Entropy-adaptive: %s | tau_entropy=%s | fallback_layer=%s", args.use_entropy_adaptive, args.tau_entropy, args.entropy_fallback_layer)
-    model, processor = load_pllava(
-        args.model_dir,
-        num_frames=args.num_frames,
-        use_lora=args.use_lora,
-        weight_dir=weight_dir,
-        lora_alpha=args.lora_alpha,
-        pooling_shape=pooling_shape,
-        selected_layer=args.selected_layer,
-        alpha=args.alpha,
-        tau=args.tau,
-        cluster_ratio=args.cluster_ratio,
-        temporal_segment_ratio=args.temporal_segment_ratio,
-        use_entropy_adaptive=args.use_entropy_adaptive,
-        tau_entropy=args.tau_entropy,
-        entropy_fallback_layer=args.entropy_fallback_layer,
-        use_motion_adaptive=args.use_motion_adaptive,
-        motion_scale=args.motion_scale,
-        use_borderline_preservation=args.use_borderline_preservation,
-        borderline_margin=args.borderline_margin,
-        use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge,
-        use_flow_pruning=args.use_flow_pruning,
-        flow_dynamic_ratio=args.flow_dynamic_ratio
-    )
-
-    # model, processor = load_llava_ov(
-    #     pretrained_model_name_or_path=args.model_dir,
+    # model, processor = load_pllava(
+    #     args.model_dir,
     #     num_frames=args.num_frames,
     #     use_lora=args.use_lora,
     #     weight_dir=weight_dir,
     #     lora_alpha=args.lora_alpha,
+    #     pooling_shape=pooling_shape,
     #     selected_layer=args.selected_layer,
     #     alpha=args.alpha,
     #     tau=args.tau,
-    #     use_vtp=args.use_vtp,
-    #     use_cluster_pruning=args.use_cluster_pruning,
-    #     cluster_pruning_topk=args.cluster_pruning_topk,
+    #     cluster_ratio=args.cluster_ratio,
+    #     temporal_segment_ratio=args.temporal_segment_ratio,
+    #     use_entropy_adaptive=args.use_entropy_adaptive,
+    #     tau_entropy=args.tau_entropy,
+    #     entropy_fallback_layer=args.entropy_fallback_layer,
+    #     use_motion_adaptive=args.use_motion_adaptive,
+    #     motion_scale=args.motion_scale,
+    #     use_borderline_preservation=args.use_borderline_preservation,
+    #     borderline_margin=args.borderline_margin,
+    #     use_weighted_merge=args.use_weighted_merge and not args.no_weighted_merge,
     # )
+
+    model, processor = load_llava_ov(
+        pretrained_model_name_or_path=args.model_dir,
+        num_frames=args.num_frames,
+        use_lora=args.use_lora,
+        weight_dir=weight_dir,
+        lora_alpha=args.lora_alpha,
+        selected_layer=args.selected_layer,
+        alpha=args.alpha,
+        tau=args.tau,
+        use_vtp=args.use_vtp,
+        use_cluster_pruning=args.use_cluster_pruning,
+        cluster_pruning_topk=args.cluster_pruning_topk,
+    )
     device = torch.device(args.device if torch.cuda.is_available() or args.device == "cpu" else "cpu")
     model = model.to(device).eval()
 
@@ -761,8 +755,6 @@ def main() -> None:
     model.config.entropy_fallback_layer = args.entropy_fallback_layer
     model.config.use_motion_adaptive = args.use_motion_adaptive
     model.config.motion_scale = args.motion_scale
-    model.config.use_flow_pruning = args.use_flow_pruning
-    model.config.flow_dynamic_ratio = args.flow_dynamic_ratio
     # Propagate to LlamaModelVTP
     lm = model.language_model
     if hasattr(lm, 'base_model'):

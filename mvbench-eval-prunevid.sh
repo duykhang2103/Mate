@@ -117,7 +117,7 @@ fi
 python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --pretrained_model_name_or_path MODELS/pllava-7b  \
     --weight_dir MODELS/pllava-7b  \
-    --save_path results/mvbench_pllava_prunevid_all \
+    --save_path results/mvbench_pllava_prunevid_optical_flow_all \
     --num_frames 16 \
     --use_lora --lora_alpha 14 \
     --pooling_shape 16-12-12 \
@@ -127,4 +127,6 @@ python -m tasks.eval.mvbench.pllava_eval_mvbench \
     --temporal_segment_ratio 0.25 \
     --cluster_ratio 0.5 \
     --conv_mode eval_mvbench \
-    --max_new_tokens 100
+    --max_new_tokens 100 \
+    --use_flow_pruning --flow_dynamic_ratio 0.5 \
+    --use_motion_adaptive --motion_scale 1.0

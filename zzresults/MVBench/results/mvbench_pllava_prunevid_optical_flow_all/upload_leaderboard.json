@@ -1,0 +1,22 @@
+{
+    "Action Sequence": 50.53191489361703,
+    "Action Prediction": 45.5,
+    "Action Antonym": 0.0,
+    "Fine-grained Action": 41.0,
+    "Unexpected Action": 57.49999999999999,
+    "Object Existence": 53.535353535353536,
+    "Object Interaction": 55.50000000000001,
+    "Object Shuffle": 35.0,
+    "Moving Direction": 19.0,
+    "Action Localization": 26.0,
+    "Scene Transition": 83.0,
+    "Action Count": 40.0,
+    "Moving Count": 34.5,
+    "Moving Attribute": 48.5,
+    "State Change": 42.0,
+    "Character Order": 48.5,
+    "Egocentric Navigation": 30.5,
+    "Episodic Reasoning": 46.0,
+    "Counterfactual Inference": 31.0,
+    "Avg": 43.701226309921964
+}

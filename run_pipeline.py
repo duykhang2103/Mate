@@ -56,16 +56,21 @@ def run_pipeline():
     # subprocess.run("ln -snf /dataset/results ./results", shell=True)
 
     subprocess.run("mkdir -p /dataset/DATAS/Video-MME /dataset/MODELS /dataset/Video-MME/results", shell=True, check=True)
+    # subprocess.run("mkdir -p /dataset/DATAS/MVBench /dataset/MODELS /dataset/MVBench/results", shell=True, check=True)
     
     # 2. CREATE LOCAL PARENT FOLDERS FIRST
     subprocess.run("mkdir -p ./DATAS", shell=True, check=True)
     
     # 3. Create the symlinks
-    subprocess.run("ln -snf /dataset/DATAS/Video-MME ./DATAS/Video-MME", shell=True, check=True)
     subprocess.run("ln -snf /dataset/MODELS ./MODELS", shell=True, check=True)
+
+    subprocess.run("ln -snf /dataset/DATAS/Video-MME ./DATAS/Video-MME", shell=True, check=True)
+    subprocess.run("ln -snf /dataset/Video-MME/results ./results", shell=True, check=True)
+
+    # subprocess.run("ln -snf /dataset/DATAS/MVBench ./DATAS/MVBench", shell=True, check=True)
+    # subprocess.run("ln -snf /dataset/MVBench/results ./results", shell=True, check=True)
     
     # FIX: Point this to /outputs/results, not /dataset/results
-    subprocess.run("ln -snf /dataset/Video-MME/results ./results", shell=True, check=True)
 
     import torch
     # ... (Giữ nguyên phần in thông số GPU của bạn) ...[cite: 4]

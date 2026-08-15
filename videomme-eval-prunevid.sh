@@ -120,21 +120,50 @@ fi
 
 # python videomme-json-converter.py 
 
+### Smoke Test
+# python scripts/infer_single_video.py \
+#     --video example/cooking.mp4 \
+#     --model_dir MODELS/pllava-7b \
+#     --weight_dir MODELS/pllava-7b \
+#     --use_lora --lora_alpha 14 \
+#     --selected_layer 10 --alpha 0.4 \
+#     --use_flow_pruning --flow_dynamic_ratio 0.5 \
+#     --use_motion_adaptive --motion_scale 1.0
+
+### MVBench Evaluation :  Task All
+# python -m tasks.eval.mvbench.pllava_eval_mvbench \
+#     --pretrained_model_name_or_path MODELS/pllava-7b \
+#     --save_path test_results/flow_merge_only \
+#     --num_frames 16 --use_lora --lora_alpha 14 --weight_dir MODELS/pllava-7b \
+#     --pooling_shape 16-12-12 --selected_layer 999 --alpha 0.4 --tau 0.8 \
+#     --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
+#     --tasks "Action Sequence,Action Prediction,Moving Direction,Object Interaction,Unexpected Action" \
+#     --use_flow_pruning --flow_dynamic_ratio 0.5 \
+#     --conv_mode plain --max_samples 200 \
+#     --use_motion_adaptive --motion_scale 1.0 \
+
+
+### Videomme Evaluation :  Task Short
 # python -m tasks.eval.videomme.pllava_eval_videomme \
 #     --pretrained_model_name_or_path MODELS/pllava-7b \
 #     --save_path results/pllava_videomme_smoke_baseline \
 #     --num_frames 16 --use_lora --lora_alpha 14 \
 #     --conv_mode eval_videomme \
 #     --alpha 1.0 --selected_layer 10 \
-#     --tasks short --max_samples 10
+#     --tasks short --max_samples 10 \
+#     --use_flow_pruning --flow_dynamic_ratio 0.5 \
+#     --use_motion_adaptive --motion_scale 1.0 \
 
+#### Videomme Evaluation :  Task All
 python -m tasks.eval.videomme.pllava_eval_videomme \
     --pretrained_model_name_or_path MODELS/pllava-7b \
-    --save_path results/pllava_videomme_all_prunevid \
+    --save_path results/pllava_videomme_all_prunevid_optical_motion \
     --num_frames 16 --use_lora --lora_alpha 14 \
     --conv_mode eval_videomme \
     --alpha 0.4 --selected_layer 10 --tau 0.8 \
-    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 
+    --temporal_segment_ratio 0.25 --cluster_ratio 0.5 \
+    --use_flow_pruning --flow_dynamic_ratio 0.5 \
+    --use_motion_adaptive --motion_scale 1.0 \
 
 # python -m tasks.eval.mvbench.ov_eval_mvbench \
 #     --pretrained_model_name_or_path MODELS/llava-onevision-7b \
@@ -160,4 +189,6 @@ python -m tasks.eval.videomme.pllava_eval_videomme \
 #     --temporal_segment_ratio 0.25 \
 #     --cluster_ratio 0.5 \
 #     --conv_mode eval_mvbench \
-#     --max_new_tokens 100
+#     --max_new_tokens 100 \
+#     --use_flow_pruning --flow_dynamic_ratio 0.5 \
+#     --use_motion_adaptive --motion_scale 1.0 \
