@@ -1,7 +1,9 @@
 
 import functools
 import itertools
+import json
 import logging
+import time
 from tqdm import tqdm
 from PIL import Image
 from multiprocessing import Pool
@@ -199,6 +201,60 @@ def parse_args():
         help="Fraction of tokens classified as dynamic based on flow magnitude (0.5 = top 50%% are dynamic).",
     )
     parser.add_argument(
+        "--use_query_guided_merge",
+        action='store_true',
+        default=False,
+        help="Use question relevance plus semantic novelty for early static/dynamic token routing.",
+    )
+    parser.add_argument(
+        "--query_merge_weight",
+        type=float,
+        default=0.7,
+        help="Maximum weight assigned to question relevance; flat query scores are down-weighted automatically.",
+    )
+    parser.add_argument(
+        "--query_dynamic_ratio",
+        type=float,
+        default=0.5,
+        help="Fixed fraction of spatial locations preserved as per-frame dynamic tokens.",
+    )
+    parser.add_argument(
+        "--use_distortion_routing",
+        action='store_true',
+        default=False,
+        help="Use SafePruneVid global distortion-per-token routing.",
+    )
+    parser.add_argument(
+        "--distortion_epsilon",
+        type=float,
+        default=0.02,
+        help="Global minimum distortion reduction per extra dynamic token.",
+    )
+    parser.add_argument(
+        "--distortion_use_query_relevance",
+        action='store_true',
+        default=False,
+        help="Multiply distortion value by validated question relevance.",
+    )
+    parser.add_argument(
+        "--distortion_query_weight",
+        type=float,
+        default=0.7,
+        help="Question relevance multiplier for distortion routing.",
+    )
+    parser.add_argument(
+        "--disable_efficiency_metrics",
+        action='store_true',
+        default=False,
+        help="Disable synchronized compressor and prefill timing.",
+    )
+    parser.add_argument(
+        "--safety_router_path",
+        type=str,
+        default=None,
+        help="Optional trained logistic safety-router JSON; requires distortion routing.",
+    )
+    parser.add_argument(
         "--use_cluster_pruning",
         action='store_true',
         default=False,
@@ -221,6 +277,12 @@ def parse_args():
         type=int,
         default=None,
         help="Max number of samples to evaluate per split. Default: all.",
+    )
+    parser.add_argument(
+        "--max_videos_per_split",
+        type=int,
+        default=None,
+        help="Retain all questions for at most this many unique videos per duration split.",
     )
     args = parser.parse_args()
     return args
@@ -263,7 +325,18 @@ def infer_mvbench(
     conv.user_query(data_sample['question'], pre_query_prompt, post_query_prompt, is_mm=True)
     if answer_prompt is not None:
         conv.assistant_response(answer_prompt)
-    
+
+    model_device = getattr(model, 'device', None)
+    measure_cuda = (
+        torch.cuda.is_available()
+        and model_device is not None
+        and str(model_device).startswith('cuda')
+    )
+    if measure_cuda:
+        torch.cuda.synchronize(model_device)
+        torch.cuda.reset_peak_memory_stats(model_device)
+    inference_started = time.perf_counter()
+
     llm_message, conv, token_info = pllava_answer(
         conv=conv,
         model=model,
@@ -275,6 +348,43 @@ def infer_mvbench(
         top_p=args.top_p,
         temperature=args.temperature
     )
+    if measure_cuda:
+        torch.cuda.synchronize(model_device)
+    token_info['total_latency_ms'] = (
+        time.perf_counter() - inference_started
+    ) * 1000.0
+    token_info['peak_gpu_memory_mb'] = (
+        torch.cuda.max_memory_allocated(model_device) / (1024.0 ** 2)
+        if measure_cuda
+        else None
+    )
+    query_reliability = getattr(
+        model, '_last_query_merge_reliability', None
+    )
+    if query_reliability is not None:
+        token_info['query_merge_reliability'] = getattr(
+            model, '_last_query_merge_reliability', None
+        )
+    token_info['prefill_tokens'] = getattr(
+        model, '_last_prefill_token_count', None
+    )
+    token_info['prefill_latency_ms'] = getattr(
+        model, '_last_prefill_latency_ms', None
+    )
+    token_info['compressor_latency_ms'] = getattr(
+        model, '_last_compressor_latency_ms', None
+    )
+    routing_diagnostics = getattr(
+        model, '_last_distortion_routing', None
+    )
+    if routing_diagnostics:
+        token_info.update({
+            f'routing_{name}': value
+            for name, value in routing_diagnostics.items()
+        })
+        token_info['routing_window_sizes'] = getattr(
+            model, '_last_distortion_window_sizes', None
+        )
     
     if answer_prompt is not None:
         llm_message =  ''.join(llm_message.split(answer_prompt)[1:])
@@ -321,6 +431,32 @@ def single_test(args, model, processor, vid_path, num_frames=4, conv_mode="plain
     llm_response, conv, _ = pllava_answer(conv=conv, model=model, processor=processor, do_sample=False, img_list=img_list, max_new_tokens=args.max_new_tokens, print_res=True)
 
 def run(rank, args, world_size):
+    if args.use_distortion_routing and (
+        args.use_query_guided_merge or args.use_flow_pruning
+    ):
+        raise ValueError(
+            "distortion routing cannot be combined with fixed query or flow routing"
+        )
+    if (
+        args.distortion_use_query_relevance
+        and not args.use_distortion_routing
+    ):
+        raise ValueError(
+            "--distortion_use_query_relevance requires --use_distortion_routing"
+        )
+    if args.distortion_epsilon < 0:
+        raise ValueError("--distortion_epsilon must be non-negative")
+    if args.safety_router_path and not args.use_distortion_routing:
+        raise ValueError(
+            "--safety_router_path requires --use_distortion_routing"
+        )
+    if args.max_samples is not None and args.max_videos_per_split is not None:
+        raise ValueError(
+            "use only one of --max_samples and --max_videos_per_split"
+        )
+    if args.max_videos_per_split is not None and args.max_videos_per_split <= 0:
+        raise ValueError("--max_videos_per_split must be positive")
+
     if rank != 0:
         transformers.utils.logging.set_verbosity_error()
         logger.setLevel(transformers.logging.ERROR)
@@ -375,6 +511,25 @@ def run(rank, args, world_size):
                                                          flow_dynamic_ratio=args.flow_dynamic_ratio,
                                                          use_cluster_pruning=args.use_cluster_pruning,
                                                          cluster_pruning_topk=args.cluster_pruning_topk)
+    model.config.use_query_guided_merge = args.use_query_guided_merge
+    model.config.query_merge_weight = args.query_merge_weight
+    model.config.query_dynamic_ratio = args.query_dynamic_ratio
+    model.config.use_distortion_routing = args.use_distortion_routing
+    model.config.distortion_epsilon = args.distortion_epsilon
+    model.config.distortion_use_query_relevance = (
+        args.distortion_use_query_relevance
+    )
+    model.config.distortion_query_weight = args.distortion_query_weight
+    model.config.record_efficiency_metrics = (
+        not args.disable_efficiency_metrics
+    )
+    model.config.safety_router = None
+    if args.safety_router_path:
+        with open(args.safety_router_path, "r", encoding="utf-8") as handle:
+            safety_router = json.load(handle)
+        if safety_router.get("type") != "logistic_safety_router":
+            raise ValueError("unsupported safety-router artifact type")
+        model.config.safety_router = safety_router
     logger.info(f'done model and dataset...')
     logger.info('constructing dataset...')
 
@@ -420,6 +575,31 @@ def run(rank, args, world_size):
                 task_counts[task] += 1
         dataset.data_list = filtered
         logger.info(f'Limited to {args.max_samples} available samples per split ({len(dataset.data_list)} total)')
+
+    if args.max_videos_per_split is not None:
+        selected_videos = defaultdict(set)
+        filtered = []
+        for d in dataset.data_list:
+            task = d['task_type']
+            video_path = os.path.join(d['prefix'], d['data']['video'])
+            if not os.path.exists(video_path):
+                continue
+            if (
+                video_path in selected_videos[task]
+                or len(selected_videos[task]) < args.max_videos_per_split
+            ):
+                selected_videos[task].add(video_path)
+                filtered.append(d)
+        dataset.data_list = filtered
+        selected_summary = {
+            task: len(paths) for task, paths in selected_videos.items()
+        }
+        logger.info(
+            'Limited unique videos per split to %s: %s (%s questions)',
+            args.max_videos_per_split,
+            selected_summary,
+            len(dataset.data_list),
+        )
 
     logger.info('single test...')
 

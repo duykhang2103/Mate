@@ -18,7 +18,9 @@ app_image = (
     # BƯỚC NÀY SẼ ĐƯỢC CACHE CHẶT CHẼ. Nó chỉ chạy lại nếu nội dung file requirements.txt thay đổi.
     .run_commands("pip install -r requirements.clean.txt")
     .run_commands("pip install -U huggingface_hub")
-    .add_local_dir(".", remote_path="/workspace", copy=True)
+    .add_local_dir(".", remote_path="/workspace",
+    ignore=[".git", "__pycache__"],
+    copy=True)
 )
 
 # 2. Create a Volume to permanently store your final submission.json
@@ -122,5 +124,11 @@ def run_pipeline():
 #     process.wait()
 
 #     # Save the volume state so the file is stored permanently
+#     output_vol.commit()
+#     # print("✅ Pipeline finished! submission.json safely stored in Volume.")s stored permanently
+#     output_vol.commit()
+#     # print("✅ Pipeline finished! submission.json safely stored in Volume.")s stored permanently
+#     output_vol.commit()
+#     # print("✅ Pipeline finished! submission.json safely stored in Volume.")s stored permanently
 #     output_vol.commit()
 #     # print("✅ Pipeline finished! submission.json safely stored in Volume.")

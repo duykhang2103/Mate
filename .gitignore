@@ -2,7 +2,11 @@ output/*.mp4
 models/__pycache__/*
 */__pycache__/*
 
-MODELS/*
+# MODELS/*
 DATAS/*
 
 *.pyc
+
+.gitnexus/*
+
+node_modules/*

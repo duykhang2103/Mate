@@ -1,16 +1,1 @@
-# Bỏ qua thư mục quản lý phiên bản (gây ra lỗi hiện tại)
 .git/
-
-# Bỏ qua các file rác của Python
-__pycache__/
-*.pyc
-
-# Bỏ qua các file model/dataset nặng (chúng ta dùng Volume cho những thứ này)
-*.safetensors
-*.bin
-*.pth
-*.pt
-checkpoints/
-outputs/
-
-.claude/

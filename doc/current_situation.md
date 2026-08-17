@@ -1,5 +1,11 @@
 # Current Situation
 
+> This July snapshot is retained as historical context. SafePruneVid was
+> rejected and archived on 2026-08-17; its evidence and preserved artifacts
+> are documented in
+> [archive/safeprunevid/README.md](../archive/safeprunevid/README.md).
+> No successor method is declared in this document.
+
 > **Updated**: 2026-07-02
 > **Status**: All methods underperform baseline. Root cause identified.
 

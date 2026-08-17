@@ -1,0 +1,189 @@
+{
+  "samples": {
+    "baseline_total": 2700,
+    "candidate_total": 2700,
+    "matched": 2700,
+    "baseline_unmatched": 0,
+    "candidate_unmatched": 0
+  },
+  "accuracy": {
+    "baseline": 0.447037037037037,
+    "candidate": 0.44481481481481483,
+    "delta": -0.0022222222222222222,
+    "delta_ci95": [
+      -0.007037037037037037,
+      0.0025925925925925925
+    ]
+  },
+  "paired_outcomes": {
+    "both_correct": 1182,
+    "baseline_correct_candidate_wrong": 25,
+    "baseline_wrong_candidate_correct": 19,
+    "both_wrong": 1474,
+    "mcnemar_exact_pvalue": 0.4513808323961257
+  },
+  "tokens": {
+    "raw_vision_tokens": {
+      "baseline_mean": 2304.0,
+      "candidate_mean": 2304.0,
+      "mean_delta": 0.0,
+      "baseline_count": 2700,
+      "candidate_count": 2700,
+      "candidate_reduction": 0.0
+    },
+    "merged_vision_tokens": {
+      "baseline_mean": 897.8066666666666,
+      "candidate_mean": 897.8466666666667,
+      "mean_delta": 0.04000000000007731,
+      "baseline_count": 2700,
+      "candidate_count": 2700,
+      "candidate_reduction": -4.4553021808790286e-05
+    },
+    "prefill_tokens": {
+      "baseline_mean": 1031.6788888888889,
+      "candidate_mean": 1031.7188888888888,
+      "mean_delta": 0.03999999999996362,
+      "baseline_count": 2700,
+      "candidate_count": 2700,
+      "sources": {
+        "baseline": {
+          "recorded": 2700,
+          "inferred": 0,
+          "missing": 0
+        },
+        "candidate": {
+          "recorded": 2700,
+          "inferred": 0,
+          "missing": 0
+        }
+      },
+      "candidate_reduction": -3.8771753915642635e-05
+    },
+    "pruned_tokens": {
+      "baseline_mean": 483.0192592592593,
+      "candidate_mean": 483.0348148148148,
+      "mean_delta": 0.01555555555552246,
+      "baseline_count": 2700,
+      "candidate_count": 2700,
+      "candidate_reduction": -3.220483501916237e-05
+    }
+  },
+  "compression": {
+    "raw_to_merged_retention": {
+      "baseline": 0.38967303240740736,
+      "candidate": 0.38969039351851853
+    },
+    "raw_to_pruned_retention": {
+      "baseline": 0.20964377572016463,
+      "candidate": 0.2096505272633745
+    },
+    "prefill_to_pruned_retention": {
+      "baseline": 0.4681875964133256,
+      "candidate": 0.46818452198255267
+    }
+  },
+  "analytical_llm_prefill": {
+    "unit": "TFLOPs",
+    "baseline": {
+      "count": 2700,
+      "mean": 8.971363621546667,
+      "median": 8.88157077504,
+      "p95": 9.700866834432
+    },
+    "candidate": {
+      "count": 2700,
+      "mean": 8.971694685643662,
+      "median": 8.88157077504,
+      "p95": 9.700866834432
+    },
+    "candidate_mean_reduction": -3.690231618749978e-05,
+    "model_dimensions": {
+      "hidden_size": 4096,
+      "intermediate_size": 11008,
+      "num_layers": 32
+    },
+    "excludes": [
+      "vision encoder",
+      "multimodal projector",
+      "token compressor",
+      "autoregressive decode"
+    ]
+  },
+  "runtime": {
+    "prefill_latency_ms": {
+      "baseline": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate_mean_reduction": null
+    },
+    "decode_latency_ms": {
+      "baseline": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate_mean_reduction": null
+    },
+    "generation_latency_ms": {
+      "baseline": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate_mean_reduction": null
+    },
+    "total_latency_ms": {
+      "baseline": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate": {
+        "count": 2700,
+        "mean": 1324.3222214437026,
+        "median": 1200.8633809998628,
+        "p95": 2112.6060830001734
+      },
+      "candidate_mean_reduction": null
+    },
+    "peak_gpu_memory_mb": {
+      "baseline": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null
+      },
+      "candidate": {
+        "count": 2700,
+        "mean": 14624.80043041088,
+        "median": 14619.45361328125,
+        "p95": 14671.44384765625
+      },
+      "candidate_mean_reduction": null
+    }
+  }
+}

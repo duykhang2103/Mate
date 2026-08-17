@@ -38,6 +38,11 @@ from torch import einsum
 # from .modeling_clip import CLIPVisionTransformer, CLIPVisionModel
 import time
 from .llama import LlamaConfig, LlamaForCausalLM, TextPivotMerge_LayerWise, LlamaAttentionTextPrior, LlamaForCausalLMElastic, LlamaForCausalLMVTP
+from .distortion_routing import (
+    apply_learned_safety_router,
+    compute_distortion_controlled_static_masks,
+    estimate_post_cluster_tokens,
+)
 import itertools
 from .configuration_pllava import PllavaConfig
 import pickle
@@ -66,6 +71,92 @@ def complement_idx(idx, dim):
     compl = compl.permute(-1, *tuple(range(ndim - 1)))
     compl = compl[n_idx:].permute(*(tuple(range(1, ndim)) + (0,)))
     return compl
+
+
+def compute_query_guided_static_mask(
+    current_frames,
+    query_embedding,
+    dynamic_ratio=0.5,
+    query_weight=0.7,
+):
+    """Select a fixed-budget dynamic mask using query relevance and novelty.
+
+    Args:
+        current_frames: Projected visual tokens shaped ``[B, W, L, C]``.
+        query_embedding: Text query representation shaped ``[B, C]``.
+        dynamic_ratio: Fraction of spatial locations retained per frame.
+        query_weight: Maximum contribution from query relevance. Its effective
+            contribution is reduced automatically when query scores are flat.
+
+    Returns:
+        A tuple containing the static mask ``[B, L]`` and per-sample query
+        reliability ``[B, 1]``. ``False`` mask entries are dynamic tokens.
+    """
+    if current_frames.ndim != 4:
+        raise ValueError(
+            f"current_frames must have shape [B, W, L, C], got {current_frames.shape}"
+        )
+    if query_embedding.ndim != 2:
+        raise ValueError(
+            f"query_embedding must have shape [B, C], got {query_embedding.shape}"
+        )
+
+    batch_size, _, spatial_tokens, channels = current_frames.shape
+    if query_embedding.shape != (batch_size, channels):
+        raise ValueError(
+            "Query and visual feature shapes are incompatible: "
+            f"query={query_embedding.shape}, frames={current_frames.shape}"
+        )
+    if not 0.0 < dynamic_ratio < 1.0:
+        raise ValueError(
+            f"dynamic_ratio must be between 0 and 1, got {dynamic_ratio}"
+        )
+
+    query_weight = min(max(float(query_weight), 0.0), 1.0)
+    scoring_frames = F.normalize(current_frames.float(), p=2, dim=-1)
+    normalized_query = F.normalize(query_embedding.float(), p=2, dim=-1)
+    query_scores = torch.einsum(
+        'bwlc,bc->bwl', scoring_frames, normalized_query
+    ).amax(dim=1)
+
+    temporal_center = F.normalize(
+        current_frames.float().mean(dim=1, keepdim=True), p=2, dim=-1
+    )
+    novelty_scores = (
+        1.0 - (scoring_frames * temporal_center).sum(dim=-1)
+    ).amax(dim=1)
+
+    def normalize_scores(scores):
+        score_min = scores.amin(dim=-1, keepdim=True)
+        score_max = scores.amax(dim=-1, keepdim=True)
+        return (scores - score_min) / (score_max - score_min).clamp_min(1e-6)
+
+    query_scores_normalized = normalize_scores(query_scores)
+    novelty_scores_normalized = normalize_scores(novelty_scores)
+
+    query_spread = query_scores.std(dim=-1, keepdim=True, unbiased=False)
+    novelty_spread = novelty_scores.std(dim=-1, keepdim=True, unbiased=False)
+    query_reliability = query_spread / (
+        query_spread + novelty_spread + 1e-6
+    )
+    effective_query_weight = query_weight * query_reliability
+    combined_scores = (
+        effective_query_weight * query_scores_normalized
+        + (1.0 - effective_query_weight) * novelty_scores_normalized
+    )
+
+    dynamic_tokens = max(
+        1, min(spatial_tokens - 1, int(spatial_tokens * dynamic_ratio))
+    )
+    _, topk_idx = combined_scores.topk(dynamic_tokens, dim=-1)
+    dynamic_mask = torch.zeros(
+        batch_size,
+        spatial_tokens,
+        dtype=torch.bool,
+        device=current_frames.device,
+    )
+    dynamic_mask.scatter_(1, topk_idx, True)
+    return ~dynamic_mask, query_reliability
 
 outputs = {}
 def hook_k(module, input, output):
@@ -833,10 +924,36 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
         result = torch.stack(pooled_frames, dim=1)  # [B, T, H, W]
         return result.reshape(B, T, H * W)  # [B, T, H*W]
 
-    def merge_frames_dynamic(self, frames, threshold=0.8, k=7):
+    def merge_frames_dynamic(self, frames, threshold=0.8, k=7, query_embedding=None):
         B, L, C = frames.shape
         assert L == self.config.num_frames * self.config.pooling_shape[1] * self.config.pooling_shape[2]
         frames = frames.view(B, self.config.num_frames, self.config.pooling_shape[1]*self.config.pooling_shape[2], C) # B T L C
+        use_distortion_routing = getattr(
+            self.config, 'use_distortion_routing', False
+        )
+        distortion_uses_query = (
+            use_distortion_routing
+            and getattr(self.config, 'distortion_use_query_relevance', False)
+        )
+        use_query_guided_merge = (
+            getattr(self.config, 'use_query_guided_merge', False)
+            and query_embedding is not None
+        )
+        if distortion_uses_query and query_embedding is None:
+            raise ValueError(
+                "distortion_use_query_relevance requires a query embedding"
+            )
+        if use_query_guided_merge or distortion_uses_query:
+            if query_embedding.shape[0] != B:
+                if B % query_embedding.shape[0] != 0:
+                    raise ValueError(
+                        "Query batch size must divide the projected video batch size: "
+                        f"query={query_embedding.shape[0]}, video={B}"
+                    )
+                query_embedding = query_embedding.repeat_interleave(
+                    B // query_embedding.shape[0], dim=0
+                )
+            query_embedding = F.normalize(query_embedding.float(), p=2, dim=-1)
         idx_clusters, _ = cluster_dpc_knn(frames.mean(dim=2), cluster_num=int(self.config.num_frames*self.config.temporal_segment_ratio), k=k)
         idx_clusters = refine_clusters(idx_clusters)
         window_list = segment_lengths(idx_clusters)
@@ -845,17 +962,142 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
 
         # Get flow-based motion scores if available
         flow_mag = getattr(self, '_last_flow_mag', None)  # [B, T-1, H, W]
+        query_reliabilities = []
+
+        current_windows = []
+        start_idx = 0
+        for window_size in window_list[0]:
+            window_size = int(window_size)
+            current_windows.append(
+                frames[:, start_idx:start_idx+window_size, :, :]
+            )
+            start_idx += window_size
+
+        distortion_static_masks = None
+        if use_distortion_routing:
+            distortion_static_masks, routing_diagnostics = (
+                compute_distortion_controlled_static_masks(
+                    current_windows,
+                    epsilon=float(
+                        getattr(self.config, 'distortion_epsilon', 0.02)
+                    ),
+                    query_embedding=(
+                        query_embedding if distortion_uses_query else None
+                    ),
+                    query_weight=float(
+                        getattr(self.config, 'distortion_query_weight', 0.7)
+                    ),
+                )
+            )
+            self._last_distortion_window_sizes = [
+                int(window.shape[1]) for window in current_windows
+            ]
+            baseline_static_masks = []
+            for current_window in current_windows:
+                window_size = current_window.shape[1]
+                if window_size > 1:
+                    baseline_normed = F.normalize(
+                        current_window, p=2, dim=-1
+                    )
+                    baseline_similarity = einsum(
+                        'b w l c, b t l c -> b w t l',
+                        baseline_normed,
+                        baseline_normed,
+                    )
+                    baseline_similarity = (
+                        (baseline_similarity.sum(dim=-2) - 1).sum(dim=-2)
+                        / (window_size * (window_size - 1))
+                    )
+                    baseline_static = baseline_similarity > threshold
+                else:
+                    baseline_static = torch.zeros(
+                        B, L, dtype=torch.bool, device=frames.device
+                    )
+                baseline_static_masks.append(baseline_static)
+            baseline_merged_tokens = estimate_post_cluster_tokens(
+                baseline_static_masks,
+                current_windows,
+                float(self.config.cluster_ratio),
+            )
+            predicted_merged_tokens = estimate_post_cluster_tokens(
+                distortion_static_masks,
+                current_windows,
+                float(self.config.cluster_ratio),
+            )
+            routing_diagnostics["baseline_similarity_merged_tokens"] = (
+                baseline_merged_tokens
+            )
+            routing_diagnostics["predicted_merged_tokens"] = (
+                predicted_merged_tokens
+            )
+            safety_router = getattr(self.config, 'safety_router', None)
+            if safety_router is not None:
+                (
+                    distortion_static_masks,
+                    safety_router_risk,
+                    safety_router_used_original,
+                ) = apply_learned_safety_router(
+                    distortion_static_masks,
+                    baseline_static_masks,
+                    routing_diagnostics,
+                    predicted_merged_tokens,
+                    safety_router,
+                )
+                routing_diagnostics["safety_router_risk"] = (
+                    safety_router_risk
+                )
+                routing_diagnostics["safety_router_used_original"] = (
+                    safety_router_used_original.float()
+                )
+            self._last_distortion_routing = {
+                name: float(value.float().mean().detach().cpu())
+                for name, value in routing_diagnostics.items()
+            }
+            if "query_reliability" in routing_diagnostics:
+                self._last_query_merge_reliability = float(
+                    routing_diagnostics["query_reliability"]
+                    .float().mean().detach().cpu()
+                )
 
         static_features = []
         dynamic_features = []
         static_sizes = []
         dynamic_sizes = []
 
-        start_idx = 0
-        for window_size in window_list[0]:
-            current_frames = frames[:, start_idx:start_idx+window_size, :, :] # B W L C
+        for window_index, current_frames in enumerate(current_windows):
+            window_size = current_frames.shape[1]
 
-            if flow_mag is not None and window_size > 1:
+            if distortion_static_masks is not None:
+                mask = distortion_static_masks[window_index]
+                dynamic_counts = (~mask).sum(dim=-1)
+                if not torch.equal(
+                    dynamic_counts,
+                    dynamic_counts[:1].expand_as(dynamic_counts),
+                ):
+                    raise ValueError(
+                        "batched distortion routing produced variable token "
+                        "counts; evaluate those samples separately"
+                    )
+                mask_expand = mask.view(B, 1, L, 1).expand(
+                    -1, window_size, -1, C
+                )
+            elif use_query_guided_merge:
+                # Keep locations that are relevant to the question or
+                # semantically novel within this temporal window. The fixed
+                # dynamic ratio makes this directly comparable to flow gating.
+                dynamic_ratio = float(
+                    getattr(self.config, 'query_dynamic_ratio', 0.5)
+                )
+                mask, query_reliability = compute_query_guided_static_mask(
+                    current_frames,
+                    query_embedding,
+                    dynamic_ratio=dynamic_ratio,
+                    query_weight=getattr(self.config, 'query_merge_weight', 0.7),
+                )
+                mask_expand = mask.view(B, 1, L, 1).expand(-1, window_size, -1, C)
+
+                query_reliabilities.append(query_reliability.mean().detach())
+            elif flow_mag is not None and window_size > 1:
                 # Flow-based static/dynamic classification
                 # Flow indices: start_idx to start_idx+window_size-1 (window_size-1 pairs for window_size frames)
                 window_flow = flow_mag[:, start_idx:min(start_idx+window_size-1, flow_mag.shape[1]), :, :]  # [B, W-1, H, W_grid]
@@ -867,12 +1109,15 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
                     (self.config.pooling_shape[1], self.config.pooling_shape[2])
                 ).flatten(1)  # [B, 144]
 
-                # Top flow_dynamic_ratio% by flow magnitude are dynamic
+                # Keep a single mask invariant across both branches: True means
+                # static.  High-flow patches are dynamic and must stay as
+                # per-frame tokens instead of being averaged across the window.
                 dynamic_ratio = getattr(self.config, 'flow_dynamic_ratio', 0.5)
                 k_dynamic = max(1, int(L * dynamic_ratio))
                 _, topk_idx = avg_flow_pooled.topk(k_dynamic, dim=-1)
-                mask = torch.zeros(B, L, dtype=torch.bool, device=frames.device)
-                mask.scatter_(1, topk_idx, True)
+                dynamic_mask = torch.zeros(B, L, dtype=torch.bool, device=frames.device)
+                dynamic_mask.scatter_(1, topk_idx, True)
+                mask = ~dynamic_mask
                 mask_expand = mask.view(B, 1, L, 1).expand(-1, window_size, -1, C)  # B W L C
             else:
                 # Fallback: feature similarity (original behavior)
@@ -903,8 +1148,10 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
 
             dynamic_features.append(dynamic_feat)
             dynamic_sizes.append(dynamic_feat.shape[1])
-
-            start_idx += window_size
+        if query_reliabilities:
+            self._last_query_merge_reliability = float(
+                torch.stack(query_reliabilities).mean().cpu()
+            )
 
         # Combine all features
         final_features = []
@@ -1022,8 +1269,30 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
             else self.config.vision_feature_select_strategy
         )
         text_indices = None
+        query_embedding = None
         static_sizes, dynamic_sizes, window_sizes = [], [], []
         self._last_flow_mag = None  # reset flow cache
+        # Keep the prefill diagnostic available after ``generate`` finishes.
+        # Autoregressive decode calls ``forward`` once per generated token; an
+        # unconditional reset here erased the value recorded during prefill.
+        if past_key_values is None:
+            self._last_query_merge_reliability = None
+            self._last_distortion_routing = None
+            self._last_distortion_window_sizes = None
+            self._last_compressor_latency_ms = None
+            self._last_prefill_latency_ms = None
+        record_efficiency_metrics = (
+            getattr(self.config, 'record_efficiency_metrics', False)
+            and past_key_values is None
+            and inputs_embeds is None
+            and input_ids is not None
+            and pixel_values is not None
+            and input_ids.shape[1] != 1
+        )
+        if record_efficiency_metrics:
+            if pixel_values.is_cuda:
+                torch.cuda.synchronize(pixel_values.device)
+            prefill_started_at = time.perf_counter()
         time1 = time.time()
         if inputs_embeds is None:
             # 1. Extra the input embeddings
@@ -1033,6 +1302,40 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
             no_img_input_ids = torch.where(input_ids!=self.config.image_token_index, input_ids, self.pad_token_id) # some model used up all the embeddings
             inputs_embeds = self.get_input_embeddings()(no_img_input_ids)
             batch_size = inputs_embeds.shape[0]
+            needs_query_embedding = (
+                getattr(self.config, 'use_query_guided_merge', False)
+                or (
+                    getattr(self.config, 'use_distortion_routing', False)
+                    and getattr(
+                        self.config,
+                        'distortion_use_query_relevance',
+                        False,
+                    )
+                )
+            )
+            if needs_query_embedding:
+                token_positions = torch.arange(
+                    input_ids.shape[1], device=input_ids.device
+                ).unsqueeze(0)
+                image_positions = input_ids == self.config.image_token_index
+                valid_text = input_ids != self.config.image_token_index
+                valid_text = valid_text & (input_ids != self.pad_token_id)
+                if attention_mask is not None:
+                    valid_text = valid_text & attention_mask.bool()
+
+                last_image_position = torch.where(
+                    image_positions,
+                    token_positions,
+                    torch.full_like(token_positions, -1),
+                ).amax(dim=1, keepdim=True)
+                query_mask = valid_text & (token_positions > last_image_position)
+                has_query_tokens = query_mask.any(dim=1, keepdim=True)
+                query_mask = torch.where(has_query_tokens, query_mask, valid_text)
+                query_weights = query_mask.unsqueeze(-1).to(inputs_embeds.dtype)
+                query_embedding = (
+                    (inputs_embeds * query_weights).sum(dim=1)
+                    / query_weights.sum(dim=1).clamp_min(1.0)
+                )
             # 2. Merge text and images
             flag = False
             if pixel_values is not None and input_ids.shape[1] != 1:
@@ -1068,12 +1371,28 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
 
                 # Store raw vision token count before merge (for FLOPs computation)
                 self._last_raw_vision_tokens = image_features.shape[1]
-                image_features, static_sizes, dynamic_sizes, window_sizes = self.merge_frames_dynamic(image_features, threshold=self.config.tau, k=7)
+                if record_efficiency_metrics:
+                    if image_features.is_cuda:
+                        torch.cuda.synchronize(image_features.device)
+                    compressor_started_at = time.perf_counter()
+                image_features, static_sizes, dynamic_sizes, window_sizes = self.merge_frames_dynamic(
+                    image_features,
+                    threshold=self.config.tau,
+                    k=7,
+                    query_embedding=query_embedding,
+                )
+                if record_efficiency_metrics:
+                    if image_features.is_cuda:
+                        torch.cuda.synchronize(image_features.device)
+                    self._last_compressor_latency_ms = (
+                        time.perf_counter() - compressor_started_at
+                    ) * 1000.0
                 self._last_merged_vision_tokens = image_features.shape[1]
 
                 inputs_embeds, attention_mask, labels, position_ids, input_ids = self._merge_input_ids_with_image_features(
                     image_features, inputs_embeds, input_ids, attention_mask, labels
                 )
+                self._last_prefill_token_count = inputs_embeds.shape[1]
 
                 if labels is None:
                     # labels = torch.full_like(attention_mask, self.config.ignore_index).to(torch.long)
@@ -1143,6 +1462,12 @@ class PllavaForConditionalGeneration(PllavaPreTrainedModel):
             dynamic_sizes=dynamic_sizes,
             window_sizes=window_sizes,
         )
+        if record_efficiency_metrics:
+            if inputs_embeds.is_cuda:
+                torch.cuda.synchronize(inputs_embeds.device)
+            self._last_prefill_latency_ms = (
+                time.perf_counter() - prefill_started_at
+            ) * 1000.0
 
         logits = outputs.logits
         try:

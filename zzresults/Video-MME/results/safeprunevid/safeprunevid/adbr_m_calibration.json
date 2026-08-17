@@ -1,0 +1,93 @@
+{
+  "selection_uses_labels": false,
+  "mode": "match",
+  "target_tflops": 8.9714,
+  "tolerance": 0.01,
+  "target_passed": false,
+  "selected": {
+    "path": "results/safeprunevid/calibration/epsilon_0p02/all_results.json",
+    "epsilon": 0.019999999552965164,
+    "samples": 900,
+    "mean_tflops": 10.701369479568497,
+    "mean_merged_tokens": 1092.26,
+    "unique_videos_by_group": {
+      "short": 100,
+      "medium": 100,
+      "long": 100
+    }
+  },
+  "candidates": [
+    {
+      "path": "results/safeprunevid/calibration/epsilon_0p0025/all_results.json",
+      "epsilon": 0.0024999999441206455,
+      "samples": 900,
+      "mean_tflops": 11.024671563339092,
+      "mean_merged_tokens": 1131.5266666666666,
+      "unique_videos_by_group": {
+        "short": 100,
+        "medium": 100,
+        "long": 100
+      }
+    },
+    {
+      "path": "results/safeprunevid/calibration/epsilon_0p005/all_results.json",
+      "epsilon": 0.004999999888241291,
+      "samples": 900,
+      "mean_tflops": 10.994862672518257,
+      "mean_merged_tokens": 1128.0855555555556,
+      "unique_videos_by_group": {
+        "short": 100,
+        "medium": 100,
+        "long": 100
+      }
+    },
+    {
+      "path": "results/safeprunevid/calibration/epsilon_0p01/all_results.json",
+      "epsilon": 0.009999999776482582,
+      "samples": 900,
+      "mean_tflops": 10.949521276017778,
+      "mean_merged_tokens": 1122.5333333333333,
+      "unique_videos_by_group": {
+        "short": 100,
+        "medium": 100,
+        "long": 100
+      }
+    },
+    {
+      "path": "results/safeprunevid/calibration/epsilon_0p02/all_results.json",
+      "epsilon": 0.019999999552965164,
+      "samples": 900,
+      "mean_tflops": 10.701369479568497,
+      "mean_merged_tokens": 1092.26,
+      "unique_videos_by_group": {
+        "short": 100,
+        "medium": 100,
+        "long": 100
+      }
+    },
+    {
+      "path": "results/safeprunevid/calibration/epsilon_0p04/all_results.json",
+      "epsilon": 0.03999999910593033,
+      "samples": 900,
+      "mean_tflops": 6.68561537335296,
+      "mean_merged_tokens": 608.3033333333333,
+      "unique_videos_by_group": {
+        "short": 100,
+        "medium": 100,
+        "long": 100
+      }
+    },
+    {
+      "path": "results/safeprunevid/calibration/epsilon_0p08/all_results.json",
+      "epsilon": 0.07999999821186066,
+      "samples": 900,
+      "mean_tflops": 3.874364215059342,
+      "mean_merged_tokens": 255.9311111111111,
+      "unique_videos_by_group": {
+        "short": 100,
+        "medium": 100,
+        "long": 100
+      }
+    }
+  ]
+}
